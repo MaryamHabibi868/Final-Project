@@ -1,4 +1,8 @@
 package ir.maktab.homeservice.repository;
 
-public interface MainServiceRepository {
+import ir.maktab.homeservice.domains.MainService;
+import ir.maktab.homeservice.repository.base.CrudRepository;
+
+public interface MainServiceRepository
+        extends CrudRepository<MainService> {
 }
