@@ -17,5 +17,7 @@ public interface CrudRepository
     void deleteById(Long id);
     void deleteAllById(Iterable<Long> ids);
     boolean existsById(Long id);
+    void beginTransaction();
+    void commitTransaction();
 
 }

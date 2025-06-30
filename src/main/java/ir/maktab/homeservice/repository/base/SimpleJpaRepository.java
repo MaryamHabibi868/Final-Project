@@ -14,6 +14,8 @@ import java.util.Optional;
 public abstract class SimpleJpaRepository <T extends BaseEntity>
         implements CrudRepository<T> {
 
+    protected EntityManager entityManager;
+
     protected Class<T> domainClass;
 
     public SimpleJpaRepository(EntityManager entityManager) {
@@ -99,4 +101,16 @@ public abstract class SimpleJpaRepository <T extends BaseEntity>
         query.where(cb.equal(from.get("id"), id));
         return entityManager.createQuery(query).getSingleResult() > 0;
     }
+
+    @Override
+    public void beginTransaction() {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
+    }
+
+    @Override
+    public void commitTransaction() {
+            entityManager.getTransaction().commit();
+        }
 }

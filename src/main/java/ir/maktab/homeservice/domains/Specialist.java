@@ -19,10 +19,10 @@ public class Specialist extends Person {
     public static final String ACCOUNT_STATUS = "account_status";
     public static final String REGISTRATION_DATE = "registration_date";
 
-    @Column(name = Person.ACCOUNT_STATUS, nullable = false)
+    @Column(name = Specialist.ACCOUNT_STATUS, nullable = false)
     private AccountStatus accountStatus;
 
-    @Column(name = Person.REGISTRATION_DATE)
+    @Column(name = Specialist.REGISTRATION_DATE)
     private LocalDateTime registrationDate;
 }
 
