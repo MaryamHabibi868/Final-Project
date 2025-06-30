@@ -22,7 +22,6 @@ public class Person extends BaseEntity {
     public static final String FIRST_NAME = "first_name";
     public static final String LAST_NAME = "last_name";
     public static final String EMAIL = "email";
-    public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
 
     @Column(name = Person.FIRST_NAME, nullable = false)
@@ -33,9 +32,6 @@ public class Person extends BaseEntity {
 
     @Column(name = Person.EMAIL, nullable = false, unique = true)
     private String email;
-
-    @Column(name = Person.USERNAME, nullable = false, unique = true)
-    private String username;
 
     @Column(name = Person.PASSWORD, nullable = false, unique = true)
     private String password;
