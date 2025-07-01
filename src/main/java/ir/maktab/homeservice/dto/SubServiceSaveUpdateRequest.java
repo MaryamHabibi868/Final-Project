@@ -1,7 +1,9 @@
 package ir.maktab.homeservice.dto;
 
 import ir.maktab.homeservice.domains.MainService;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.UniqueElements;
@@ -14,9 +16,10 @@ import org.hibernate.validator.constraints.UniqueElements;
 public class SubServiceSaveUpdateRequest {
 
     @NotNull(groups = {ValidationGroup.Update.class})
+    @Null(groups = {ValidationGroup.Save.class})
     private Long id;
 
-    @NotNull(groups = {ValidationGroup.Save.class},
+    @NotBlank(groups = {ValidationGroup.Save.class},
             message = "The name of sub service should be entered.")
     private String subServiceTitle;
 
@@ -24,7 +27,7 @@ public class SubServiceSaveUpdateRequest {
             message = "The price of service should be entered.")
     private Double basePrice;
 
-    @NotNull(groups = {ValidationGroup.Save.class},
+    @NotBlank(groups = {ValidationGroup.Save.class},
             message = "The description of service should be entered.")
     @Size(groups = {ValidationGroup.Save.class}, min = 20, max = 1000,
             message = "The length of description should be between 20 and 1000 character ")

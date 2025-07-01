@@ -4,6 +4,8 @@ import ir.maktab.homeservice.domains.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,5 +24,5 @@ public class MainService extends BaseEntity {
     private String mainServiceTitle;
 
     @OneToMany (mappedBy = "mainService")
-    private Set<SubService> subServices;
+    private Set<SubService> subServices = new HashSet<>();
 }
