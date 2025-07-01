@@ -21,6 +21,6 @@ public class MainService extends BaseEntity {
     @Column(name = MainService.MAIN_SERVICE_TITLE, nullable = false, unique = true)
     private String mainServiceTitle;
 
-    @OneToMany
+    @OneToMany (mappedBy = "mainService")
     private Set<SubService> subServices;
 }

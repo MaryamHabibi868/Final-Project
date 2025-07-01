@@ -1,5 +1,6 @@
 package ir.maktab.homeservice.domains;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -11,5 +12,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@DiscriminatorValue(value = "Manager")
 public class Manager extends Person {
 }

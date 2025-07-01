@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.domains;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@DiscriminatorValue(value = "Specialist")
 public class Specialist extends Person {
 
     public static final String ACCOUNT_STATUS = "account_status";

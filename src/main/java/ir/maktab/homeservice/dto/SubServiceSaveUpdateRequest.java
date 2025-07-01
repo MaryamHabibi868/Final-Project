@@ -10,18 +10,13 @@ import org.hibernate.validator.constraints.UniqueElements;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class MainAndSubServiceSaveUpdateRequest {
+public class SubServiceSaveUpdateRequest {
 
     @NotNull(groups = {ValidationGroup.Update.class})
     private Long id;
 
     @NotNull(groups = {ValidationGroup.Save.class},
-            message = "The title of service should be entered.")
-    @UniqueElements
-    private String mainServiceTitle;
-
-    @NotNull(groups = {ValidationGroup.Save.class},
-            message = "The name of Service should be entered.")
+            message = "The name of sub service should be entered.")
     private String subServiceTitle;
 
     @NotNull(groups = {ValidationGroup.Save.class},

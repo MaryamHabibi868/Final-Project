@@ -2,11 +2,8 @@ package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.MainService;
 import ir.maktab.homeservice.domains.SubService;
-import ir.maktab.homeservice.dto.MainAndSubServiceSaveUpdateRequest;
 import ir.maktab.homeservice.repository.SubServiceRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
-
-import java.util.Objects;
 
 public class SubServiceServiceImpl
         extends BaseServiceImpl<SubService, SubServiceRepository>
@@ -18,10 +15,4 @@ public class SubServiceServiceImpl
     }
 
     private final MainService mainService;
-
-    public SubService createSubService(MainAndSubServiceSaveUpdateRequest mainAndSubServiceSaveUpdateRequest) {
-        if (Objects.isNull(mainAndSubServiceSaveUpdateRequest)) {
-            return
-        }
     }
-}

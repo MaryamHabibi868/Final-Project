@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import ir.maktab.homeservice.domains.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -29,6 +30,9 @@ public class SubService extends BaseEntity {
 
     @Column(name = SubService.DESCRIPTION, nullable = false)
     private String description;
+
+    @ManyToOne
+    private MainService mainService;
 
 
 }
