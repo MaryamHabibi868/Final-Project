@@ -1,7 +1,13 @@
 package ir.maktab.homeservice.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
+@Setter
+@Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class MainServiceSaveUpdateRequest {
 
     @NotNull(groups = {ValidationGroup.Update.class})
