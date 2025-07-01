@@ -8,6 +8,7 @@ import ir.maktab.homeservice.repository.MainServiceRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,5 +38,16 @@ public class MainServiceServiceImpl
            return repository.save(mainService);
         }
         throw new NotFoundException("Main Service Not Found");
+    }
+
+    public void deleteMainService(MainServiceSaveUpdateRequest request) {
+        if (repository.findById(request.getId()).isPresent()) {
+            repository.deleteById(request.getId());
+        }
+        throw new NotFoundException("Main Service Not Found");
+    }
+
+    public List<MainService> findAllMainServices() {
+        return repository.findAll();
     }
 }
