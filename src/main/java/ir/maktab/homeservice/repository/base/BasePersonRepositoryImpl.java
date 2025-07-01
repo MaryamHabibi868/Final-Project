@@ -17,12 +17,12 @@ public abstract class BasePersonRepositoryImpl <T extends Person>
     }
 
     @Override
-    public Optional<T> findByUserName(String userName) {
+    public Optional<T> findByEmail(String email) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(getDomainClass());
         Root<T> from = query.from(getDomainClass());
         query.select(from);
-        query.where(cb.equal(from.get("userName"), userName));
+        query.where(cb.equal(from.get("email"), email));
         return Optional.ofNullable(entityManager.createQuery(query).getSingleResult());
     }
 }

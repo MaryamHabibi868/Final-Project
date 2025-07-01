@@ -5,5 +5,5 @@ import java.util.Optional;
 public interface BasePersonRepository <T extends Person> extends
         CrudRepository<T> {
 
-    Optional<T> findByUserName(String userName);
+    Optional<T> findByEmail(String email);
 }
