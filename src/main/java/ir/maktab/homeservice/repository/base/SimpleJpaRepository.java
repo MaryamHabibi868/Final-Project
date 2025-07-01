@@ -84,7 +84,12 @@ public abstract class SimpleJpaRepository <T extends BaseEntity>
 
     @Override
     public void deleteById(Long id) {
-        findById(id).ifPresent(entityManager::remove);
+        /*findById(id).ifPresent(entityManager::remove);*/
+        Optional<T> byId = findById(id);
+        if (byId.isPresent()) {
+            T entity = byId.get();
+            entity.setActive(false);
+        }
     }
 
     @Override

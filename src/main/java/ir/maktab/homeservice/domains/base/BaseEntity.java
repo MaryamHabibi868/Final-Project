@@ -19,4 +19,9 @@ public class BaseEntity implements Serializable {
     private Long id;
 
     private Boolean active;
+
+    @PrePersist
+    public void prePersist() {
+        this.active = true;
+    }
 }

@@ -22,7 +22,10 @@ public class MainServiceServiceImpl
 
     public MainService createMainService(MainServiceSaveUpdateRequest request) {
        Optional<MainService> foundMainService = repository.findByMainServiceTitle(request.getMainServiceTitle());
-        if (foundMainService.isPresent()) {
+       if (!foundMainService.get().getActive()) {
+           foundMainService.get().setActive(true);
+       }
+        if (foundMainService.isPresent() && foundMainService.get().getActive()) {
             throw new DuplicatedException("Main Service Title Already Exists");
         }
         MainService mainService = new MainService();

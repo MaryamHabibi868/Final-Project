@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface MainServiceRepository
         extends CrudRepository<MainService> {
 
-    public Optional<MainService> findByMainServiceTitle(String mainServiceTitle);
+    Optional<MainService> findByMainServiceTitle(String mainServiceTitle);
 }
