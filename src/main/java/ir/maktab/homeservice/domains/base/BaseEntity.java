@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
@@ -18,10 +20,17 @@ public class BaseEntity implements Serializable {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Boolean active;
+    private Boolean active = true;
+
+    private ZonedDateTime createDate;
+
+   /* @PrePersist
+    public void isActive() {
+        this.active = true;
+    }*/
 
     @PrePersist
-    public void prePersist() {
-        this.active = true;
+    public void registrationDate() {
+        createDate = ZonedDateTime.now();
     }
 }
