@@ -3,7 +3,9 @@ package ir.maktab.homeservice.service;
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.repository.CustomerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CustomerServiceImpl
         extends BaseServiceImpl<Customer, CustomerRepository>
         implements CustomerService{

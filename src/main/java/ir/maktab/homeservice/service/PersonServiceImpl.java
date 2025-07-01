@@ -3,7 +3,9 @@ package ir.maktab.homeservice.service;
 import ir.maktab.homeservice.domains.Person;
 import ir.maktab.homeservice.repository.PersonRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PersonServiceImpl
         extends BaseServiceImpl<Person, PersonRepository>
         implements PersonService{

@@ -5,9 +5,11 @@ import ir.maktab.homeservice.dto.SubServiceSaveUpdateRequest;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.repository.SubServiceRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class SubServiceServiceImpl
         extends BaseServiceImpl<SubService, SubServiceRepository>
         implements SubServiceService {

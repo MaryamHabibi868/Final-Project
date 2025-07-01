@@ -26,9 +26,6 @@ public class Specialist extends Person {
     @Column(name = Specialist.ACCOUNT_STATUS, nullable = false)
     private AccountStatus accountStatus;
 
-    @Column(name = Specialist.REGISTRATION_DATE)
-    private LocalDateTime registrationDate;
-
     @OneToMany
     private Set<SubService> subServices;
 }

@@ -15,7 +15,8 @@ public class SpecialistServiceImpl
         extends BaseServiceImpl<Specialist, SpecialistRepository>
         implements SpecialistService {
 
-    public SpecialistServiceImpl(SpecialistRepository repository, SubServiceService subServiceService) {
+    public SpecialistServiceImpl(SpecialistRepository repository,
+                                 SubServiceService subServiceService) {
         super(repository);
 
         this.subServiceService = subServiceService;
