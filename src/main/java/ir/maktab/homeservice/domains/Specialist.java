@@ -3,10 +3,12 @@ package ir.maktab.homeservice.domains;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,5 +28,8 @@ public class Specialist extends Person {
 
     @Column(name = Specialist.REGISTRATION_DATE)
     private LocalDateTime registrationDate;
+
+    @OneToMany
+    private Set<SubService> subServices;
 }
 
