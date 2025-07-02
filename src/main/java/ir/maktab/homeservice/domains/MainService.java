@@ -18,7 +18,7 @@ import java.util.Set;
 public class MainService extends BaseEntity {
 
     public static final String TABLE_NAME = "main_service";
-    public static final String MAIN_SERVICE_TITLE = "title";
+    public static final String MAIN_SERVICE_TITLE = "main_service_title";
 
     @Column(name = MainService.MAIN_SERVICE_TITLE, nullable = false, unique = true)
     private String mainServiceTitle;
