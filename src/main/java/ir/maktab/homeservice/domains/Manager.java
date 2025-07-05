@@ -13,5 +13,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "Manager")
-public class Manager extends Person {
+public class Manager extends User {
 }

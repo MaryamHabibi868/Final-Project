@@ -15,7 +15,7 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MainService extends BaseEntity {
+public class MainService extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "main_service";
     public static final String MAIN_SERVICE_TITLE = "main_service_title";

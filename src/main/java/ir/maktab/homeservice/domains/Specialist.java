@@ -7,7 +7,6 @@ import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -18,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "Specialist")
-public class Specialist extends Person {
+public class Specialist extends User {
 
     public static final String ACCOUNT_STATUS = "account_status";
     public static final String REGISTRATION_DATE = "registration_date";

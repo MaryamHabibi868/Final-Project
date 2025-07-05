@@ -1,7 +1,10 @@
 package ir.maktab.homeservice.repository;
 
 import ir.maktab.homeservice.domains.Manager;
-import ir.maktab.homeservice.repository.base.BasePersonRepository;
+import ir.maktab.homeservice.repository.base.BaseUserRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ManagerRepository extends BasePersonRepository<Manager> {
+@Repository
+public interface ManagerRepository
+        extends BaseUserRepository<Manager> {
 }

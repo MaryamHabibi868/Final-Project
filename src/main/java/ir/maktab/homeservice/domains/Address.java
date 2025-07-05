@@ -15,7 +15,7 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address extends BaseEntity {
+public class Address extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "address";
     public static final String PROVINCE = "province";

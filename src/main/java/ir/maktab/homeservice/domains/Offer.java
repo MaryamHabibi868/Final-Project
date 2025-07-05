@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Offer extends BaseEntity {
+public class Offer extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "offer";
     public static final String DESCRIPTION = "description";

@@ -1,7 +1,9 @@
 package ir.maktab.homeservice.repository;
 
 import ir.maktab.homeservice.domains.Specialist;
-import ir.maktab.homeservice.repository.base.BasePersonRepository;
+import ir.maktab.homeservice.repository.base.BaseUserRepository;
+import org.springframework.stereotype.Repository;
 
-public interface SpecialistRepository extends BasePersonRepository<Specialist> {
+@Repository
+public interface SpecialistRepository extends BaseUserRepository<Specialist> {
 }

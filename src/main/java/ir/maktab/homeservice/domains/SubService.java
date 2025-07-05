@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubService extends BaseEntity {
+public class SubService extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "sub_service";
     public static final String SUB_SERVICE_TITLE = "sub_service_title";

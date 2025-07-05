@@ -1,12 +1,10 @@
 package ir.maktab.homeservice.repository;
 
 import ir.maktab.homeservice.domains.MainService;
-import ir.maktab.homeservice.repository.base.CrudRepository;
+import ir.maktab.homeservice.repository.base.BaseRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
+@Repository
 public interface MainServiceRepository
-        extends CrudRepository<MainService> {
-
-    Optional<MainService> findByMainServiceTitle(String mainServiceTitle);
+        extends BaseRepository<MainService , Long> {
 }
