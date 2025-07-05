@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl
-        extends BaseServiceImpl<Customer, CustomerRepository>
+        extends BaseServiceImpl<Customer, Long, CustomerRepository>
         implements CustomerService {
 
     public CustomerServiceImpl(CustomerRepository repository) {

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class SubServiceServiceImpl
-        extends BaseServiceImpl<SubService, SubServiceRepository>
+        extends BaseServiceImpl<SubService, Long, SubServiceRepository>
         implements SubServiceService {
 
     public SubServiceServiceImpl(SubServiceRepository repository, MainServiceService mainServiceService) {

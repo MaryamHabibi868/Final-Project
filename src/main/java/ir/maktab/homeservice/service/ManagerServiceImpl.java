@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ManagerServiceImpl
-        extends BaseServiceImpl<Manager, ManagerRepository>
+        extends BaseServiceImpl<Manager, Long, ManagerRepository>
         implements ManagerService{
 
     public ManagerServiceImpl(ManagerRepository repository) {

@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class MainServiceServiceImpl
-        extends BaseServiceImpl<MainService, MainServiceRepository>
+        extends BaseServiceImpl<MainService, Long, MainServiceRepository>
         implements MainServiceService {
 
     public MainServiceServiceImpl(MainServiceRepository repository) {

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class SpecialistServiceImpl
-        extends BaseServiceImpl<Specialist, SpecialistRepository>
+        extends BaseServiceImpl<Specialist, Long, SpecialistRepository>
         implements SpecialistService {
 
     public SpecialistServiceImpl(SpecialistRepository repository,

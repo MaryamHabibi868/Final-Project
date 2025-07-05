@@ -6,11 +6,8 @@ import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersonServiceImpl
-        extends BaseServiceImpl<User, UserRepository>
-        implements PersonService{
+public class UserServiceImpl
+        extends BaseServiceImpl<User, Long, UserRepository>
+        implements UserService {
 
-    public PersonServiceImpl(UserRepository repository) {
-        super(repository);
-    }
 }
