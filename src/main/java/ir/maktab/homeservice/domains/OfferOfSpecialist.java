@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -36,8 +37,6 @@ public class OfferOfSpecialist extends BaseEntity<Long> {
     //Duration
     private Double taskDuration;
 
-
-    public void startDate() {
-        startDateSuggestion = ZonedDateTime.now();
-    }
+    @ManyToMany
+    private Set<OrderOfCustomer> orderOfCustomers;
 }

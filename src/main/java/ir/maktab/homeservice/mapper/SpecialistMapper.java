@@ -3,6 +3,7 @@ package ir.maktab.homeservice.mapper;
 import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.dto.SpecialistFound;
 import ir.maktab.homeservice.dto.SpecialistSaveUpdateRequest;
+import ir.maktab.homeservice.dto.SpecialistUpdateInfo;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface SpecialistMapper {
@@ -12,4 +13,6 @@ public interface SpecialistMapper {
     Specialist specialistDTOMapToEntity(SpecialistSaveUpdateRequest specialistSaveUpdateRequest);
 
     Specialist foundSpecialistToEntity(SpecialistFound specialistFound);
+
+    Specialist updateInfoMapToEntity(SpecialistUpdateInfo specialistUpdateInfo);
 }

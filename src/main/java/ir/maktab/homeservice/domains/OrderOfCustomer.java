@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -39,6 +40,9 @@ public class OrderOfCustomer extends BaseEntity<Long> {
 
     @Column(name = OrderOfCustomer.OFFER_STATUS, nullable = false)
     private OfferStatus offerStatus;
+
+    @ManyToMany
+    private Set<OfferOfSpecialist> offerOfSpecialists;
 
     public void startDate() {
         startDate = ZonedDateTime.now();

@@ -1,7 +1,11 @@
 package ir.maktab.homeservice.dto;
 
+import ir.maktab.homeservice.domains.AccountStatus;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.util.Set;
 
 @Setter
 @Getter
@@ -35,4 +39,11 @@ public class SpecialistSaveUpdateRequest {
             message = "Password should be combination of letters and numbers"
     )
     private String password;
+
+    @NotBlank(groups = {ValidationGroup.Save.class, ValidationGroup.Update.class})
+    private AccountStatus accountStatus;
+
+
+    @OneToMany
+    private Set<Long> homeServicesId;
 }
