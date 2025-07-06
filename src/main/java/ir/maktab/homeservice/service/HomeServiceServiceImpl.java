@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.HomeService;
+import ir.maktab.homeservice.dto.HomeServiceFound;
 import ir.maktab.homeservice.dto.HomeServiceSaveUpdateRequest;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotFoundException;
@@ -33,29 +34,25 @@ public class HomeServiceServiceImpl
         if (foundMainService.get().getIsActive()) {
             throw new DuplicatedException("Main Service Title Already Exists");
         }
-        HomeService homeService = homeServiceMapper.mainServiceDTOMapToEntity(request);
+        HomeService homeService = homeServiceMapper.homeServiceDTOMapToEntity(request);
         homeService.setMainServiceTitle(request.getMainServiceTitle());
         HomeService save = homeServiceRepository.save(homeService);
-        return homeServiceMapper.mainServiceMapToDTO(save);
+        return homeServiceMapper.homeServiceMapToDTO(save);
     }
 
     public HomeServiceSaveUpdateRequest updateMainService(HomeServiceSaveUpdateRequest request) {
         Optional<HomeService> foundMainService = homeServiceRepository.findById(request.getId());
         if (foundMainService.isPresent()) {
-            HomeService homeService = homeServiceMapper.mainServiceDTOMapToEntity(request);
+            HomeService homeService = homeServiceMapper.homeServiceDTOMapToEntity(request);
             homeService.setMainServiceTitle(request.getMainServiceTitle());
             HomeService save = homeServiceRepository.save(homeService);
-            return homeServiceMapper.mainServiceMapToDTO(save);
+            return homeServiceMapper.homeServiceMapToDTO(save);
         }
         throw new NotFoundException("Main Service Not Found");
     }
 
-    public void deleteMainService(HomeServiceSaveUpdateRequest request) {
-        if (homeServiceRepository.findById(request.getId()).isPresent()) {
-            HomeService homeService = homeServiceMapper.mainServiceDTOMapToEntity(request);
-            homeServiceRepository.deleteById(homeService.getId());
-        }
-        throw new NotFoundException("Main Service Not Found");
+    public void deleteHomeService(HomeServiceFound request) {
+        customDeleteHomeServiceById(request.getId());
     }
 
     public List<HomeService> findAllMainServices() {
@@ -63,7 +60,7 @@ public class HomeServiceServiceImpl
     }
 
     @Override
-    public void deleteHomeService(Long id) {
+    public void customDeleteHomeServiceById(Long id) {
         Optional<HomeService> homeServiceFound = homeServiceRepository.findById(id);
         if (homeServiceFound.isPresent()) {
             HomeService homeService = homeServiceFound.get();

@@ -1,7 +1,7 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
-import ir.maktab.homeservice.domains.HomeService;
+import ir.maktab.homeservice.dto.CustomerFound;
 import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.repository.CustomerRepository;
@@ -23,7 +23,7 @@ public class CustomerServiceImpl
     }
 
     @Override
-    public void deleteCustomer(Long id) {
+    public void customDeleteCustomerById(Long id) {
         Optional<Customer> customerFound = customerRepository.findById(id);
         if (customerFound.isPresent()) {
             Customer customer = customerFound.get();
@@ -55,12 +55,8 @@ public class CustomerServiceImpl
         return repository.save(customer);
     }
 
-    public void deleteCustomer(CustomerSaveUpdateRequest request) {
-        Optional<Customer> foundCustomer = repository.findById(request.getId());
-        if (foundCustomer.isEmpty()) {
-            throw new NotFoundException("Customer not found");
-        }
-        repository.deleteById(request.getId());
+    public void deleteCustomer(CustomerFound request) {
+       customDeleteCustomerById(request.getId());
     }
 
     public List<Customer> findAllCustomers() {

@@ -5,5 +5,5 @@ import ir.maktab.homeservice.service.base.BaseService;
 
 public interface ManagerService extends BaseService<Manager, Long> {
 
-    void deleteManager(Long id);
+    void customDeleteManagerById(Long id);
 }

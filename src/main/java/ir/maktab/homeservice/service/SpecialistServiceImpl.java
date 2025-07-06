@@ -28,7 +28,7 @@ public class SpecialistServiceImpl
     }
 
     @Override
-    public void deleteSpecialist(Long id) {
+    public void customDeleteSpecialistById(Long id) {
         Optional<Specialist> specialistFound = specialistRepository.findById(id);
         if (specialistFound.isPresent()) {
             Specialist specialist = specialistFound.get();
