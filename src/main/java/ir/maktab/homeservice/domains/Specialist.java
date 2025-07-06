@@ -27,9 +27,6 @@ public class Specialist extends User {
 
 
     @OneToMany
-    private Set<MainService> mainServices;
-
-    @OneToMany
-    private Set<SubService> subServices;
+    private Set<HomeService> homeServices;
 }
 

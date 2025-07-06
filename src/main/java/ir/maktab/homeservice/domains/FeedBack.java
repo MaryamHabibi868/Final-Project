@@ -27,5 +27,5 @@ public class FeedBack extends BaseEntity<Long> {
     private String feedbackType;
 
     @OneToOne
-    private OfferOfCustomer offerOfCustomer;
+    private OrderOfCustomer orderOfCustomer;
 }

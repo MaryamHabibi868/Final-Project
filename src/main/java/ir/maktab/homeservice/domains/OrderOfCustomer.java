@@ -15,29 +15,29 @@ import java.time.ZonedDateTime;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OfferOfCustomer extends BaseEntity<Long> {
+public class OrderOfCustomer extends BaseEntity<Long> {
 
-    public static final String TABLE_NAME = "offer_of_customer";
+    public static final String TABLE_NAME = "order_of_customer";
     public static final String DESCRIPTION = "description";
     public static final String SUGGESTED_PRICE = "suggested_price";
     public static final String START_DATE = "start_date";
     public static final String ADDRESS = "address";
     public static final String OFFER_STATUS = "offer_status";
 
-    @Column(name = OfferOfCustomer.DESCRIPTION, nullable = false)
+    @Column(name = OrderOfCustomer.DESCRIPTION, nullable = false)
     private String description;
 
-    @Column(name = OfferOfCustomer.SUGGESTED_PRICE, nullable = false)
+    @Column(name = OrderOfCustomer.SUGGESTED_PRICE, nullable = false)
     private BigDecimal suggestedPrice;
 
-    @Column(name = OfferOfCustomer.START_DATE, nullable = false)
+    @Column(name = OrderOfCustomer.START_DATE, nullable = false)
     private ZonedDateTime startDate;
 
-    @JoinColumn(name = OfferOfCustomer.ADDRESS, nullable = false)
+    @JoinColumn(name = OrderOfCustomer.ADDRESS, nullable = false)
     @ManyToOne
     private Address address;
 
-    @Column(name = OfferOfCustomer.OFFER_STATUS, nullable = false)
+    @Column(name = OrderOfCustomer.OFFER_STATUS, nullable = false)
     private OfferStatus offerStatus;
 
     public void startDate() {
