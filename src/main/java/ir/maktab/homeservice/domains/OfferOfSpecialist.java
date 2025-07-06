@@ -1,0 +1,43 @@
+package ir.maktab.homeservice.domains;
+
+import ir.maktab.homeservice.domains.base.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+
+@Entity
+@Getter
+@Setter
+@ToString(callSuper = true)
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class OfferOfSpecialist extends BaseEntity<Long> {
+
+    public static final String TABLE_NAME = "offer_of_specialist";
+    public static final String DESCRIPTION = "description";
+    public static final String SUGGESTED_PRICE = "suggested_price";
+    public static final String START_DATE_SUGGESTION = "start_date_suggestion";
+    public static final String TASK_DURATION = "task_duration";
+
+    @Column(name = OfferOfSpecialist.DESCRIPTION)
+    private String description;
+
+    @Column(name = OfferOfSpecialist.SUGGESTED_PRICE, nullable = false)
+    private BigDecimal suggestedPrice;
+
+    @Column(name = OfferOfSpecialist.START_DATE_SUGGESTION, nullable = false)
+    private ZonedDateTime startDateSuggestion;
+
+    @Column(name = OfferOfSpecialist.TASK_DURATION, nullable = false)
+    //Duration
+    private Double taskDuration;
+
+
+    public void startDate() {
+        startDateSuggestion = ZonedDateTime.now();
+    }
+}

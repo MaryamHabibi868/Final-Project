@@ -12,8 +12,6 @@ public class ManagerServiceImpl
         extends BaseServiceImpl<Manager, Long, ManagerRepository>
         implements ManagerService{
 
-    public ManagerServiceImpl(ManagerRepository repository) {
-        super(repository);
-    }
+
 
 }

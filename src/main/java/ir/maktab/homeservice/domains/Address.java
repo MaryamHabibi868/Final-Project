@@ -54,5 +54,5 @@ public class Address extends BaseEntity<Long> {
     private String description;
 
     @OneToMany (mappedBy = "address")
-    private Set<Offer> offers;
+    private Set<OfferOfSpecialist> offerOfSpecialists;
 }

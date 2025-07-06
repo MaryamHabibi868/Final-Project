@@ -25,6 +25,10 @@ public class Specialist extends User {
     @Column(name = Specialist.ACCOUNT_STATUS, nullable = false)
     private AccountStatus accountStatus;
 
+
+    @OneToMany
+    private Set<MainService> mainServices;
+
     @OneToMany
     private Set<SubService> subServices;
 }

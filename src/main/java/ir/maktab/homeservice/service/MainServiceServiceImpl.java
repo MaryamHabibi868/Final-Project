@@ -16,12 +16,15 @@ public class MainServiceServiceImpl
         extends BaseServiceImpl<MainService, Long, MainServiceRepository>
         implements MainServiceService {
 
-    public MainServiceServiceImpl(MainServiceRepository repository) {
-        super(repository);
+    private final MainServiceRepository mainServiceRepository;
+
+    public MainServiceServiceImpl(MainServiceRepository mainServiceRepository) {
+        this.mainServiceRepository = mainServiceRepository;
     }
 
     public MainService createMainService(MainServiceSaveUpdateRequest request) {
-       Optional<MainService> foundMainService = repository.findByMainServiceTitle(request.getMainServiceTitle());
+       Optional<MainService> foundMainService =
+               mainServiceRepository.findAllByMainServiceTitleIgnoreCase(request.getMainServiceTitle());
        if (!foundMainService.get().getActive()) {
            foundMainService.get().setActive(true);
        }
