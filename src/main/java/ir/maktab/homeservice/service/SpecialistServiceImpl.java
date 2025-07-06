@@ -62,12 +62,15 @@ public class SpecialistServiceImpl
     }
 
     public SpecialistSaveUpdateRequest updateSpecialistInfo(SpecialistUpdateInfo request) {
-        Specialist specialist = specialistMapper.updateInfoMapToEntity(request);
-        specialist.setEmail(request.getEmail());
-        specialist.setPassword(request.getPassword());
-        specialist.setAccountStatus(AccountStatus.PENDING);
-        specialistRepository.save(specialist);
-        return specialistMapper.specialistMapToDTO(specialist);
+        if (specialistRepository.findById(request.getId()).isPresent()) {
+            Specialist specialist = specialistMapper.updateInfoMapToEntity(request);
+            specialist.setEmail(request.getEmail());
+            specialist.setPassword(request.getPassword());
+            specialist.setAccountStatus(AccountStatus.PENDING);
+            specialistRepository.save(specialist);
+            return specialistMapper.specialistMapToDTO(specialist);
+        }
+        throw new NotFoundException("Specialist Not Found");
     }
 
     public SpecialistSaveUpdateRequest approveSpecialistRegistration(SpecialistFound request) {

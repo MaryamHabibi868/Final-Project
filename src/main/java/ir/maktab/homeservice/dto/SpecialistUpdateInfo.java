@@ -12,6 +12,9 @@ import lombok.*;
 @NoArgsConstructor
 public class SpecialistUpdateInfo {
 
+    @NotNull
+    private Long id;
+
     @NotBlank(groups = {ValidationGroup.Save.class},
             message = "Email should be entered.")
     @Email

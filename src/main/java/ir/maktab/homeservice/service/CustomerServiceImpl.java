@@ -4,10 +4,10 @@ import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.dto.CustomerFound;
 import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
 import ir.maktab.homeservice.exception.NotFoundException;
+import ir.maktab.homeservice.mapper.CustomerMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +17,12 @@ public class CustomerServiceImpl
         implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+                               CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
     @Override
@@ -33,56 +36,45 @@ public class CustomerServiceImpl
         throw new NotFoundException("Customer Not Found");
     }
 
-    public Customer registerCustomer(CustomerSaveUpdateRequest request) {
+    public CustomerSaveUpdateRequest registerCustomer(CustomerSaveUpdateRequest request) {
         Customer customer = new Customer();
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         customer.setEmail(request.getEmail());
         customer.setPassword(request.getPassword());
-        return repository.save(customer);
+        Customer save = customerRepository.save(customer);
+        return customerMapper.customerMapToDTO(save);
     }
 
-    public Customer updateCustomer(CustomerSaveUpdateRequest request) {
-        Optional<Customer> foundCustomer = repository.findById(request.getId());
-        if (foundCustomer.isEmpty()) {
-            throw new NotFoundException("Customer not found");
+    public CustomerSaveUpdateRequest updateCustomer(CustomerSaveUpdateRequest request) {
+        if (customerRepository.findById(request.getId()).isPresent()) {
+            Customer customer = new Customer();
+            customer.setFirstName(request.getFirstName());
+            customer.setLastName(request.getLastName());
+            customer.setEmail(request.getEmail());
+            customer.setPassword(request.getPassword());
+            Customer save = customerRepository.save(customer);
+            return customerMapper.customerMapToDTO(save);
         }
-        Customer customer = new Customer();
-        customer.setFirstName(foundCustomer.get().getFirstName());
-        customer.setLastName(foundCustomer.get().getLastName());
-        customer.setEmail(foundCustomer.get().getEmail());
-        customer.setPassword(foundCustomer.get().getPassword());
-        return repository.save(customer);
+        throw new NotFoundException("Customer Not Found");
+    }
+
+
+    public CustomerSaveUpdateRequest loginCustomer(CustomerSaveUpdateRequest request) {
+        return customerMapper.customerMapToDTO(customerRepository.
+                findByEmailAndPassword(request.getEmail(), request.getPassword())
+                .orElseThrow(() -> new NotFoundException("Customer Not Found")));
     }
 
     public void deleteCustomer(CustomerFound request) {
-       customDeleteCustomerById(request.getId());
+        customDeleteCustomerById(request.getId());
     }
 
     public List<Customer> findAllCustomers() {
-        return repository.findAll();
+        return customerRepository.findAll();
     }
 
-    public Customer customerRegistration(CustomerSaveUpdateRequest request) {
-        Customer customer = new Customer();
-        customer.setFirstName(request.getFirstName());
-        customer.setLastName(request.getLastName());
-        customer.setEmail(request.getEmail());
-        customer.setPassword(request.getPassword());
-        return repository.save(customer);
-    }
 
-    public Customer customerLogin(CustomerSaveUpdateRequest request) {
-        Customer customer = new Customer();
-        Optional<Customer> foundCustomer = repository.findByEmail(request.getEmail());
-        if (foundCustomer.isPresent()) {
-            if (foundCustomer.get().getPassword().equals(request.getPassword())) {
-                System.out.println("Login Success");
-                return foundCustomer.get();
-            } else {
-                System.out.println("Wrong Password");
-            }
-        }
-        throw new NotFoundException("Customer not found");
-    }
+
+
 }
