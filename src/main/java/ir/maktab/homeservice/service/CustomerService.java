@@ -4,4 +4,6 @@ import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.service.base.BaseService;
 
 public interface CustomerService extends BaseService<Customer, Long> {
+
+    void deleteCustomer(Long id);
 }

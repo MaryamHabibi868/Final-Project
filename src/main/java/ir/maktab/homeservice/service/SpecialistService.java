@@ -4,4 +4,6 @@ import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.service.base.BaseService;
 
 public interface SpecialistService extends BaseService<Specialist, Long> {
+
+    void deleteSpecialist(Long id);
 }
