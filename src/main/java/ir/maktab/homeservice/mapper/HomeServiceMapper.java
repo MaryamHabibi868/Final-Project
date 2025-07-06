@@ -1,12 +1,15 @@
 package ir.maktab.homeservice.mapper;
 
 import ir.maktab.homeservice.domains.HomeService;
+import ir.maktab.homeservice.dto.HomeServiceFound;
 import ir.maktab.homeservice.dto.HomeServiceSaveUpdateRequest;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface HomeServiceMapper {
 
-    HomeServiceSaveUpdateRequest mainServiceMapToDTO(HomeService homeService);
+    HomeServiceSaveUpdateRequest homeServiceMapToDTO(HomeService homeService);
 
-    HomeService mainServiceDTOMapToEntity(HomeServiceSaveUpdateRequest homeServiceSaveUpdateRequest);
+    HomeService homeServiceDTOMapToEntity(HomeServiceSaveUpdateRequest homeServiceSaveUpdateRequest);
+
+    HomeService foundHomeServiceToEntity(HomeServiceFound homeServiceFound);
 }
