@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 public class BaseServiceImpl
@@ -42,5 +43,10 @@ public class BaseServiceImpl
             repository.save(entity);
         }
         throw new NotFoundException("Customer Not Found");
+    }
+
+    @Override
+    public List<T> findAll() {
+        return repository.findAllByIsActiveTrue();
     }
 }

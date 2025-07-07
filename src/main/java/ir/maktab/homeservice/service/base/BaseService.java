@@ -4,6 +4,7 @@ import ir.maktab.homeservice.domains.base.BaseEntity;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 public interface BaseService <T extends BaseEntity<ID> , ID extends Serializable> {
@@ -13,4 +14,6 @@ public interface BaseService <T extends BaseEntity<ID> , ID extends Serializable
     T save(T entity);
 
     void customDeleteById(ID id);
+
+    List<T> findAll();
 }
