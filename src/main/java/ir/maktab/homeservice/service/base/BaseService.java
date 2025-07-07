@@ -11,4 +11,6 @@ public interface BaseService <T extends BaseEntity<ID> , ID extends Serializable
     Optional<T> findById(ID id);
 
     T save(T entity);
+
+    void customDeleteById(ID id);
 }

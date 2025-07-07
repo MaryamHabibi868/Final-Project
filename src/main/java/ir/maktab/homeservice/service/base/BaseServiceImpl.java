@@ -1,6 +1,8 @@
 package ir.maktab.homeservice.service.base;
 
+import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.base.BaseEntity;
+import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.repository.base.BaseRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -29,5 +31,16 @@ public class BaseServiceImpl
     @Override
     public T save(T entity) {
         return repository.save(entity);
+    }
+
+    @Override
+    public void customDeleteById(ID id) {
+        Optional<T> foundEntity = repository.findById(id);
+        if (foundEntity.isPresent()) {
+            T entity = foundEntity.get();
+            T.setIsActive(false);
+            repository.save(entity);
+        }
+        throw new NotFoundException("Customer Not Found");
     }
 }

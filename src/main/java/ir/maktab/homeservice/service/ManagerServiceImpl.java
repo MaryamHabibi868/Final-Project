@@ -1,6 +1,5 @@
 package ir.maktab.homeservice.service;
 
-import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.Manager;
 import ir.maktab.homeservice.dto.ManagerFound;
 import ir.maktab.homeservice.exception.NotFoundException;
