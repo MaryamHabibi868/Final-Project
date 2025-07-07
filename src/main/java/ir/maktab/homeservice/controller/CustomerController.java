@@ -2,6 +2,7 @@ package ir.maktab.homeservice.controller;
 
 import ir.maktab.homeservice.domains.HomeService;
 import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
+import ir.maktab.homeservice.dto.FeedbackSubmit;
 import ir.maktab.homeservice.dto.OrderOfCustomerRequest;
 import ir.maktab.homeservice.dto.ValidationGroup;
 import ir.maktab.homeservice.service.CustomerService;
@@ -55,6 +56,13 @@ public class CustomerController {
             @RequestBody @Valid
             OrderOfCustomerRequest request) {
         return ResponseEntity.ok(orderOfCustomerService.submitOrder(request));
+    }
+
+    @PostMapping("/submit-feedback")
+    public ResponseEntity<FeedbackSubmit> submitFeedback(
+            @RequestBody @Valid
+            FeedbackSubmit feedbackSubmit) {
+        return ResponseEntity.ok(feedbackSubmit);
     }
 
 }
