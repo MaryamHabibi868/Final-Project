@@ -37,6 +37,6 @@ public class OfferOfSpecialist extends BaseEntity<Long> {
     //Duration
     private Double taskDuration;
 
-    @ManyToMany
-    private Set<OrderOfCustomer> orderOfCustomers;
+    @ManyToOne
+    private OrderOfCustomer orderOfCustomer;
 }

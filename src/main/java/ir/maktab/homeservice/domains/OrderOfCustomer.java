@@ -44,6 +44,9 @@ public class OrderOfCustomer extends BaseEntity<Long> {
     @ManyToOne
     private HomeService homeService;
 
+    @OneToMany(mappedBy = "")
+    private Set<OfferOfSpecialist> offerOfSpecialists;
+
     @ManyToOne
     private Customer customer;
 

@@ -52,7 +52,4 @@ public class Address extends BaseEntity<Long> {
 
     @Column(name = Address.DESCRIPTION)
     private String description;
-
-    @OneToMany (mappedBy = "address")
-    private Set<OfferOfSpecialist> offerOfSpecialists;
 }

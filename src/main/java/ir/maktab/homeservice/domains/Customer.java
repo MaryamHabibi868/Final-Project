@@ -1,9 +1,13 @@
 package ir.maktab.homeservice.domains;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.math.BigDecimal;
+import java.util.Stack;
 
 @Entity
 @Getter
@@ -14,4 +18,14 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @DiscriminatorValue(value = "Customer")
 public class Customer extends User {
+
+    public static final String BALANCE = "balance";
+
+    @Column(name = Customer.BALANCE)
+    private BigDecimal balance;
+
+    public BigDecimal balance() {
+        balance = BigDecimal.valueOf(0.0);
+        return balance;
+    }
 }
