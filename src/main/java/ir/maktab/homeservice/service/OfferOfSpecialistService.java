@@ -14,4 +14,7 @@ public interface OfferOfSpecialistService
 
     List<OfferOfSpecialistRequest>
     findAllOffersOfSpecialistsByCustomerId(CustomerSaveUpdateRequest request);
+
+    OfferOfSpecialistRequest chooseOfferOfSpecialist(
+            OfferOfSpecialistRequest request);
 }

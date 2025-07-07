@@ -2,6 +2,7 @@ package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.OfferOfSpecialist;
+import ir.maktab.homeservice.domains.OrderStatus;
 import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
 import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
 import ir.maktab.homeservice.mapper.OfferOfSpecialistMapper;
@@ -43,5 +44,18 @@ public class OfferOfSpecialistServiceImpl
             CustomerSaveUpdateRequest request) {
         Customer customer = customerService.findById(request.getId()).get();
         return repository.findAllByCustomerIdOrderBySuggestedPriceAsc(customer.getId());
+    }
+
+    @Override
+    public OfferOfSpecialistRequest chooseOfferOfSpecialist(
+            OfferOfSpecialistRequest request) {
+
+        OfferOfSpecialist offerOfSpecialist =
+                offerOfSpecialistMapper.offerOfSpecialistDTOMapToEntity(request);
+
+        offerOfSpecialist.getOrderOfCustomer().
+                setOrderStatus(OrderStatus.WAITING_FOR_SPECIALIST_COMING);
+        OfferOfSpecialist save = repository.save(offerOfSpecialist);
+        return offerOfSpecialistMapper.offerOfSpecialistMapToDTO(save);
     }
 }

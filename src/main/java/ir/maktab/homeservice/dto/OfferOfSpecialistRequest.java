@@ -16,6 +16,8 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 public class OfferOfSpecialistRequest {
 
+    private Long id;
+
     @NotNull(message = "Suggestion Price of Offer should be entered.")
     private BigDecimal suggestedPrice;
 

@@ -1,14 +1,12 @@
 package ir.maktab.homeservice.controller;
 
 import ir.maktab.homeservice.domains.HomeService;
-import ir.maktab.homeservice.domains.OfferOfSpecialist;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.CustomerService;
 import ir.maktab.homeservice.service.HomeServiceService;
 import ir.maktab.homeservice.service.OfferOfSpecialistService;
 import ir.maktab.homeservice.service.OrderOfCustomerService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -73,5 +71,12 @@ public class CustomerController {
         return ResponseEntity.ok(
                 offerOfSpecialistService.
                         findAllOffersOfSpecialistsByCustomerId(request));
+    }
+
+    @PostMapping("/choose-offer")
+    public ResponseEntity<OfferOfSpecialistRequest> chooseOffer(
+            @RequestBody
+            OfferOfSpecialistRequest request) {
+        return offerOfSpecialistService.chooseOfferOfSpecialist(request);
     }
 }
