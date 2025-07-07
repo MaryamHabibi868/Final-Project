@@ -19,13 +19,9 @@ import java.util.Set;
 public class OfferOfSpecialist extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "offer_of_specialist";
-    public static final String DESCRIPTION = "description";
     public static final String SUGGESTED_PRICE = "suggested_price";
     public static final String START_DATE_SUGGESTION = "start_date_suggestion";
     public static final String TASK_DURATION = "task_duration";
-
-    @Column(name = OfferOfSpecialist.DESCRIPTION)
-    private String description;
 
     @Column(name = OfferOfSpecialist.SUGGESTED_PRICE, nullable = false)
     private BigDecimal suggestedPrice;

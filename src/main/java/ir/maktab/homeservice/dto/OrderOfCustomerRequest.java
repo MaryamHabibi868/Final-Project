@@ -1,17 +1,11 @@
 package ir.maktab.homeservice.dto;
 
 import ir.maktab.homeservice.domains.*;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 @Setter
 @Getter
