@@ -41,8 +41,11 @@ public class OrderOfCustomer extends BaseEntity<Long> {
     @Column(name = OrderOfCustomer.OFFER_STATUS, nullable = false)
     private OfferStatus offerStatus;
 
-    @ManyToMany
-    private Set<OfferOfSpecialist> offerOfSpecialists;
+    @ManyToOne
+    private HomeService homeService;
+
+    @ManyToOne
+    private Customer customer;
 
     public void startDate() {
         startDate = ZonedDateTime.now();

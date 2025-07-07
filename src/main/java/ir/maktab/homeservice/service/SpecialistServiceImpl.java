@@ -9,6 +9,8 @@ import ir.maktab.homeservice.dto.HomeServiceFound;
 import ir.maktab.homeservice.dto.SpecialistFound;
 import ir.maktab.homeservice.dto.SpecialistSaveUpdateRequest;
 import ir.maktab.homeservice.dto.SpecialistUpdateInfo;
+import ir.maktab.homeservice.exception.NotActiveException;
+import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.SpecialistMapper;
 import ir.maktab.homeservice.repository.SpecialistRepository;
@@ -84,29 +86,51 @@ public class SpecialistServiceImpl
         return specialistMapper.specialistMapToDTO(specialist);
     }
 
-   /* public void addSpecialistToHomeService(SpecialistFound specialist , HomeServiceFound homeService) {
+    public void addSpecialistToHomeService(SpecialistFound specialist , HomeServiceFound homeService) {
         Optional<Specialist> foundSpecialist = specialistRepository.findById(specialist.getId());
-        Optional<HomeService> foundHomeService = homeServiceService.
+        Optional<HomeService> foundHomeService = homeServiceService.findById(homeService.getId());
         if (foundSpecialist.isEmpty()) {
             throw new NotFoundException ("Specialist Not Found");
         }
-        if (foundSubService.isEmpty()) {
-            throw new NotFoundException ("SubService Not Found");
+        if (foundHomeService.isEmpty()) {
+            throw new NotFoundException ("HomeService Not Found");
         }
-        foundSpecialist.get().getSubServices().add(subService);
+        if (!foundSpecialist.get().getIsActive()){
+            throw new NotActiveException("Specialist Not Active");
+        }
+        if (!foundHomeService.get().getIsActive()){
+            throw new NotActiveException("HomeService Not Active");
+        }
+        if (foundSpecialist.get().getAccountStatus() != AccountStatus.APPROVED) {
+            throw new NotApprovedException("This Specialist Not Approved");
+        }
+        HomeService homeService1 = foundHomeService.get();
+        foundSpecialist.get().getHomeServices().add(homeService1);
         specialistRepository.save(foundSpecialist.get());
+        homeServiceService.save(homeService1);
     }
 
-    public void removeSpecialistFromSubService(Specialist specialist , SubService subService) {
+    public void removeSpecialistFromHomeService(SpecialistFound specialist , HomeServiceFound homeService) {
         Optional<Specialist> foundSpecialist = specialistRepository.findById(specialist.getId());
-        Optional<SubService> foundSubService = subServiceService.findById(subService.getId());
+        Optional<HomeService> foundHomeService = homeServiceService.findById(homeService.getId());
         if (foundSpecialist.isEmpty()) {
             throw new NotFoundException ("Specialist Not Found");
         }
-        if (foundSubService.isEmpty()) {
-            throw new NotFoundException ("SubService Not Found");
+        if (foundHomeService.isEmpty()) {
+            throw new NotFoundException ("HomeService Not Found");
         }
-        foundSpecialist.get().getSubServices().remove(subService);
+        if (!foundSpecialist.get().getIsActive()){
+            throw new NotActiveException("Specialist Not Active");
+        }
+        if (!foundHomeService.get().getIsActive()){
+            throw new NotActiveException("HomeService Not Active");
+        }
+        if (foundSpecialist.get().getAccountStatus() != AccountStatus.APPROVED) {
+            throw new NotApprovedException("This Specialist Not Approved");
+        }
+        HomeService homeService1 = foundHomeService.get();
+        foundSpecialist.get().getHomeServices().remove(homeService1);
         specialistRepository.save(foundSpecialist.get());
-    }*/
+        homeServiceService.save(homeService1);
+    }
 }

@@ -1,9 +1,6 @@
 package ir.maktab.homeservice.domains;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -26,7 +23,7 @@ public class Specialist extends User {
     private AccountStatus accountStatus;
 
 
-    @OneToMany
+    @ManyToMany
     private Set<HomeService> homeServices;
 }
 
