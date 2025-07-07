@@ -1,14 +1,14 @@
 package ir.maktab.homeservice.controller;
 
 import ir.maktab.homeservice.domains.HomeService;
-import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
-import ir.maktab.homeservice.dto.FeedbackSubmit;
-import ir.maktab.homeservice.dto.OrderOfCustomerRequest;
-import ir.maktab.homeservice.dto.ValidationGroup;
+import ir.maktab.homeservice.domains.OfferOfSpecialist;
+import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.CustomerService;
 import ir.maktab.homeservice.service.HomeServiceService;
+import ir.maktab.homeservice.service.OfferOfSpecialistService;
 import ir.maktab.homeservice.service.OrderOfCustomerService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +24,7 @@ public class CustomerController {
     private final CustomerService customerService;
     private final HomeServiceService homeServiceService;
     private final OrderOfCustomerService orderOfCustomerService;
+    private final OfferOfSpecialistService offerOfSpecialistService;
 
     @PostMapping("/register")
     public ResponseEntity<CustomerSaveUpdateRequest> registerCustomer(
@@ -65,4 +66,12 @@ public class CustomerController {
         return ResponseEntity.ok(feedbackSubmit);
     }
 
+    @GetMapping("/find-all-offers-to-order")
+    public ResponseEntity<List<OfferOfSpecialistRequest>> findAllOffersToOrder(
+            @RequestBody
+            CustomerSaveUpdateRequest request) {
+        return ResponseEntity.ok(
+                offerOfSpecialistService.
+                        findAllOffersOfSpecialistsByCustomerId(request));
+    }
 }
