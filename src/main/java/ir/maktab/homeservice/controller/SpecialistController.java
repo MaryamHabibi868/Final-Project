@@ -1,5 +1,6 @@
 package ir.maktab.homeservice.controller;
 
+import ir.maktab.homeservice.domains.OrderOfCustomer;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.OfferOfSpecialistService;
 import ir.maktab.homeservice.service.SpecialistService;
@@ -48,8 +49,8 @@ public class SpecialistController {
     @PostMapping("/submit-offer")
     public ResponseEntity<OfferOfSpecialistRequest> submitOffer(
             @RequestBody @Valid
-            OfferOfSpecialistRequest request) {
-        return ResponseEntity.ok(offerOfSpecialistService.submitOffer(request));
+            OfferOfSpecialistRequest request, OrderOfCustomer order) {
+        return ResponseEntity.ok(specialistService.submitOfferBySpecialist(request, order));
     }
 
 

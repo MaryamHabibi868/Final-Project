@@ -1,6 +1,8 @@
 package ir.maktab.homeservice.service;
 
+import ir.maktab.homeservice.domains.OrderOfCustomer;
 import ir.maktab.homeservice.domains.Specialist;
+import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
 import ir.maktab.homeservice.dto.SpecialistFound;
 import ir.maktab.homeservice.dto.SpecialistSaveUpdateRequest;
 import ir.maktab.homeservice.dto.SpecialistUpdateInfo;
@@ -21,5 +23,8 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
 
     SpecialistSaveUpdateRequest approveSpecialistRegistration(
             SpecialistFound request);
+
+    OfferOfSpecialistRequest submitOfferBySpecialist(OfferOfSpecialistRequest request,
+                                                     OrderOfCustomer order);
 }
 

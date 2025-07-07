@@ -33,7 +33,7 @@ public class OrderOfCustomerServiceImpl
             orderOfCustomer.setSuggestedPrice(request.getSuggestedPrice());
             orderOfCustomer.setStartDate(orderOfCustomer.getStartDate());
             orderOfCustomer.setAddress(orderOfCustomer.getAddress());
-            orderOfCustomer.setOrderStatus(OrderStatus.WAITING_FOR_EXPERT_OFFER);
+            orderOfCustomer.setOrderStatus(OrderStatus.WAITING_FOR_SPECIALIST_OFFER);
             OrderOfCustomer save = repository.save(orderOfCustomer);
             return orderOfCustomerMapper.orderOfCustomerMapToDTO(save);
     }
