@@ -1,5 +1,5 @@
 package ir.maktab.homeservice.domains;
 
-public enum OfferStatus {
+public enum OrderStatus {
     WAITING_FOR_EXPERT_OFFER
 }

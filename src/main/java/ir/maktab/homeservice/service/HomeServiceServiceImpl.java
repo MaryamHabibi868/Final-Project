@@ -62,10 +62,6 @@ public class HomeServiceServiceImpl
         customDeleteHomeServiceById(request.getId());
     }
 
-    public List<HomeService> findAllHomeServices() {
-        return homeServiceRepository.findAllByIsActiveTrue();
-    }
-
     @Override
     public void customDeleteHomeServiceById(Long id) {
         Optional<HomeService> homeServiceFound = homeServiceRepository.findById(id);

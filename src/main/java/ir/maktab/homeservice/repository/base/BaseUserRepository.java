@@ -10,3 +10,5 @@ public interface BaseUserRepository<T extends User>
 
     Optional<T> findByEmailAndPassword(String email, String password);
 }
+
+

@@ -39,7 +39,7 @@ public class OrderOfCustomer extends BaseEntity<Long> {
     private Address address;
 
     @Column(name = OrderOfCustomer.OFFER_STATUS, nullable = false)
-    private OfferStatus offerStatus;
+    private OrderStatus orderStatus;
 
     @ManyToOne
     private HomeService homeService;

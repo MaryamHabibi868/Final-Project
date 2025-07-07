@@ -36,6 +36,7 @@ public class CustomerServiceImpl
         throw new NotFoundException("Customer Not Found");
     }
 
+    @Override
     public CustomerSaveUpdateRequest registerCustomer(CustomerSaveUpdateRequest request) {
         Customer customer = new Customer();
         customer.setFirstName(request.getFirstName());
@@ -46,6 +47,7 @@ public class CustomerServiceImpl
         return customerMapper.customerMapToDTO(save);
     }
 
+    @Override
     public CustomerSaveUpdateRequest updateCustomer(CustomerSaveUpdateRequest request) {
         if (customerRepository.findById(request.getId()).isPresent()) {
             Customer customer = new Customer();
@@ -60,6 +62,7 @@ public class CustomerServiceImpl
     }
 
 
+    @Override
     public CustomerSaveUpdateRequest loginCustomer(CustomerSaveUpdateRequest request) {
         return customerMapper.customerMapToDTO(customerRepository.
                 findByEmailAndPassword(request.getEmail(), request.getPassword())

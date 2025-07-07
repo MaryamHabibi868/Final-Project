@@ -6,5 +6,4 @@ import ir.maktab.homeservice.service.base.BaseService;
 public interface HomeServiceService extends BaseService<HomeService, Long> {
 
     void customDeleteHomeServiceById(Long id);
-
 }
