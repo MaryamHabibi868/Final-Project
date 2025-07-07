@@ -2,9 +2,12 @@ package ir.maktab.homeservice.controller;
 
 import ir.maktab.homeservice.domains.HomeService;
 import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
+import ir.maktab.homeservice.dto.OrderOfCustomerRequest;
 import ir.maktab.homeservice.dto.ValidationGroup;
 import ir.maktab.homeservice.service.CustomerService;
 import ir.maktab.homeservice.service.HomeServiceService;
+import ir.maktab.homeservice.service.OrderOfCustomerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +22,7 @@ public class CustomerController {
 
     private final CustomerService customerService;
     private final HomeServiceService homeServiceService;
+    private final OrderOfCustomerService orderOfCustomerService;
 
     @PostMapping("/register")
     public ResponseEntity<CustomerSaveUpdateRequest> registerCustomer(
@@ -45,4 +49,12 @@ public class CustomerController {
     public List<HomeService> findAllHomeServices() {
         return homeServiceService.findAll();
     }
+
+    @PostMapping("/submitOrder")
+    public ResponseEntity<OrderOfCustomerRequest> submitOrder(
+            @RequestBody @Valid
+            OrderOfCustomerRequest request) {
+        return ResponseEntity.ok(orderOfCustomerService.submitOrder(request));
+    }
+
 }
