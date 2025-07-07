@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -25,7 +27,7 @@ public class HomeService extends BaseEntity<Long> {
     private String homeServiceTitle;
 
     @Column(name = HomeService.BASE_PRICE, nullable = false)
-    private Double basePrice;
+    private BigDecimal basePrice;
 
     @Column(name = HomeService.DESCRIPTION, nullable = false)
     private String description;

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 @ToString
@@ -23,7 +25,7 @@ public class HomeServiceSaveUpdateRequest {
 
     @NotBlank(groups = {ValidationGroup.Save.class},
             message = "The name of main service should be entered.")
-    private Double basePrice;
+    private BigDecimal basePrice;
 
     @NotBlank(groups = {ValidationGroup.Save.class},
             message = "The name of main service should be entered.")
