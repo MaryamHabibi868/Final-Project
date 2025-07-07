@@ -34,13 +34,6 @@ public class SpecialistServiceImpl
         this.offerOfSpecialistService = offerOfSpecialistService;
     }
 
-    /*public SpecialistServiceImpl(SpecialistRepository specialistRepository,
-                                 SpecialistMapper specialistMapper,
-                                 HomeServiceService homeServiceService) {
-        this.specialistRepository = specialistRepository;
-        this.specialistMapper = specialistMapper;
-        this.homeServiceService = homeServiceService;
-    }*/
 
     @Override
     public void customDeleteSpecialistById(Long id) {

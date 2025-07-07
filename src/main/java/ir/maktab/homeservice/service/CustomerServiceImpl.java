@@ -2,17 +2,16 @@ package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.FeedBack;
-import ir.maktab.homeservice.domains.OfferOfSpecialist;
 import ir.maktab.homeservice.dto.CustomerFound;
 import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
 import ir.maktab.homeservice.dto.FeedbackSubmit;
+import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.CustomerMapper;
 import ir.maktab.homeservice.mapper.FeedBackMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +20,11 @@ public class CustomerServiceImpl
         extends BaseServiceImpl<Customer, Long, CustomerRepository>
         implements CustomerService {
 
-    /*private final CustomerRepository customerRepository;*/
     private final CustomerMapper customerMapper;
     private final OfferOfSpecialistService offerOfSpecialistService;
     private final FeedbackService feedbackService;
     private final FeedBackMapper feedBackMapper;
+
 
     public CustomerServiceImpl(CustomerRepository repository,
                                CustomerMapper customerMapper,
@@ -38,12 +37,6 @@ public class CustomerServiceImpl
         this.feedbackService = feedbackService;
         this.feedBackMapper = feedBackMapper;
     }
-
-   /* public CustomerServiceImpl(CustomerRepository customerRepository,
-                               CustomerMapper customerMapper) {
-        this.customerRepository = customerRepository;
-        this.customerMapper = customerMapper;
-    }*/
 
     @Override
     public void customDeleteCustomerById(Long id) {

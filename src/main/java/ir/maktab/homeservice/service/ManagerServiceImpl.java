@@ -14,19 +14,18 @@ public class ManagerServiceImpl
         extends BaseServiceImpl<Manager, Long, ManagerRepository>
         implements ManagerService {
 
-    private final ManagerRepository managerRepository;
-
-    public ManagerServiceImpl(ManagerRepository managerRepository) {
-        this.managerRepository = managerRepository;
+    public ManagerServiceImpl(ManagerRepository repository) {
+        super(repository);
     }
+
 
     @Override
     public void customDeleteManagerById(Long id) {
-        Optional<Manager> managerFound = managerRepository.findById(id);
+        Optional<Manager> managerFound = repository.findById(id);
         if (managerFound.isPresent()) {
             Manager manager = managerFound.get();
             manager.setIsActive(false);
-            managerRepository.save(manager);
+            repository.save(manager);
         }
         throw new NotFoundException("Manager Not Found");
     }
