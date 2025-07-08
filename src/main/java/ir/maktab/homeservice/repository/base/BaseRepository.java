@@ -13,5 +13,6 @@ public interface BaseRepository<T extends BaseEntity<ID>,
         extends JpaRepository<T, ID>,
         JpaSpecificationExecutor<T> {
 
+    //✅
     List<T> findAllByIsActiveTrue();
 }

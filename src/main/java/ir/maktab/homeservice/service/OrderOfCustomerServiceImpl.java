@@ -1,7 +1,7 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.OrderOfCustomer;
-import ir.maktab.homeservice.domains.OrderStatus;
+import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import ir.maktab.homeservice.dto.OrderOfCustomerRequest;
 import ir.maktab.homeservice.exception.NotValidPriceException;
 import ir.maktab.homeservice.mapper.OrderOfCustomerMapper;

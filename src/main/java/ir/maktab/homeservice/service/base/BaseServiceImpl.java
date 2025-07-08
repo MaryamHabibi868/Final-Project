@@ -23,30 +23,27 @@ public class BaseServiceImpl
         this.repository = repository;
     }
 
-
+    //✅
     @Override
     public Optional<T> findById(ID id) {
         return repository.findById(id);
     }
 
+    //✅
     @Override
     public T save(T entity) {
         return repository.save(entity);
     }
 
+    //✅
     @Override
     public void customDeleteById(ID id) {
         Optional<T> foundEntity = repository.findById(id);
         if (foundEntity.isPresent()) {
             T entity = foundEntity.get();
-            /*T.setIsActive(false);*/
+            entity.setIsActive(false);
             repository.save(entity);
         }
-        throw new NotFoundException("Customer Not Found");
-    }
-
-    @Override
-    public List<T> findAll() {
-        return repository.findAllByIsActiveTrue();
+        throw new NotFoundException("Entity Not Found");
     }
 }

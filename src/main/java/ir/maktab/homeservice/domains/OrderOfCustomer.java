@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.domains;
 
 import ir.maktab.homeservice.domains.base.BaseEntity;
+import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

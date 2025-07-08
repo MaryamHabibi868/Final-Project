@@ -1,22 +1,23 @@
 package ir.maktab.homeservice.controller;
 
-import ir.maktab.homeservice.dto.HomeServiceFound;
 import ir.maktab.homeservice.dto.HomeServiceSaveUpdateRequest;
 import ir.maktab.homeservice.dto.ValidationGroup;
 import ir.maktab.homeservice.service.HomeServiceService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/home-service")
+@RequestMapping("api/home-services")
 public class HomeServiceController {
 
     private final HomeServiceService homeServiceService;
 
+    //✅ ok
     @PostMapping
     public ResponseEntity<HomeServiceSaveUpdateRequest> createHomeService(
             @RequestBody @Validated(value = ValidationGroup.Save.class)
@@ -24,6 +25,7 @@ public class HomeServiceController {
         return ResponseEntity.ok(homeServiceService.createHomeService(request));
     }
 
+    //✅
     @PutMapping
     public ResponseEntity<HomeServiceSaveUpdateRequest> updateHomeService(
             @RequestBody @Validated (value = ValidationGroup.Update.class)
@@ -31,9 +33,17 @@ public class HomeServiceController {
         return ResponseEntity.ok(homeServiceService.updateHomeService(request));
     }
 
-    @DeleteMapping
-    public void deleteHomeService(
-            @RequestBody @Valid HomeServiceFound request) {
-        homeServiceService.deleteHomeService(request);
+    //✅
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteHomeService(
+            @PathVariable Long id) {
+        homeServiceService.deleteHomeService(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    //✅
+    @GetMapping
+    public ResponseEntity<List<HomeServiceSaveUpdateRequest>> findAllHomeServices() {
+        return ResponseEntity.ok(homeServiceService.findAllHomeServices());
     }
 }

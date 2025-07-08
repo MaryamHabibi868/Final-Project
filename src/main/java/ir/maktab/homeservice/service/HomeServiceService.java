@@ -5,15 +5,21 @@ import ir.maktab.homeservice.dto.HomeServiceFound;
 import ir.maktab.homeservice.dto.HomeServiceSaveUpdateRequest;
 import ir.maktab.homeservice.service.base.BaseService;
 
+import java.util.List;
+
 public interface HomeServiceService extends BaseService<HomeService, Long> {
 
-    void customDeleteHomeServiceById(Long id);
-
+    //✅
     HomeServiceSaveUpdateRequest createHomeService(
             HomeServiceSaveUpdateRequest request);
 
+    //✅
     HomeServiceSaveUpdateRequest updateHomeService(
             HomeServiceSaveUpdateRequest request);
 
-    void deleteHomeService(HomeServiceFound request);
+    //✅
+    void deleteHomeService(Long id);
+
+    //✅
+    List<HomeServiceSaveUpdateRequest> findAllHomeServices();
 }

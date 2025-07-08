@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface HomeServiceRepository
         extends BaseRepository<HomeService, Long> {
 
+    //✅
     Optional<HomeService> findAllByHomeServiceTitleIgnoreCase(String mainServiceTitle);
 }

@@ -1,4 +1,4 @@
-package ir.maktab.homeservice.domains;
+package ir.maktab.homeservice.domains.enumClasses;
 
 public enum AccountStatus {
     NEW,
