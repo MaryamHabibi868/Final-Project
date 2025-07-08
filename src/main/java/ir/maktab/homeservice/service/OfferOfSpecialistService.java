@@ -17,4 +17,6 @@ public interface OfferOfSpecialistService
 
     OfferOfSpecialistRequest chooseOfferOfSpecialist(
             OfferOfSpecialistRequest request);
+
+    OfferOfSpecialistRequest startService(OfferOfSpecialistRequest request);
 }

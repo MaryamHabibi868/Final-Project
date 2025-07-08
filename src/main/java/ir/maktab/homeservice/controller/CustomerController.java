@@ -75,8 +75,15 @@ public class CustomerController {
 
     @PostMapping("/choose-offer")
     public ResponseEntity<OfferOfSpecialistRequest> chooseOffer(
-            @RequestBody
+            @RequestBody @Valid
             OfferOfSpecialistRequest request) {
         return offerOfSpecialistService.chooseOfferOfSpecialist(request);
+    }
+
+    @PostMapping("/start-service")
+    public ResponseEntity<OfferOfSpecialistRequest> startService(
+            @RequestBody @Valid
+            OfferOfSpecialistRequest request) {
+        return offerOfSpecialistService.startService(request);
     }
 }

@@ -5,11 +5,13 @@ import ir.maktab.homeservice.domains.OfferOfSpecialist;
 import ir.maktab.homeservice.domains.OrderStatus;
 import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
 import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
+import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.mapper.OfferOfSpecialistMapper;
 import ir.maktab.homeservice.repository.OfferOfSpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -55,6 +57,26 @@ public class OfferOfSpecialistServiceImpl
 
         offerOfSpecialist.getOrderOfCustomer().
                 setOrderStatus(OrderStatus.WAITING_FOR_SPECIALIST_COMING);
+        OfferOfSpecialist save = repository.save(offerOfSpecialist);
+        return offerOfSpecialistMapper.offerOfSpecialistMapToDTO(save);
+    }
+
+    @Override
+    public OfferOfSpecialistRequest startService(OfferOfSpecialistRequest request) {
+        OfferOfSpecialist offerOfSpecialist =
+                offerOfSpecialistMapper.offerOfSpecialistDTOMapToEntity(request);
+
+        if (offerOfSpecialist.getOrderOfCustomer().
+                getOrderStatus()!=OrderStatus.WAITING_FOR_SPECIALIST_COMING){
+            throw new NotApprovedException("This offer is not approved");
+        }
+
+        if (offerOfSpecialist.getStartDateSuggestion().isBefore(ZonedDateTime.now())){
+            throw new NotApprovedException
+                    ("Start time is before the suggested time with specialist");
+        }
+
+        offerOfSpecialist.getOrderOfCustomer().setOrderStatus(OrderStatus.HAS_BEGIN);
         OfferOfSpecialist save = repository.save(offerOfSpecialist);
         return offerOfSpecialistMapper.offerOfSpecialistMapToDTO(save);
     }
