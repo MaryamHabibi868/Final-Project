@@ -27,7 +27,9 @@ public class HomeServiceServiceImpl
     }
 
 
-    public HomeServiceSaveUpdateRequest createHomeService(HomeServiceSaveUpdateRequest request) {
+    @Override
+    public HomeServiceSaveUpdateRequest createHomeService(
+            HomeServiceSaveUpdateRequest request) {
        Optional<HomeService> foundHomeService =
                repository.findAllByHomeServiceTitleIgnoreCase(
                        request.getHomeServiceTitle());
@@ -45,7 +47,9 @@ public class HomeServiceServiceImpl
         return homeServiceMapper.homeServiceMapToDTO(save);
     }
 
-    public HomeServiceSaveUpdateRequest updateMainService(HomeServiceSaveUpdateRequest request) {
+    @Override
+    public HomeServiceSaveUpdateRequest updateHomeService(
+            HomeServiceSaveUpdateRequest request) {
         Optional<HomeService> foundMainService = repository.findById(request.getId());
         if (foundMainService.isPresent()) {
             HomeService homeService = homeServiceMapper.homeServiceDTOMapToEntity(request);
@@ -58,6 +62,7 @@ public class HomeServiceServiceImpl
         throw new NotFoundException("Main Service Not Found");
     }
 
+    @Override
     public void deleteHomeService(HomeServiceFound request) {
         customDeleteHomeServiceById(request.getId());
     }

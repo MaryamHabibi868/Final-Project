@@ -9,6 +9,7 @@ import ir.maktab.homeservice.mapper.SpecialistMapper;
 import ir.maktab.homeservice.repository.SpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
@@ -47,17 +48,17 @@ public class SpecialistServiceImpl
     }
 
     @Override
-   public SpecialistSaveUpdateRequest registerSpecialist(SpecialistSaveUpdateRequest request) {
+    public SpecialistSaveUpdateRequest registerSpecialist(SpecialistSaveUpdateRequest request) {
         Specialist specialist = new Specialist();
         specialist.setFirstName(request.getFirstName());
         specialist.setLastName(request.getLastName());
         specialist.setEmail(request.getEmail());
         specialist.setPassword(request.getPassword());
-       Specialist save = repository.save(specialist);
-       return specialistMapper.specialistMapToDTO(save);
-   }
+        Specialist save = repository.save(specialist);
+        return specialistMapper.specialistMapToDTO(save);
+    }
 
-   @Override
+    @Override
     public SpecialistSaveUpdateRequest loginSpecialist(SpecialistSaveUpdateRequest request) {
         return specialistMapper.specialistMapToDTO(repository.
                 findByEmailAndPassword(request.getEmail(), request.getPassword())
@@ -88,19 +89,23 @@ public class SpecialistServiceImpl
         return specialistMapper.specialistMapToDTO(specialist);
     }
 
-    public void addSpecialistToHomeService(SpecialistFound specialist , HomeServiceFound homeService) {
+    @Override
+    public void addSpecialistToHomeService(
+            SpecialistFound specialist,
+            HomeServiceFound homeService) {
+
         Optional<Specialist> foundSpecialist = repository.findById(specialist.getId());
         Optional<HomeService> foundHomeService = homeServiceService.findById(homeService.getId());
         if (foundSpecialist.isEmpty()) {
-            throw new NotFoundException ("Specialist Not Found");
+            throw new NotFoundException("Specialist Not Found");
         }
         if (foundHomeService.isEmpty()) {
-            throw new NotFoundException ("HomeService Not Found");
+            throw new NotFoundException("HomeService Not Found");
         }
-        if (!foundSpecialist.get().getIsActive()){
+        if (!foundSpecialist.get().getIsActive()) {
             throw new NotActiveException("Specialist Not Active");
         }
-        if (!foundHomeService.get().getIsActive()){
+        if (!foundHomeService.get().getIsActive()) {
             throw new NotActiveException("HomeService Not Active");
         }
         if (foundSpecialist.get().getAccountStatus() != AccountStatus.APPROVED) {
@@ -112,19 +117,22 @@ public class SpecialistServiceImpl
         homeServiceService.save(homeService1);
     }
 
-    public void removeSpecialistFromHomeService(SpecialistFound specialist , HomeServiceFound homeService) {
+    @Override
+    public void removeSpecialistFromHomeService(
+            SpecialistFound specialist,
+            HomeServiceFound homeService) {
         Optional<Specialist> foundSpecialist = repository.findById(specialist.getId());
         Optional<HomeService> foundHomeService = homeServiceService.findById(homeService.getId());
         if (foundSpecialist.isEmpty()) {
-            throw new NotFoundException ("Specialist Not Found");
+            throw new NotFoundException("Specialist Not Found");
         }
         if (foundHomeService.isEmpty()) {
-            throw new NotFoundException ("HomeService Not Found");
+            throw new NotFoundException("HomeService Not Found");
         }
-        if (!foundSpecialist.get().getIsActive()){
+        if (!foundSpecialist.get().getIsActive()) {
             throw new NotActiveException("Specialist Not Active");
         }
-        if (!foundHomeService.get().getIsActive()){
+        if (!foundHomeService.get().getIsActive()) {
             throw new NotActiveException("HomeService Not Active");
         }
         if (foundSpecialist.get().getAccountStatus() != AccountStatus.APPROVED) {
@@ -138,10 +146,10 @@ public class SpecialistServiceImpl
 
     @Override
     public OfferOfSpecialistRequest submitOfferBySpecialist(OfferOfSpecialistRequest request,
-                                        OrderOfCustomer order){
+                                                            OrderOfCustomer order) {
         OrderOfCustomer orderOfCustomerFound = orderOfCustomerService.findById(order.getId()).get();
         if (orderOfCustomerFound
-                .getOrderStatus().equals(OrderStatus.WAITING_FOR_SPECIALIST_OFFER)){
+                .getOrderStatus().equals(OrderStatus.WAITING_FOR_SPECIALIST_OFFER)) {
             OfferOfSpecialistRequest offerOfSpecialistRequest =
                     offerOfSpecialistService.submitOffer(request);
 

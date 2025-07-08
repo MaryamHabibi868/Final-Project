@@ -2,6 +2,7 @@ package ir.maktab.homeservice.controller;
 
 import ir.maktab.homeservice.domains.OrderOfCustomer;
 import ir.maktab.homeservice.dto.*;
+import ir.maktab.homeservice.service.HomeServiceService;
 import ir.maktab.homeservice.service.OfferOfSpecialistService;
 import ir.maktab.homeservice.service.SpecialistService;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ public class SpecialistController {
 
     private final SpecialistService specialistService;
     private final OfferOfSpecialistService offerOfSpecialistService;
+    private final HomeServiceService homeServiceService;
 
     @PostMapping("/register")
     public ResponseEntity<SpecialistSaveUpdateRequest> registerSpecialist(
@@ -27,21 +29,21 @@ public class SpecialistController {
 
     @PostMapping("/login")
     public ResponseEntity<SpecialistSaveUpdateRequest> loginSpecialist(
-            @RequestBody @Validated (value = ValidationGroup.Update.class)
+            @RequestBody @Validated(value = ValidationGroup.Update.class)
             SpecialistSaveUpdateRequest request) {
         return ResponseEntity.ok(specialistService.loginSpecialist(request));
     }
 
     @PutMapping("/update")
     public ResponseEntity<SpecialistSaveUpdateRequest> updateSpecialist(
-            @RequestBody @Validated (value = ValidationGroup.Update.class)
+            @RequestBody @Validated(value = ValidationGroup.Update.class)
             SpecialistUpdateInfo request) {
         return ResponseEntity.ok(specialistService.updateSpecialistInfo(request));
     }
 
     @PutMapping("/approve-specialist")
     public ResponseEntity<SpecialistSaveUpdateRequest> approveSpecialistRegistration(
-            @RequestBody @Validated (value = ValidationGroup.Update.class)
+            @RequestBody @Validated(value = ValidationGroup.Update.class)
             SpecialistFound request) {
         return ResponseEntity.ok(specialistService.approveSpecialistRegistration(request));
     }
@@ -52,6 +54,21 @@ public class SpecialistController {
             OfferOfSpecialistRequest request, OrderOfCustomer order) {
         return ResponseEntity.ok(specialistService.submitOfferBySpecialist(request, order));
     }
+
+    @PostMapping("/add-specialist-to-home-service")
+    public void addSpecialistToHomeService(
+            @RequestBody @Valid
+            SpecialistFound specialist, HomeServiceFound homeService) {
+        specialistService.addSpecialistToHomeService(specialist, homeService);
+    }
+
+    @DeleteMapping("/deleting-specialist-from-home-service")
+    public void deleteSpecialistFromHomeService(
+            @RequestBody @Valid
+            SpecialistFound specialist, HomeServiceFound homeService) {
+        specialistService.removeSpecialistFromHomeService(specialist, homeService);
+    }
+
 
 
 }
