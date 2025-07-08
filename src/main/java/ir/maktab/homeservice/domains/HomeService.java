@@ -1,7 +1,10 @@
 package ir.maktab.homeservice.domains;
 
 import ir.maktab.homeservice.domains.base.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -32,7 +35,7 @@ public class HomeService extends BaseEntity<Long> {
     @Column(name = HomeService.DESCRIPTION, nullable = false)
     private String description;
 
-    @Column(name = HomeService.PARENT_SERVICE)
+    @JoinColumn(name = HomeService.PARENT_SERVICE)
     @ManyToOne
     private HomeService parentService;
 }

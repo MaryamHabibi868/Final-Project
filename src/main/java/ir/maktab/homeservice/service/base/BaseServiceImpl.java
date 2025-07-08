@@ -39,7 +39,7 @@ public class BaseServiceImpl
         Optional<T> foundEntity = repository.findById(id);
         if (foundEntity.isPresent()) {
             T entity = foundEntity.get();
-            T.setIsActive(false);
+            /*T.setIsActive(false);*/
             repository.save(entity);
         }
         throw new NotFoundException("Customer Not Found");

@@ -9,9 +9,13 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @ToString(callSuper = true)
+/*
 @SuperBuilder
+*/
 @NoArgsConstructor
+/*
 @AllArgsConstructor
+*/
 @DiscriminatorValue(value = "Manager")
 public class Manager extends User {
 }
