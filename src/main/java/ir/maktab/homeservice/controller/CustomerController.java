@@ -8,6 +8,7 @@ import ir.maktab.homeservice.service.OfferOfSpecialistService;
 import ir.maktab.homeservice.service.OrderOfCustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.ParameterScriptAssert;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -77,13 +78,23 @@ public class CustomerController {
     public ResponseEntity<OfferOfSpecialistRequest> chooseOffer(
             @RequestBody @Valid
             OfferOfSpecialistRequest request) {
-        return offerOfSpecialistService.chooseOfferOfSpecialist(request);
+        return ResponseEntity.ok
+                (offerOfSpecialistService.chooseOfferOfSpecialist(request));
     }
 
     @PostMapping("/start-service")
     public ResponseEntity<OfferOfSpecialistRequest> startService(
             @RequestBody @Valid
             OfferOfSpecialistRequest request) {
-        return offerOfSpecialistService.startService(request);
+        return ResponseEntity.ok(
+                offerOfSpecialistService.startService(request));
+    }
+
+    @PostMapping("/end-service")
+    public ResponseEntity<OfferOfSpecialistRequest> endService(
+            @RequestBody @Valid
+            OfferOfSpecialistRequest request) {
+        return ResponseEntity.ok(
+                offerOfSpecialistService.endService(request));
     }
 }

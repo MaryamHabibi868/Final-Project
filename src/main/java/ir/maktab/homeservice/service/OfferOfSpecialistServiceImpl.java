@@ -80,4 +80,18 @@ public class OfferOfSpecialistServiceImpl
         OfferOfSpecialist save = repository.save(offerOfSpecialist);
         return offerOfSpecialistMapper.offerOfSpecialistMapToDTO(save);
     }
+
+    @Override
+    public OfferOfSpecialistRequest endService(OfferOfSpecialistRequest request) {
+        OfferOfSpecialist offerOfSpecialist = offerOfSpecialistMapper
+                .offerOfSpecialistDTOMapToEntity(request);
+
+        if (offerOfSpecialist.getOrderOfCustomer().getOrderStatus() !=
+                OrderStatus.HAS_BEGIN){
+            throw new NotApprovedException("This offer is not begin");
+        }
+        offerOfSpecialist.getOrderOfCustomer().setOrderStatus(OrderStatus.DONE);
+        OfferOfSpecialist save = repository.save(offerOfSpecialist);
+        return offerOfSpecialistMapper.offerOfSpecialistMapToDTO(save);
+    }
 }
