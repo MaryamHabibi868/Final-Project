@@ -23,9 +23,6 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
     SpecialistSaveRequest approveSpecialistRegistration(
             Long id);
 
-    OfferOfSpecialistRequest submitOfferBySpecialist(OfferOfSpecialistRequest request,
-                                                     OrderOfCustomer order);
-
     //✅
     void addSpecialistToHomeService(
             Long specialistId, Long homeServiceId);

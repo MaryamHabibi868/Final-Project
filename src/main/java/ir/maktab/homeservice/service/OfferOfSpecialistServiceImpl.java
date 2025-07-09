@@ -3,6 +3,8 @@ package ir.maktab.homeservice.service;
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.OfferOfSpecialist;
 import ir.maktab.homeservice.domains.OrderOfCustomer;
+import ir.maktab.homeservice.domains.Specialist;
+import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
 import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import ir.maktab.homeservice.dto.CustomerUpdateRequest;
 import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
@@ -26,15 +28,18 @@ public class OfferOfSpecialistServiceImpl
     private final OfferOfSpecialistMapper offerOfSpecialistMapper;
     private final CustomerService customerService;
     private final OrderOfCustomerService orderOfCustomerService;
+    private final SpecialistService specialistService;
 
     public OfferOfSpecialistServiceImpl(OfferOfSpecialistRepository repository,
                                         OfferOfSpecialistMapper offerOfSpecialistMapper,
                                         CustomerService customerService,
-                                        OrderOfCustomerService orderOfCustomerService) {
+                                        OrderOfCustomerService orderOfCustomerService,
+                                        SpecialistService specialistService) {
         super(repository);
         this.offerOfSpecialistMapper = offerOfSpecialistMapper;
         this.customerService = customerService;
         this.orderOfCustomerService = orderOfCustomerService;
+        this.specialistService = specialistService;
     }
 
     //✅ ok
@@ -44,13 +49,28 @@ public class OfferOfSpecialistServiceImpl
             Long orderOfCustomerId) {
         OrderOfCustomer foundOrderOfCustomer = orderOfCustomerService.
                 findById(orderOfCustomerId).orElseThrow(
-                () -> new NotFoundException("Order of customer Not Found"));
+                        () -> new NotFoundException("Order of customer Not Found"));
 
+        Specialist foundSpecialist = specialistService.
+                findById(request.getSpecialistId()).orElseThrow(
+                        () -> new NotFoundException("Special ist Not Found"));
+
+        if (!(foundSpecialist.getAccountStatus() == AccountStatus.APPROVED)) {
+            throw new NotApprovedException("Special ist Not Approved");
+        }
         if (request.getSuggestedPrice()
-                .compareTo(foundOrderOfCustomer.getSuggestedPrice())< 0) {
+                .compareTo(foundOrderOfCustomer.getSuggestedPrice()) < 0) {
             throw new NotValidPriceException(
                     "Suggested price is less than the price of this Order");
         }
+        if (!(foundOrderOfCustomer.getOrderStatus() ==
+                OrderStatus.WAITING_FOR_SPECIALIST_OFFER)) {
+            throw new NotApprovedException("Order is not waiting for special offer");
+        }
+
+        foundOrderOfCustomer.setOrderStatus(OrderStatus.WAITING_FOR_CHOOSING_SPECIALIST);
+        orderOfCustomerService.save(foundOrderOfCustomer);
+
         OfferOfSpecialist offerOfSpecialist = new OfferOfSpecialist();
         offerOfSpecialist.setSuggestedPrice(request.getSuggestedPrice());
         offerOfSpecialist.setStartDateSuggestion(request.getStartDateSuggestion());

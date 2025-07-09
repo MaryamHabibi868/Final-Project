@@ -25,4 +25,7 @@ public class OfferOfSpecialistRequest {
 
     @NotNull(message = "Task duration of Offer should be entered.")
     private Double taskDuration;
+
+    @NotBlank
+    private Long specialistId;
 }

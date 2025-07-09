@@ -2,7 +2,6 @@ package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.*;
 import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
-import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.NotActiveException;
 import ir.maktab.homeservice.exception.NotApprovedException;
@@ -19,20 +18,13 @@ public class SpecialistServiceImpl
 
     private final SpecialistMapper specialistMapper;
     private final HomeServiceService homeServiceService;
-    private final OrderOfCustomerService orderOfCustomerService;
-    private final OfferOfSpecialistService offerOfSpecialistService;
 
     public SpecialistServiceImpl(SpecialistRepository repository,
-                                 SpecialistRepository specialistRepository,
                                  SpecialistMapper specialistMapper,
-                                 HomeServiceService homeServiceService,
-                                 OrderOfCustomerService orderOfCustomerService,
-                                 OfferOfSpecialistService offerOfSpecialistService) {
+                                 HomeServiceService homeServiceService) {
         super(repository);
         this.specialistMapper = specialistMapper;
         this.homeServiceService = homeServiceService;
-        this.orderOfCustomerService = orderOfCustomerService;
-        this.offerOfSpecialistService = offerOfSpecialistService;
     }
 
     //✅
@@ -133,23 +125,5 @@ public class SpecialistServiceImpl
         foundSpecialist.getHomeServices().remove(foundHomeService);
         repository.save(foundSpecialist);
         homeServiceService.save(foundHomeService);
-    }
-
-    @Override
-    public OfferOfSpecialistRequest submitOfferBySpecialist(
-            OfferOfSpecialistRequest request,
-            OrderOfCustomer order) {
-        OrderOfCustomer orderOfCustomerFound = orderOfCustomerService.findById(order.getId()).get();
-        if (orderOfCustomerFound
-                .getOrderStatus().equals(OrderStatus.WAITING_FOR_SPECIALIST_OFFER)) {
-            OfferOfSpecialistRequest offerOfSpecialistRequest =
-                    offerOfSpecialistService.submitOffer(request);
-
-            orderOfCustomerFound.setOrderStatus(OrderStatus.WAITING_FOR_CHOOSING_SPECIALIST);
-            orderOfCustomerService.save(orderOfCustomerFound);
-
-            return offerOfSpecialistRequest;
-        }
-        throw new NotApprovedException("Order is not waiting for special offer");
     }
 }
