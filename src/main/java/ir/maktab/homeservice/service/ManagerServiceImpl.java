@@ -18,19 +18,4 @@ public class ManagerServiceImpl
         super(repository);
     }
 
-
-    @Override
-    public void customDeleteManagerById(Long id) {
-        Optional<Manager> managerFound = repository.findById(id);
-        if (managerFound.isPresent()) {
-            Manager manager = managerFound.get();
-            manager.setIsActive(false);
-            repository.save(manager);
-        }
-        throw new NotFoundException("Manager Not Found");
-    }
-
-    void deleteManager(ManagerFound request) {
-        customDeleteManagerById(request.getId());
-    }
 }

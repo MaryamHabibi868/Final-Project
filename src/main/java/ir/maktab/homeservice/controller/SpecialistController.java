@@ -37,7 +37,7 @@ public class SpecialistController {
     }
 
     //✅
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<SpecialistResponse> updateSpecialist(
             @RequestBody @Valid
             SpecialistUpdateInfo request) {

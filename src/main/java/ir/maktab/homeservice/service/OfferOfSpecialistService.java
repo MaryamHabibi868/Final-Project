@@ -1,7 +1,7 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.OfferOfSpecialist;
-import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
+import ir.maktab.homeservice.dto.CustomerUpdateRequest;
 import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
 import ir.maktab.homeservice.service.base.BaseService;
 
@@ -13,7 +13,7 @@ public interface OfferOfSpecialistService
     OfferOfSpecialistRequest submitOffer(OfferOfSpecialistRequest request);
 
     List<OfferOfSpecialistRequest>
-    findAllOffersOfSpecialistsByCustomerId(CustomerSaveUpdateRequest request);
+    findAllOffersOfSpecialistsByCustomerId(CustomerUpdateRequest request);
 
     OfferOfSpecialistRequest chooseOfferOfSpecialist(
             OfferOfSpecialistRequest request);

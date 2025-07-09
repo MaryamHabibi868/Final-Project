@@ -11,5 +11,7 @@ import java.util.List;
 public interface OfferOfSpecialistRepository
         extends BaseRepository<OfferOfSpecialist, Long> {
 
-    List<OfferOfSpecialistRequest> findAllByCustomerIdOrderBySuggestedPriceAsc(Long customerId);
+  /*  List<OfferOfSpecialistRequest> findAllByCustomerIdOrderBySuggestedPriceAsc(Long customerId);
+
+    List<OfferOfSpecialist> findAllByCustomerIdOrderBySuggestedPriceDesc(Long customerId);*/
 }
