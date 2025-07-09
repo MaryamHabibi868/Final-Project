@@ -2,10 +2,7 @@ package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.FeedBack;
-import ir.maktab.homeservice.dto.CustomerFound;
-import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
-import ir.maktab.homeservice.dto.FeedbackSubmit;
-import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
+import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.CustomerMapper;
 import ir.maktab.homeservice.mapper.FeedBackMapper;
@@ -13,7 +10,6 @@ import ir.maktab.homeservice.repository.CustomerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl
@@ -21,70 +17,59 @@ public class CustomerServiceImpl
         implements CustomerService {
 
     private final CustomerMapper customerMapper;
-    private final OfferOfSpecialistService offerOfSpecialistService;
     private final FeedbackService feedbackService;
     private final FeedBackMapper feedBackMapper;
 
 
     public CustomerServiceImpl(CustomerRepository repository,
                                CustomerMapper customerMapper,
-                               OfferOfSpecialistService offerOfSpecialistService,
                                FeedbackService feedbackService,
                                FeedBackMapper feedBackMapper) {
         super(repository);
         this.customerMapper = customerMapper;
-        this.offerOfSpecialistService = offerOfSpecialistService;
         this.feedbackService = feedbackService;
         this.feedBackMapper = feedBackMapper;
     }
 
+    //✅
     @Override
-    public void customDeleteCustomerById(Long id) {
-        Optional<Customer> customerFound = repository.findById(id);
-        if (customerFound.isPresent()) {
-            Customer customer = customerFound.get();
-            customer.setIsActive(false);
-            repository.save(customer);
-        }
-        throw new NotFoundException("Customer Not Found");
-    }
-
-    @Override
-    public CustomerSaveUpdateRequest registerCustomer(CustomerSaveUpdateRequest request) {
+    public CustomerResponse registerCustomer(CustomerSaveRequest request) {
         Customer customer = new Customer();
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         customer.setEmail(request.getEmail());
         customer.setPassword(request.getPassword());
         Customer save = repository.save(customer);
-        return customerMapper.customerMapToDTO(save);
+        return customerMapper.entityMapToResponse(save);
     }
 
+    //✅
     @Override
-    public CustomerSaveUpdateRequest updateCustomer(CustomerSaveUpdateRequest request) {
-        if (repository.findById(request.getId()).isPresent()) {
-            Customer customer = new Customer();
-            customer.setFirstName(request.getFirstName());
-            customer.setLastName(request.getLastName());
-            customer.setEmail(request.getEmail());
-            customer.setPassword(request.getPassword());
-            Customer save = repository.save(customer);
-            return customerMapper.customerMapToDTO(save);
-        }
-        throw new NotFoundException("Customer Not Found");
+    public CustomerResponse updateCustomer(CustomerUpdateRequest request) {
+            Customer foundCustomer = repository.findById(request.getId())
+                    .orElseThrow(
+                    () -> new NotFoundException("Customer not found")
+            );
+            foundCustomer.setFirstName(request.getFirstName());
+            foundCustomer.setLastName(request.getLastName());
+            foundCustomer.setEmail(request.getEmail());
+            foundCustomer.setPassword(request.getPassword());
+            Customer save = repository.save(foundCustomer);
+            return customerMapper.entityMapToResponse(save);
+
     }
 
-
+    //✅
     @Override
-    public CustomerSaveUpdateRequest loginCustomer(CustomerSaveUpdateRequest request) {
-        return customerMapper.customerMapToDTO(repository.
+    public CustomerResponse loginCustomer(CustomerLoginRequest request) {
+        return customerMapper.entityMapToResponse(repository.
                 findByEmailAndPassword(request.getEmail(), request.getPassword())
                 .orElseThrow(() -> new NotFoundException("Customer Not Found")));
     }
 
-    public void deleteCustomer(CustomerFound request) {
+  /*  public void deleteCustomer(CustomerFound request) {
         customDeleteCustomerById(request.getId());
-    }
+    }*/
 
     public List<Customer> findAllCustomers() {
         return repository.findAll();

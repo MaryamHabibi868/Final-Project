@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.mapper;
 
 import ir.maktab.homeservice.domains.Customer;
+import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.dto.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -8,9 +9,13 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CustomerMapper {
 
-    CustomerSaveUpdateRequest customerMapToDTO(Customer customer);
+    CustomerUpdateRequest customerMapToDTO(Customer customer);
 
-    Customer customerDTOMapToEntity(CustomerSaveUpdateRequest customerSaveUpdateRequest);
+    Customer customerDTOMapToEntity(CustomerUpdateRequest customerUpdateRequest);
 
-    Customer foundCustomerToEntity(CustomerFound customerFound);
+    Customer foundCustomerToEntity(CustomerResponse customerResponse);
+
+    CustomerResponse entityMapToResponse(Customer customer);
+
+    Customer responseMapToEntity(CustomerResponse customerResponse);
 }

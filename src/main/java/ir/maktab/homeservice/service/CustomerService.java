@@ -1,19 +1,19 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
-import ir.maktab.homeservice.dto.CustomerSaveUpdateRequest;
-import ir.maktab.homeservice.dto.FeedbackSubmit;
+import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.base.BaseService;
 
 public interface CustomerService extends BaseService<Customer, Long> {
 
-    void customDeleteCustomerById(Long id);
+    //✅
+    CustomerResponse registerCustomer(CustomerSaveRequest request);
 
-    CustomerSaveUpdateRequest registerCustomer(CustomerSaveUpdateRequest request);
+    //✅
+    CustomerResponse updateCustomer(CustomerUpdateRequest request);
 
-    CustomerSaveUpdateRequest updateCustomer(CustomerSaveUpdateRequest request);
-
-    CustomerSaveUpdateRequest loginCustomer(CustomerSaveUpdateRequest request);
+    //✅
+    CustomerResponse loginCustomer(CustomerLoginRequest request);
 
     FeedbackSubmit submitFeedback(
             FeedbackSubmit feedbackSubmit, Long offerOfSpecialistId);

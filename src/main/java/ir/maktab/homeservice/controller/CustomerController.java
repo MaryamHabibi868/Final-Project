@@ -1,6 +1,5 @@
 package ir.maktab.homeservice.controller;
 
-import ir.maktab.homeservice.domains.HomeService;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.CustomerService;
 import ir.maktab.homeservice.service.HomeServiceService;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/customer")
+@RequestMapping("api/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -23,30 +22,28 @@ public class CustomerController {
     private final OrderOfCustomerService orderOfCustomerService;
     private final OfferOfSpecialistService offerOfSpecialistService;
 
+    //✅
     @PostMapping("/register")
-    public ResponseEntity<CustomerSaveUpdateRequest> registerCustomer(
-            @RequestBody @Validated(value = ValidationGroup.Save.class)
-            CustomerSaveUpdateRequest request) {
+    public ResponseEntity<CustomerResponse> registerCustomer(
+            @RequestBody @Valid
+            CustomerSaveRequest request) {
         return ResponseEntity.ok(customerService.registerCustomer(request));
     }
 
+    //✅
     @PostMapping("/login")
-    public ResponseEntity<CustomerSaveUpdateRequest> loginCustomer(
-            @RequestBody @Validated (value = ValidationGroup.Update.class)
-            CustomerSaveUpdateRequest request) {
+    public ResponseEntity<CustomerResponse> loginCustomer(
+            @RequestBody @Valid
+            CustomerLoginRequest request) {
         return ResponseEntity.ok(customerService.loginCustomer(request));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<CustomerSaveUpdateRequest> updateCustomer(
-            @RequestBody @Validated (value = ValidationGroup.Update.class)
-            CustomerSaveUpdateRequest request) {
+    //✅
+    @PutMapping
+    public ResponseEntity<CustomerResponse> updateCustomer(
+            @RequestBody @Valid
+            CustomerUpdateRequest request) {
         return ResponseEntity.ok(customerService.updateCustomer(request));
-    }
-
-    @GetMapping("/findAllHomeServices")
-    public List<HomeService> findAllHomeServices() {
-        return homeServiceService.findAll();
     }
 
     @PostMapping("/submitOrder")
@@ -66,7 +63,7 @@ public class CustomerController {
     @GetMapping("/find-all-offers-to-order")
     public ResponseEntity<List<OfferOfSpecialistRequest>> findAllOffersToOrder(
             @RequestBody
-            CustomerSaveUpdateRequest request) {
+            CustomerUpdateRequest request) {
         return ResponseEntity.ok(
                 offerOfSpecialistService.
                         findAllOffersOfSpecialistsByCustomerId(request));
