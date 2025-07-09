@@ -1,8 +1,9 @@
 package ir.maktab.homeservice.mapper;
 
 import ir.maktab.homeservice.domains.Specialist;
-import ir.maktab.homeservice.dto.SpecialistFound;
-import ir.maktab.homeservice.dto.SpecialistSaveUpdateRequest;
+import ir.maktab.homeservice.dto.SpecialistLoginRequest;
+import ir.maktab.homeservice.dto.SpecialistResponse;
+import ir.maktab.homeservice.dto.SpecialistSaveRequest;
 import ir.maktab.homeservice.dto.SpecialistUpdateInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -10,11 +11,15 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface SpecialistMapper {
 
-    SpecialistSaveUpdateRequest specialistMapToDTO(Specialist specialist);
+    SpecialistSaveRequest specialistMapToDTO(Specialist specialist);
 
-    Specialist specialistDTOMapToEntity(SpecialistSaveUpdateRequest specialistSaveUpdateRequest);
+    Specialist specialistDTOMapToEntity(SpecialistSaveRequest specialistSaveRequest);
 
-    Specialist foundSpecialistToEntity(SpecialistFound specialistFound);
+    Specialist specialistLoginMapToEntity(SpecialistLoginRequest specialistLoginRequest);
 
     Specialist updateInfoMapToEntity(SpecialistUpdateInfo specialistUpdateInfo);
+
+    SpecialistResponse entityMapToResponse(Specialist specialist);
+
+    Specialist responseMapToEntity(SpecialistResponse specialistResponse);
 }

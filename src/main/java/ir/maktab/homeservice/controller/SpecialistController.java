@@ -20,32 +20,36 @@ public class SpecialistController {
     private final OfferOfSpecialistService offerOfSpecialistService;
     private final HomeServiceService homeServiceService;
 
+    //✅
     @PostMapping("/register")
-    public ResponseEntity<SpecialistSaveUpdateRequest> registerSpecialist(
-            @RequestBody @Validated(value = ValidationGroup.Save.class)
-            SpecialistSaveUpdateRequest request) {
+    public ResponseEntity<SpecialistResponse> registerSpecialist(
+            @RequestBody @Valid
+            SpecialistSaveRequest request) {
         return ResponseEntity.ok(specialistService.registerSpecialist(request));
     }
 
+    //✅
     @PostMapping("/login")
-    public ResponseEntity<SpecialistSaveUpdateRequest> loginSpecialist(
-            @RequestBody @Validated(value = ValidationGroup.Update.class)
-            SpecialistSaveUpdateRequest request) {
+    public ResponseEntity<SpecialistResponse> loginSpecialist(
+            @RequestBody @Valid
+            SpecialistLoginRequest request) {
         return ResponseEntity.ok(specialistService.loginSpecialist(request));
     }
 
+    //✅
     @PutMapping("/update")
-    public ResponseEntity<SpecialistSaveUpdateRequest> updateSpecialist(
-            @RequestBody @Validated(value = ValidationGroup.Update.class)
+    public ResponseEntity<SpecialistResponse> updateSpecialist(
+            @RequestBody @Valid
             SpecialistUpdateInfo request) {
         return ResponseEntity.ok(specialistService.updateSpecialistInfo(request));
     }
 
-    @PutMapping("/approve-specialist")
-    public ResponseEntity<SpecialistSaveUpdateRequest> approveSpecialistRegistration(
-            @RequestBody @Validated(value = ValidationGroup.Update.class)
-            SpecialistFound request) {
-        return ResponseEntity.ok(specialistService.approveSpecialistRegistration(request));
+    //✅
+    @PutMapping("/specialists/{id}/approve")
+    public ResponseEntity<SpecialistSaveRequest>
+    approveSpecialistRegistration(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(specialistService.approveSpecialistRegistration(id));
     }
 
     @PostMapping("/submit-offer")
@@ -55,20 +59,23 @@ public class SpecialistController {
         return ResponseEntity.ok(specialistService.submitOfferBySpecialist(request, order));
     }
 
-    @PostMapping("/add-specialist-to-home-service")
-    public void addSpecialistToHomeService(
-            @RequestBody @Valid
-            SpecialistFound specialist, HomeServiceFound homeService) {
-        specialistService.addSpecialistToHomeService(specialist, homeService);
+    //✅
+    @PostMapping("/specialists/{specialistId}/home-services")
+    public ResponseEntity<Void> addSpecialistToHomeService(
+            @PathVariable Long specialistId,
+            @RequestParam Long homeServiceId) {
+        specialistService.addSpecialistToHomeService(specialistId, homeServiceId);
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/deleting-specialist-from-home-service")
-    public void deleteSpecialistFromHomeService(
-            @RequestBody @Valid
-            SpecialistFound specialist, HomeServiceFound homeService) {
-        specialistService.removeSpecialistFromHomeService(specialist, homeService);
+    //✅
+    @DeleteMapping("/specialists/{specialistId}/home-services")
+    public ResponseEntity<Void> deleteSpecialistFromHomeService(
+            @PathVariable Long specialistId,
+            @RequestParam Long homeServiceId) {
+        specialistService.removeSpecialistFromHomeService(specialistId, homeServiceId);
+        return ResponseEntity.ok().build();
     }
-
 
 
 }

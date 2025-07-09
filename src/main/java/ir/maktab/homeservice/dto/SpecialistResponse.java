@@ -1,5 +1,6 @@
 package ir.maktab.homeservice.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -9,8 +10,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpecialistFound {
-
+public class SpecialistResponse {
 
     @NotNull
     private Long id;
@@ -20,4 +20,10 @@ public class SpecialistFound {
 
     @NotBlank
     private String lastName;
+
+    @NotBlank
+    @Email
+    private String email;
+
+
 }

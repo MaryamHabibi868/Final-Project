@@ -1,6 +1,8 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.*;
+import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
+import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.NotActiveException;
 import ir.maktab.homeservice.exception.NotApprovedException;
@@ -9,8 +11,6 @@ import ir.maktab.homeservice.mapper.SpecialistMapper;
 import ir.maktab.homeservice.repository.SpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class SpecialistServiceImpl
@@ -35,118 +35,110 @@ public class SpecialistServiceImpl
         this.offerOfSpecialistService = offerOfSpecialistService;
     }
 
-
+    //✅
     @Override
-    public void customDeleteSpecialistById(Long id) {
-        Optional<Specialist> specialistFound = repository.findById(id);
-        if (specialistFound.isPresent()) {
-            Specialist specialist = specialistFound.get();
-            specialist.setIsActive(false);
-            repository.save(specialist);
-        }
-        throw new NotFoundException("Specialist Not Found");
-    }
-
-    @Override
-    public SpecialistSaveUpdateRequest registerSpecialist(SpecialistSaveUpdateRequest request) {
+    public SpecialistResponse registerSpecialist(SpecialistSaveRequest request) {
         Specialist specialist = new Specialist();
         specialist.setFirstName(request.getFirstName());
         specialist.setLastName(request.getLastName());
         specialist.setEmail(request.getEmail());
         specialist.setPassword(request.getPassword());
         Specialist save = repository.save(specialist);
-        return specialistMapper.specialistMapToDTO(save);
+        return specialistMapper.entityMapToResponse(save);
     }
 
+    //✅
     @Override
-    public SpecialistSaveUpdateRequest loginSpecialist(SpecialistSaveUpdateRequest request) {
-        return specialistMapper.specialistMapToDTO(repository.
+    public SpecialistResponse loginSpecialist(
+            SpecialistLoginRequest request) {
+        return specialistMapper.entityMapToResponse(repository.
                 findByEmailAndPassword(request.getEmail(), request.getPassword())
                 .orElseThrow(() -> new NotFoundException("Specialist Not Found")));
     }
 
+    //✅
     @Override
-    public SpecialistSaveUpdateRequest updateSpecialistInfo(SpecialistUpdateInfo request) {
-        if (repository.findById(request.getId()).isPresent()) {
-            Specialist specialist = specialistMapper.updateInfoMapToEntity(request);
-            specialist.setEmail(request.getEmail());
-            specialist.setPassword(request.getPassword());
-            specialist.setAccountStatus(AccountStatus.PENDING);
-            repository.save(specialist);
-            return specialistMapper.specialistMapToDTO(specialist);
-        }
-        throw new NotFoundException("Specialist Not Found");
+    public SpecialistResponse updateSpecialistInfo(SpecialistUpdateInfo request) {
+        Specialist specialistFound = repository.findById(request.getId())
+                .orElseThrow(
+                        () -> new NotFoundException("Specialist Not Found")
+                );
+        specialistFound.setEmail(request.getEmail());
+        specialistFound.setPassword(request.getPassword());
+        specialistFound.setAccountStatus(AccountStatus.PENDING);
+        repository.save(specialistFound);
+        return specialistMapper.entityMapToResponse(specialistFound);
     }
 
-    public SpecialistSaveUpdateRequest approveSpecialistRegistration(SpecialistFound request) {
-        Optional<Specialist> foundSpecialist = repository.findById(request.getId());
-        Specialist specialist = specialistMapper.foundSpecialistToEntity(request);
-        if (foundSpecialist.isPresent() &&
-                foundSpecialist.get().getAccountStatus() != AccountStatus.APPROVED) {
-            specialist.setAccountStatus(AccountStatus.APPROVED);
-            repository.save(specialist);
+    //✅
+    @Override
+    public SpecialistSaveRequest approveSpecialistRegistration(Long id) {
+        Specialist foundSpecialist = repository.findById(id).orElseThrow(
+                () -> new NotFoundException("Specialist Not Found")
+        );
+        if (foundSpecialist.getAccountStatus() != AccountStatus.APPROVED) {
+            foundSpecialist.setAccountStatus(AccountStatus.APPROVED);
+            repository.save(foundSpecialist);
         }
-        return specialistMapper.specialistMapToDTO(specialist);
+        return specialistMapper.specialistMapToDTO(foundSpecialist);
     }
 
+    //✅
     @Override
     public void addSpecialistToHomeService(
-            SpecialistFound specialist,
-            HomeServiceFound homeService) {
+            Long specialistId, Long homeServiceId) {
 
-        Optional<Specialist> foundSpecialist = repository.findById(specialist.getId());
-        Optional<HomeService> foundHomeService = homeServiceService.findById(homeService.getId());
-        if (foundSpecialist.isEmpty()) {
-            throw new NotFoundException("Specialist Not Found");
-        }
-        if (foundHomeService.isEmpty()) {
-            throw new NotFoundException("HomeService Not Found");
-        }
-        if (!foundSpecialist.get().getIsActive()) {
+        Specialist foundSpecialist = repository.findById(specialistId)
+                .orElseThrow(
+                        () -> new NotFoundException("Specialist Not Found")
+                );
+        HomeService foundHomeService = homeServiceService.findById(homeServiceId)
+                .orElseThrow(
+                        () -> new NotFoundException("HomeService Not Found")
+                );
+        if (!foundSpecialist.getIsActive()) {
             throw new NotActiveException("Specialist Not Active");
         }
-        if (!foundHomeService.get().getIsActive()) {
+        if (!foundHomeService.getIsActive()) {
             throw new NotActiveException("HomeService Not Active");
         }
-        if (foundSpecialist.get().getAccountStatus() != AccountStatus.APPROVED) {
+        if (foundSpecialist.getAccountStatus() != AccountStatus.APPROVED) {
             throw new NotApprovedException("This Specialist Not Approved");
         }
-        HomeService homeService1 = foundHomeService.get();
-        foundSpecialist.get().getHomeServices().add(homeService1);
-        repository.save(foundSpecialist.get());
-        homeServiceService.save(homeService1);
+        foundSpecialist.getHomeServices().add(foundHomeService);
+        repository.save(foundSpecialist);
+        homeServiceService.save(foundHomeService);
     }
 
+    //✅
     @Override
     public void removeSpecialistFromHomeService(
-            SpecialistFound specialist,
-            HomeServiceFound homeService) {
-        Optional<Specialist> foundSpecialist = repository.findById(specialist.getId());
-        Optional<HomeService> foundHomeService = homeServiceService.findById(homeService.getId());
-        if (foundSpecialist.isEmpty()) {
-            throw new NotFoundException("Specialist Not Found");
-        }
-        if (foundHomeService.isEmpty()) {
-            throw new NotFoundException("HomeService Not Found");
-        }
-        if (!foundSpecialist.get().getIsActive()) {
+            Long specialistId, Long homeServiceId) {
+        Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
+                () -> new NotFoundException("Specialist Not Found")
+        );
+        HomeService foundHomeService = homeServiceService.findById(homeServiceId)
+                .orElseThrow(
+                        () -> new NotFoundException("HomeService Not Found")
+                );
+        if (!foundSpecialist.getIsActive()) {
             throw new NotActiveException("Specialist Not Active");
         }
-        if (!foundHomeService.get().getIsActive()) {
+        if (!foundHomeService.getIsActive()) {
             throw new NotActiveException("HomeService Not Active");
         }
-        if (foundSpecialist.get().getAccountStatus() != AccountStatus.APPROVED) {
+        if (foundSpecialist.getAccountStatus() != AccountStatus.APPROVED) {
             throw new NotApprovedException("This Specialist Not Approved");
         }
-        HomeService homeService1 = foundHomeService.get();
-        foundSpecialist.get().getHomeServices().remove(homeService1);
-        repository.save(foundSpecialist.get());
-        homeServiceService.save(homeService1);
+        foundSpecialist.getHomeServices().remove(foundHomeService);
+        repository.save(foundSpecialist);
+        homeServiceService.save(foundHomeService);
     }
 
     @Override
-    public OfferOfSpecialistRequest submitOfferBySpecialist(OfferOfSpecialistRequest request,
-                                                            OrderOfCustomer order) {
+    public OfferOfSpecialistRequest submitOfferBySpecialist(
+            OfferOfSpecialistRequest request,
+            OrderOfCustomer order) {
         OrderOfCustomer orderOfCustomerFound = orderOfCustomerService.findById(order.getId()).get();
         if (orderOfCustomerFound
                 .getOrderStatus().equals(OrderStatus.WAITING_FOR_SPECIALIST_OFFER)) {

@@ -7,29 +7,31 @@ import ir.maktab.homeservice.service.base.BaseService;
 
 public interface SpecialistService extends BaseService<Specialist, Long> {
 
-    void customDeleteSpecialistById(Long id);
+    //✅
+    SpecialistResponse registerSpecialist(
+            SpecialistSaveRequest request);
 
-    SpecialistSaveUpdateRequest registerSpecialist(
-            SpecialistSaveUpdateRequest request);
+    //✅
+    SpecialistResponse loginSpecialist(
+            SpecialistLoginRequest request);
 
-    SpecialistSaveUpdateRequest loginSpecialist(
-            SpecialistSaveUpdateRequest request);
-
-    SpecialistSaveUpdateRequest updateSpecialistInfo(
+    //✅
+    SpecialistResponse updateSpecialistInfo(
             SpecialistUpdateInfo request);
 
-    SpecialistSaveUpdateRequest approveSpecialistRegistration(
-            SpecialistFound request);
+    //✅
+    SpecialistSaveRequest approveSpecialistRegistration(
+            Long id);
 
     OfferOfSpecialistRequest submitOfferBySpecialist(OfferOfSpecialistRequest request,
                                                      OrderOfCustomer order);
 
+    //✅
     void addSpecialistToHomeService(
-            SpecialistFound specialist ,
-            HomeServiceFound homeService);
+            Long specialistId, Long homeServiceId);
 
+    //✅
     void removeSpecialistFromHomeService(
-            SpecialistFound specialist,
-            HomeServiceFound homeService);
+            Long specialistId, Long homeServiceId);
 }
 
