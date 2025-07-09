@@ -45,12 +45,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.updateCustomer(request));
     }
 
-    @PostMapping("/submitOrder")
-    public ResponseEntity<OrderOfCustomerRequest> submitOrder(
-            @RequestBody @Valid
-            OrderOfCustomerRequest request) {
-        return ResponseEntity.ok(orderOfCustomerService.submitOrder(request));
-    }
+
 
     @PostMapping("/submit-feedback")
     public ResponseEntity<FeedbackRequest> submitFeedback(
