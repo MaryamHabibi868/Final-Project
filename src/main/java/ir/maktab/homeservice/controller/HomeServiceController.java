@@ -1,11 +1,11 @@
 package ir.maktab.homeservice.controller;
 
-import ir.maktab.homeservice.dto.HomeServiceSaveUpdateRequest;
-import ir.maktab.homeservice.dto.ValidationGroup;
+import ir.maktab.homeservice.dto.HomeServiceResponse;
+import ir.maktab.homeservice.dto.HomeServiceSaveRequest;
+import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
 import ir.maktab.homeservice.service.HomeServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,17 +19,17 @@ public class HomeServiceController {
 
     //✅ ok
     @PostMapping
-    public ResponseEntity<HomeServiceSaveUpdateRequest> createHomeService(
-            @RequestBody @Validated(value = ValidationGroup.Save.class)
-            HomeServiceSaveUpdateRequest request) {
+    public ResponseEntity<HomeServiceResponse> createHomeService(
+            @RequestBody
+            HomeServiceSaveRequest request) {
         return ResponseEntity.ok(homeServiceService.createHomeService(request));
     }
 
     //✅
     @PutMapping
-    public ResponseEntity<HomeServiceSaveUpdateRequest> updateHomeService(
-            @RequestBody @Validated (value = ValidationGroup.Update.class)
-            HomeServiceSaveUpdateRequest request) {
+    public ResponseEntity<HomeServiceResponse> updateHomeService(
+            @RequestBody
+            HomeServiceUpdateRequest request) {
         return ResponseEntity.ok(homeServiceService.updateHomeService(request));
     }
 
@@ -43,7 +43,7 @@ public class HomeServiceController {
 
     //✅
     @GetMapping
-    public ResponseEntity<List<HomeServiceSaveUpdateRequest>> findAllHomeServices() {
+    public ResponseEntity<List<HomeServiceResponse>> findAllHomeServices() {
         return ResponseEntity.ok(homeServiceService.findAllHomeServices());
     }
 }

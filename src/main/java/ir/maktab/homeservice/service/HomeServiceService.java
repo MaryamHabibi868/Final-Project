@@ -1,8 +1,9 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.HomeService;
-import ir.maktab.homeservice.dto.HomeServiceFound;
-import ir.maktab.homeservice.dto.HomeServiceSaveUpdateRequest;
+import ir.maktab.homeservice.dto.HomeServiceResponse;
+import ir.maktab.homeservice.dto.HomeServiceSaveRequest;
+import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
 import ir.maktab.homeservice.service.base.BaseService;
 
 import java.util.List;
@@ -10,16 +11,16 @@ import java.util.List;
 public interface HomeServiceService extends BaseService<HomeService, Long> {
 
     //✅
-    HomeServiceSaveUpdateRequest createHomeService(
-            HomeServiceSaveUpdateRequest request);
+    HomeServiceResponse createHomeService(
+            HomeServiceSaveRequest request);
 
     //✅
-    HomeServiceSaveUpdateRequest updateHomeService(
-            HomeServiceSaveUpdateRequest request);
+    HomeServiceResponse updateHomeService(
+            HomeServiceUpdateRequest request);
 
     //✅
     void deleteHomeService(Long id);
 
     //✅
-    List<HomeServiceSaveUpdateRequest> findAllHomeServices();
+    List<HomeServiceResponse> findAllHomeServices();
 }
