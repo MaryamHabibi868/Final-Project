@@ -8,27 +8,18 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ManagerSaveUpdateRequest {
+public class ManagerUpdateRequest {
 
-    @NotNull(groups = {ValidationGroup.Update.class})
-    @Null(groups = {ValidationGroup.Save.class})
+    @NotNull
     private Long id;
 
-    @NotBlank(groups = {ValidationGroup.Save.class},
-            message = "First name should be entered.")
     private String firstName;
 
-    @NotBlank(groups = {ValidationGroup.Save.class},
-            message = "Last name should be entered.")
     private String lastName;
 
-    @NotBlank(groups = {ValidationGroup.Save.class},
-            message = "Email should be entered.")
     @Email
     private String email;
 
-    @NotBlank(groups = {ValidationGroup.Save.class},
-            message = "Password should be entered.")
     @Size(min = 8, max = 20, message = "Password should be between 8-20 character ")
     @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
