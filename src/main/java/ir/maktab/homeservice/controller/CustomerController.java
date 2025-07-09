@@ -8,7 +8,6 @@ import ir.maktab.homeservice.service.OrderOfCustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -54,10 +53,10 @@ public class CustomerController {
     }
 
     @PostMapping("/submit-feedback")
-    public ResponseEntity<FeedbackSubmit> submitFeedback(
+    public ResponseEntity<FeedbackRequest> submitFeedback(
             @RequestBody @Valid
-            FeedbackSubmit feedbackSubmit) {
-        return ResponseEntity.ok(feedbackSubmit);
+            FeedbackRequest feedbackRequest) {
+        return ResponseEntity.ok(feedbackRequest);
     }
 
     @GetMapping("/find-all-offers-to-order")

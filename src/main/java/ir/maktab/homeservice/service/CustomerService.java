@@ -15,6 +15,6 @@ public interface CustomerService extends BaseService<Customer, Long> {
     //✅
     CustomerResponse loginCustomer(CustomerLoginRequest request);
 
-    FeedbackSubmit submitFeedback(
-            FeedbackSubmit feedbackSubmit, Long offerOfSpecialistId);
+    FeedbackRequest submitFeedback(
+            FeedbackRequest feedbackRequest, Long offerOfSpecialistId);
 }

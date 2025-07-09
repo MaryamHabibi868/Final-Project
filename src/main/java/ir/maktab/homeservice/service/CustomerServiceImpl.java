@@ -76,14 +76,14 @@ public class CustomerServiceImpl
     }
 
     @Override
-    public FeedbackSubmit submitFeedback(FeedbackSubmit feedbackSubmit, Long offerOfSpecialistId) {
-        FeedBack feedBack1 = feedBackMapper.feedbackDTOMapToEntity(feedbackSubmit);
+    public FeedbackRequest submitFeedback(FeedbackRequest feedbackRequest, Long offerOfSpecialistId) {
+        FeedBack feedBack1 = feedBackMapper.feedbackDTOMapToEntity(feedbackRequest);
         if (!feedBack1.getOfferOfSpecialist().getId().equals(offerOfSpecialistId)) {
             throw new NotFoundException("Offer Of Specialist Not Found");
         }
         FeedBack feedBack = new FeedBack();
-        feedBack.setFeedbackRange(feedbackSubmit.getFeedbackRange());
-        feedBack.setFeedbackType(feedbackSubmit.getFeedbackType());
+        feedBack.setFeedbackRange(feedbackRequest.getFeedbackRange());
+        feedBack.setFeedbackType(feedbackRequest.getFeedbackType());
         FeedBack save = feedbackService.save(feedBack);
         return feedBackMapper.feedbackMapToDTO(save);
     }

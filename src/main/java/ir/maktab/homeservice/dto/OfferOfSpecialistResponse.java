@@ -1,7 +1,5 @@
 package ir.maktab.homeservice.dto;
 
-import ir.maktab.homeservice.domains.OfferOfSpecialist;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -14,15 +12,17 @@ import java.time.ZonedDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class OfferOfSpecialistRequest {
+public class OfferOfSpecialistResponse {
 
+    @NotNull
+    private Long id;
 
-    @NotNull(message = "Suggestion Price of Offer should be entered.")
+    @NotNull
     private BigDecimal suggestedPrice;
 
-    @NotBlank(message = "Start date suggestion of Offer should be entered.")
+    @NotBlank
     private ZonedDateTime startDateSuggestion;
 
-    @NotNull(message = "Task duration of Offer should be entered.")
+    @NotNull
     private Double taskDuration;
 }
