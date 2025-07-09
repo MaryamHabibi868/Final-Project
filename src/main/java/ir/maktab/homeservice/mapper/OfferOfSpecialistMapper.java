@@ -2,6 +2,7 @@ package ir.maktab.homeservice.mapper;
 
 import ir.maktab.homeservice.domains.OfferOfSpecialist;
 import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
+import ir.maktab.homeservice.dto.OfferOfSpecialistResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
@@ -12,5 +13,9 @@ public interface OfferOfSpecialistMapper {
 
     OfferOfSpecialist offerOfSpecialistDTOMapToEntity(
             OfferOfSpecialistRequest offerOfSpecialistRequest);
+
+    OfferOfSpecialist responseMapToEntity(OfferOfSpecialistResponse offerOfSpecialistResponse);
+
+    OfferOfSpecialistResponse entityMapToResponse(OfferOfSpecialist offerOfSpecialist);
 }
 

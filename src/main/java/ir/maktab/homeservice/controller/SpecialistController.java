@@ -51,12 +51,6 @@ public class SpecialistController {
         return ResponseEntity.ok(specialistService.approveSpecialistRegistration(id));
     }
 
-    @PostMapping("/submit-offer")
-    public ResponseEntity<OfferOfSpecialistRequest> submitOffer(
-            @RequestBody @Valid
-            OfferOfSpecialistRequest request, OrderOfCustomer order) {
-        return ResponseEntity.ok(specialistService.submitOfferBySpecialist(request, order));
-    }
 
     //✅
     @PostMapping("/specialists/{specialistId}/home-services")

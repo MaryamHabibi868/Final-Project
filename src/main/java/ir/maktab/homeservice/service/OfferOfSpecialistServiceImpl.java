@@ -2,10 +2,14 @@ package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.OfferOfSpecialist;
+import ir.maktab.homeservice.domains.OrderOfCustomer;
 import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import ir.maktab.homeservice.dto.CustomerUpdateRequest;
 import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
+import ir.maktab.homeservice.dto.OfferOfSpecialistResponse;
 import ir.maktab.homeservice.exception.NotApprovedException;
+import ir.maktab.homeservice.exception.NotFoundException;
+import ir.maktab.homeservice.exception.NotValidPriceException;
 import ir.maktab.homeservice.mapper.OfferOfSpecialistMapper;
 import ir.maktab.homeservice.repository.OfferOfSpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
@@ -21,23 +25,38 @@ public class OfferOfSpecialistServiceImpl
 
     private final OfferOfSpecialistMapper offerOfSpecialistMapper;
     private final CustomerService customerService;
+    private final OrderOfCustomerService orderOfCustomerService;
 
     public OfferOfSpecialistServiceImpl(OfferOfSpecialistRepository repository,
                                         OfferOfSpecialistMapper offerOfSpecialistMapper,
-                                        CustomerService customerService) {
+                                        CustomerService customerService,
+                                        OrderOfCustomerService orderOfCustomerService) {
         super(repository);
         this.offerOfSpecialistMapper = offerOfSpecialistMapper;
         this.customerService = customerService;
+        this.orderOfCustomerService = orderOfCustomerService;
     }
 
+    //✅ ok
     @Override
-    public OfferOfSpecialistRequest submitOffer(OfferOfSpecialistRequest request) {
+    public OfferOfSpecialistResponse submitOfferToOrder(
+            OfferOfSpecialistRequest request,
+            Long orderOfCustomerId) {
+        OrderOfCustomer foundOrderOfCustomer = orderOfCustomerService.
+                findById(orderOfCustomerId).orElseThrow(
+                () -> new NotFoundException("Order of customer Not Found"));
+
+        if (request.getSuggestedPrice()
+                .compareTo(foundOrderOfCustomer.getSuggestedPrice())< 0) {
+            throw new NotValidPriceException(
+                    "Suggested price is less than the price of this Order");
+        }
         OfferOfSpecialist offerOfSpecialist = new OfferOfSpecialist();
         offerOfSpecialist.setSuggestedPrice(request.getSuggestedPrice());
         offerOfSpecialist.setStartDateSuggestion(request.getStartDateSuggestion());
         offerOfSpecialist.setTaskDuration(request.getTaskDuration());
         OfferOfSpecialist save = repository.save(offerOfSpecialist);
-        return offerOfSpecialistMapper.offerOfSpecialistMapToDTO(save);
+        return offerOfSpecialistMapper.entityMapToResponse(save);
     }
 
     @Override
@@ -70,11 +89,11 @@ public class OfferOfSpecialistServiceImpl
                 offerOfSpecialistMapper.offerOfSpecialistDTOMapToEntity(request);
 
         if (offerOfSpecialist.getOrderOfCustomer().
-                getOrderStatus()!=OrderStatus.WAITING_FOR_SPECIALIST_COMING){
+                getOrderStatus() != OrderStatus.WAITING_FOR_SPECIALIST_COMING) {
             throw new NotApprovedException("This offer is not approved");
         }
 
-        if (offerOfSpecialist.getStartDateSuggestion().isBefore(ZonedDateTime.now())){
+        if (offerOfSpecialist.getStartDateSuggestion().isBefore(ZonedDateTime.now())) {
             throw new NotApprovedException
                     ("Start time is before the suggested time with specialist");
         }
@@ -90,7 +109,7 @@ public class OfferOfSpecialistServiceImpl
                 .offerOfSpecialistDTOMapToEntity(request);
 
         if (offerOfSpecialist.getOrderOfCustomer().getOrderStatus() !=
-                OrderStatus.HAS_BEGIN){
+                OrderStatus.HAS_BEGIN) {
             throw new NotApprovedException("This offer is not begin");
         }
         offerOfSpecialist.getOrderOfCustomer().setOrderStatus(OrderStatus.DONE);
