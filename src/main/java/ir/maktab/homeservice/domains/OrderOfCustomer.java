@@ -45,13 +45,9 @@ public class OrderOfCustomer extends BaseEntity<Long> {
     @ManyToOne
     private HomeService homeService;
 
-    @OneToMany(mappedBy = "")
+    @OneToMany(mappedBy = "orderOfCustomer")
     private Set<OfferOfSpecialist> offerOfSpecialists;
 
     @ManyToOne
     private Customer customer;
-
-    public void startDate() {
-        startDate = ZonedDateTime.now();
-    }
 }
