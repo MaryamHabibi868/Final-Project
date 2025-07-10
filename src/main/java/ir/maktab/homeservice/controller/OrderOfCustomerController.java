@@ -16,12 +16,11 @@ public class OrderOfCustomerController {
     private final OrderOfCustomerService orderOfCustomerService;
 
     //✅ ok
-    @PostMapping("/home-services/{homeServiceId}/orders")
+    @PostMapping
     public ResponseEntity<OrderOfCustomerResponse> submitOrder(
-            @PathVariable Long homeServiceId,
             @RequestBody @Valid
             OrderOfCustomerRequest request) {
         return ResponseEntity.ok(
-                orderOfCustomerService.submitOrderForHomeService(request, homeServiceId));
+                orderOfCustomerService.submitOrderForHomeService(request));
     }
 }

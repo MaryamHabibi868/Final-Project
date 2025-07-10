@@ -18,23 +18,15 @@ import java.util.Set;
 public class Specialist extends User {
 
     public static final String ACCOUNT_STATUS = "account_status";
-    public static final String REGISTRATION_DATE = "registration_date";
-    public static final String BALANCE = "balance";
 
-    @Column(name = Specialist.ACCOUNT_STATUS, nullable = false)
+
+    @Column(name = Specialist.ACCOUNT_STATUS)
     private AccountStatus accountStatus;
 
-    @Column(name = Specialist.BALANCE)
-    private BigDecimal balance;
-
-
+    @JoinTable(name = "specialist_homeService")
     @ManyToMany
     private Set<HomeService> homeServices;
 
-    public BigDecimal balance() {
-        balance = BigDecimal.valueOf(0.0);
-        return balance;
-    }
 }
 
 

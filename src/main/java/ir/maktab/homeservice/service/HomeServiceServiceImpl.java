@@ -31,16 +31,14 @@ public class HomeServiceServiceImpl
     @Override
     public HomeServiceResponse createHomeService(
             HomeServiceSaveRequest request) {
-        Optional<HomeService> foundHomeService =
+        HomeService foundHomeService =
                 repository.findAllByHomeServiceTitleIgnoreCase(
-                        request.getHomeServiceTitle());
-        if (!foundHomeService.get().getIsActive()) {
-            foundHomeService.get().setIsActive(true);
-        }
-        if (foundHomeService.get().getIsActive()) {
-            throw new DuplicatedException("Home Service Title Already Exists");
-        }
-        HomeService homeService = homeServiceMapper.saveRequestMapToEntity(request);
+                        request.getHomeServiceTitle()).orElseThrow(
+                        () -> new NotFoundException(
+                                "Home Service Title Already Exists")
+                );
+
+        HomeService homeService = new HomeService();
         homeService.setHomeServiceTitle(request.getHomeServiceTitle());
         homeService.setBasePrice(request.getBasePrice());
         homeService.setDescription(request.getDescription());
@@ -53,29 +51,29 @@ public class HomeServiceServiceImpl
     @Override
     public HomeServiceResponse updateHomeService(
             HomeServiceUpdateRequest request) {
-        Optional<HomeService> foundMainService = repository.findById(request.getId());
-        if (foundMainService.isPresent()) {
-            HomeService homeService = homeServiceMapper.updateRequestMapToEntity(request);
-            homeService.setHomeServiceTitle(request.getHomeServiceTitle());
-            homeService.setBasePrice(request.getBasePrice());
-            homeService.setDescription(request.getDescription());
-            homeService.setParentService(request.getParentService());
-            HomeService save = repository.save(homeService);
-            return homeServiceMapper.entityMapToResponse(save);
-        }
-        throw new NotFoundException("Home Service Not Found");
+        HomeService foundMainService = repository
+                .findById(request.getId()).orElseThrow(
+                        () -> new NotFoundException("Home Service Not Found")
+                );
+        HomeService homeService = homeServiceMapper.updateRequestMapToEntity(request);
+        homeService.setHomeServiceTitle(request.getHomeServiceTitle());
+        homeService.setBasePrice(request.getBasePrice());
+        homeService.setDescription(request.getDescription());
+        homeService.setParentService(request.getParentService());
+        HomeService save = repository.save(homeService);
+        return homeServiceMapper.entityMapToResponse(save);
     }
 
     //✅
     @Override
     public void deleteHomeService(Long id) {
-        customDeleteById(id);
+        deleteById(id);
     }
 
     //✅
     @Override
     public List<HomeServiceResponse> findAllHomeServices() {
-       return repository.findAllByIsActiveTrue().stream()
+        return repository.findAll().stream()
                 .map(homeServiceMapper::entityMapToResponse)
                 .toList();
     }

@@ -16,7 +16,6 @@ import ir.maktab.homeservice.mapper.OfferOfSpecialistMapper;
 import ir.maktab.homeservice.repository.OfferOfSpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -45,26 +44,23 @@ public class OfferOfSpecialistServiceImpl
     //✅ ok
     @Override
     public OfferOfSpecialistResponse submitOfferToOrder(
-            OfferOfSpecialistRequest request,
-            Long orderOfCustomerId) {
+            OfferOfSpecialistRequest request) {
         OrderOfCustomer foundOrderOfCustomer = orderOfCustomerService.
-                findById(orderOfCustomerId).orElseThrow(
-                        () -> new NotFoundException("Order of customer Not Found"));
+                findById(request.getOrderOfCustomerId());
 
         Specialist foundSpecialist = specialistService.
-                findById(request.getSpecialistId()).orElseThrow(
-                        () -> new NotFoundException("Special ist Not Found"));
+                findById(request.getSpecialistId());
 
-        if (!(foundSpecialist.getAccountStatus() == AccountStatus.APPROVED)) {
-            throw new NotApprovedException("Special ist Not Approved");
+        if (foundSpecialist.getAccountStatus() != AccountStatus.APPROVED) {
+            throw new NotApprovedException("Specialist Not Approved");
         }
         if (request.getSuggestedPrice()
                 .compareTo(foundOrderOfCustomer.getSuggestedPrice()) < 0) {
             throw new NotValidPriceException(
                     "Suggested price is less than the price of this Order");
         }
-        if (!(foundOrderOfCustomer.getOrderStatus() ==
-                OrderStatus.WAITING_FOR_SPECIALIST_OFFER)) {
+        if (foundOrderOfCustomer.getOrderStatus() !=
+                OrderStatus.WAITING_FOR_SPECIALIST_OFFER) {
             throw new NotApprovedException("Order is not waiting for special offer");
         }
 
@@ -75,65 +71,82 @@ public class OfferOfSpecialistServiceImpl
         offerOfSpecialist.setSuggestedPrice(request.getSuggestedPrice());
         offerOfSpecialist.setStartDateSuggestion(request.getStartDateSuggestion());
         offerOfSpecialist.setTaskDuration(request.getTaskDuration());
+        offerOfSpecialist.setSpecialist(foundSpecialist);
+        offerOfSpecialist.setOrderOfCustomer(foundOrderOfCustomer);
         OfferOfSpecialist save = repository.save(offerOfSpecialist);
         return offerOfSpecialistMapper.entityMapToResponse(save);
     }
 
-    @Override
+   /* @Override
     public List<OfferOfSpecialistRequest>
     findAllOffersOfSpecialistsByCustomerId(
             CustomerUpdateRequest request) {
-        Customer customer = customerService.findById(request.getId()).get();
+        Customer customer = customerService.findByIdIsActiveTrue(request.getId());
         return null;
-/*
+*//*
                 repository.findAllByCustomerIdOrderBySuggestedPriceAsc(customer.getId());
-*/
-    }
+*//*
+    }*/
 
+    //✅ ok
     @Override
-    public OfferOfSpecialistRequest chooseOfferOfSpecialist(
-            OfferOfSpecialistRequest request) {
+    public OfferOfSpecialistResponse chooseOfferOfSpecialist(
+            OfferOfSpecialistResponse request) {
+        OfferOfSpecialist foundOfferOfSpecialist = repository.findById(
+                request.getId()).orElseThrow(
+                () -> new NotFoundException("Offer of specialist not found")
+        );
+        if (foundOfferOfSpecialist.getOrderOfCustomer().getOrderStatus()
+            != OrderStatus.WAITING_FOR_SPECIALIST_OFFER) {
+            throw new NotApprovedException("Order is not waiting for special offer");
+        }
 
-        OfferOfSpecialist offerOfSpecialist =
-                offerOfSpecialistMapper.offerOfSpecialistDTOMapToEntity(request);
-
-        offerOfSpecialist.getOrderOfCustomer().
+        foundOfferOfSpecialist.getOrderOfCustomer().
                 setOrderStatus(OrderStatus.WAITING_FOR_SPECIALIST_COMING);
-        OfferOfSpecialist save = repository.save(offerOfSpecialist);
-        return offerOfSpecialistMapper.offerOfSpecialistMapToDTO(save);
+        foundOfferOfSpecialist.setSpecialist(Specialist.builder()
+                        .id(request.getSpecialistId()).build());
+        OfferOfSpecialist save = repository.save(foundOfferOfSpecialist);
+        return offerOfSpecialistMapper.entityMapToResponse(save);
     }
 
+    //✅ ok
     @Override
-    public OfferOfSpecialistRequest startService(OfferOfSpecialistRequest request) {
-        OfferOfSpecialist offerOfSpecialist =
-                offerOfSpecialistMapper.offerOfSpecialistDTOMapToEntity(request);
+    public OfferOfSpecialistResponse startService(OfferOfSpecialistResponse request) {
+        OfferOfSpecialist foundOfferOfSpecialist = repository.findById(request.getId())
+                .orElseThrow(
+                        () -> new NotFoundException("Offer of specialist not found")
+                );
 
-        if (offerOfSpecialist.getOrderOfCustomer().
+        if (foundOfferOfSpecialist.getOrderOfCustomer().
                 getOrderStatus() != OrderStatus.WAITING_FOR_SPECIALIST_COMING) {
             throw new NotApprovedException("This offer is not approved");
         }
 
-        if (offerOfSpecialist.getStartDateSuggestion().isBefore(ZonedDateTime.now())) {
+        if (foundOfferOfSpecialist.getStartDateSuggestion().isBefore(ZonedDateTime.now())) {
             throw new NotApprovedException
                     ("Start time is before the suggested time with specialist");
         }
 
-        offerOfSpecialist.getOrderOfCustomer().setOrderStatus(OrderStatus.HAS_BEGIN);
-        OfferOfSpecialist save = repository.save(offerOfSpecialist);
-        return offerOfSpecialistMapper.offerOfSpecialistMapToDTO(save);
+        foundOfferOfSpecialist.getOrderOfCustomer().setOrderStatus(
+                OrderStatus.HAS_BEGIN);
+        OfferOfSpecialist save = repository.save(foundOfferOfSpecialist);
+        return offerOfSpecialistMapper.entityMapToResponse(save);
     }
 
+    //✅
     @Override
-    public OfferOfSpecialistRequest endService(OfferOfSpecialistRequest request) {
-        OfferOfSpecialist offerOfSpecialist = offerOfSpecialistMapper
-                .offerOfSpecialistDTOMapToEntity(request);
+    public OfferOfSpecialistResponse endService(OfferOfSpecialistResponse request) {
+        OfferOfSpecialist foundOfferOfSpecialist = repository.findById(request.getId())
+                .orElseThrow(
+                        () -> new NotFoundException("Offer of specialist not found")
+                );
 
-        if (offerOfSpecialist.getOrderOfCustomer().getOrderStatus() !=
+        if (foundOfferOfSpecialist.getOrderOfCustomer().getOrderStatus() !=
                 OrderStatus.HAS_BEGIN) {
             throw new NotApprovedException("This offer is not begin");
         }
-        offerOfSpecialist.getOrderOfCustomer().setOrderStatus(OrderStatus.DONE);
-        OfferOfSpecialist save = repository.save(offerOfSpecialist);
-        return offerOfSpecialistMapper.offerOfSpecialistMapToDTO(save);
+        foundOfferOfSpecialist.getOrderOfCustomer().setOrderStatus(OrderStatus.DONE);
+        OfferOfSpecialist save = repository.save(foundOfferOfSpecialist);
+        return offerOfSpecialistMapper.entityMapToResponse(save);
     }
 }

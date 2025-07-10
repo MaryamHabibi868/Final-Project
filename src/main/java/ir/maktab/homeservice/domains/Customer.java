@@ -13,17 +13,8 @@ import java.math.BigDecimal;
 @ToString(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
+/*@AllArgsConstructor*/
 @DiscriminatorValue(value = "Customer")
 public class Customer extends User {
 
-    public static final String BALANCE = "balance";
-
-    @Column(name = Customer.BALANCE)
-    private BigDecimal balance;
-
-    public BigDecimal balance() {
-        balance = BigDecimal.valueOf(0.0);
-        return balance;
-    }
 }

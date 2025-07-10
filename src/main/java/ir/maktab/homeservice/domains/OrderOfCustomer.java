@@ -23,8 +23,10 @@ public class OrderOfCustomer extends BaseEntity<Long> {
     public static final String DESCRIPTION = "description";
     public static final String SUGGESTED_PRICE = "suggested_price";
     public static final String START_DATE = "start_date";
-    public static final String ADDRESS = "address";
+    public static final String ADDRESS_ID = "address_id";
     public static final String OFFER_STATUS = "offer_status";
+    public static final String HOME_SERVICE_ID = "home_service_id";
+    public static final String CUSTOMER_ID = "customer_id";
 
     @Column(name = OrderOfCustomer.DESCRIPTION, nullable = false)
     private String description;
@@ -35,19 +37,22 @@ public class OrderOfCustomer extends BaseEntity<Long> {
     @Column(name = OrderOfCustomer.START_DATE, nullable = false)
     private ZonedDateTime startDate;
 
-    @JoinColumn(name = OrderOfCustomer.ADDRESS, nullable = false)
+    @JoinColumn(name = OrderOfCustomer.ADDRESS_ID, nullable = false)
     @ManyToOne
     private Address address;
 
+    @JoinColumn(name = OrderOfCustomer.OFFER_STATUS, nullable = false)
     @Column(name = OrderOfCustomer.OFFER_STATUS, nullable = false)
     private OrderStatus orderStatus;
 
+    @JoinColumn(name = OrderOfCustomer.HOME_SERVICE_ID, nullable = false)
     @ManyToOne
     private HomeService homeService;
 
-    @OneToMany(mappedBy = "orderOfCustomer")
-    private Set<OfferOfSpecialist> offerOfSpecialists;
+    /*@OneToMany(mappedBy = "orderOfCustomer")
+    private Set<OfferOfSpecialist> offerOfSpecialists;*/
 
+    @JoinColumn(name = OrderOfCustomer.CUSTOMER_ID, nullable = false)
     @ManyToOne
     private Customer customer;
 }

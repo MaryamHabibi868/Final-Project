@@ -11,4 +11,8 @@ public interface HomeServiceRepository
 
     //✅
     Optional<HomeService> findAllByHomeServiceTitleIgnoreCase(String mainServiceTitle);
+
+/*
+    Optional<HomeService> findByParentServiceTitleIgnoreCase(String parentServiceTitle);
+*/
 }

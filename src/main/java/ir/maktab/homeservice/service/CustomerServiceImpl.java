@@ -3,13 +3,13 @@ package ir.maktab.homeservice.service;
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.FeedBack;
 import ir.maktab.homeservice.dto.*;
+import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.CustomerMapper;
 import ir.maktab.homeservice.mapper.FeedBackMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class CustomerServiceImpl
@@ -34,6 +34,12 @@ public class CustomerServiceImpl
     //✅
     @Override
     public CustomerResponse registerCustomer(CustomerSaveRequest request) {
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new DuplicatedException("Email address already in use");
+        }
+        if (repository.existsByPassword(request.getPassword())) {
+            throw new DuplicatedException("Password already in use");
+        }
         Customer customer = new Customer();
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
@@ -56,7 +62,6 @@ public class CustomerServiceImpl
             foundCustomer.setPassword(request.getPassword());
             Customer save = repository.save(foundCustomer);
             return customerMapper.entityMapToResponse(save);
-
     }
 
     //✅
@@ -67,13 +72,6 @@ public class CustomerServiceImpl
                 .orElseThrow(() -> new NotFoundException("Customer Not Found")));
     }
 
-  /*  public void deleteCustomer(CustomerFound request) {
-        customDeleteCustomerById(request.getId());
-    }*/
-
-    public List<Customer> findAllCustomers() {
-        return repository.findAll();
-    }
 
     @Override
     public FeedbackRequest submitFeedback(FeedbackRequest feedbackRequest, Long offerOfSpecialistId) {
@@ -83,7 +81,7 @@ public class CustomerServiceImpl
         }
         FeedBack feedBack = new FeedBack();
         feedBack.setFeedbackRange(feedbackRequest.getFeedbackRange());
-        feedBack.setFeedbackType(feedbackRequest.getFeedbackType());
+        feedBack.setFeedbackDescription(feedbackRequest.getFeedbackType());
         FeedBack save = feedbackService.save(feedBack);
         return feedBackMapper.feedbackMapToDTO(save);
     }

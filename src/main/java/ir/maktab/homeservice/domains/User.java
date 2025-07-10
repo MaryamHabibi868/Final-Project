@@ -5,9 +5,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import javax.naming.Name;
+
 @Entity
 @Getter
 @Setter
+@Table (name = "users")
 @ToString (callSuper = true)
 @SuperBuilder
 @NoArgsConstructor

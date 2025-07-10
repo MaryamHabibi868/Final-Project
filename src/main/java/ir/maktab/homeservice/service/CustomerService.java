@@ -17,4 +17,5 @@ public interface CustomerService extends BaseService<Customer, Long> {
 
     FeedbackRequest submitFeedback(
             FeedbackRequest feedbackRequest, Long offerOfSpecialistId);
+
 }

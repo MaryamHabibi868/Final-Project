@@ -1,15 +1,10 @@
 package ir.maktab.homeservice.service.base;
 
-import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.base.BaseEntity;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.repository.base.BaseRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 
 public class BaseServiceImpl
@@ -25,8 +20,10 @@ public class BaseServiceImpl
 
     //✅
     @Override
-    public Optional<T> findById(ID id) {
-        return repository.findById(id);
+    public T findById(ID id) {
+        return repository.findById(id).orElseThrow(
+                () -> new NotFoundException("Not found entity with id: " + id)
+        );
     }
 
     //✅
@@ -37,6 +34,20 @@ public class BaseServiceImpl
 
     //✅
     @Override
+    public void deleteById(ID id) {
+        repository.findById(id).orElseThrow(
+                () -> new NotFoundException("Not found entity with id: " + id)
+        );
+        repository.deleteById(id);
+    }
+
+
+
+
+
+    /*
+    //✅
+    @Override
     public void customDeleteById(ID id) {
         Optional<T> foundEntity = repository.findById(id);
         if (foundEntity.isPresent()) {
@@ -45,5 +56,5 @@ public class BaseServiceImpl
             repository.save(entity);
         }
         throw new NotFoundException("Entity Not Found");
-    }
+    }*/
 }

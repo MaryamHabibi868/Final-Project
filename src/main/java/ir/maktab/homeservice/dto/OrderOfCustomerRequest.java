@@ -23,6 +23,12 @@ public class OrderOfCustomerRequest {
     @NotBlank (message = "Start Date of Order should be entered.")
     private ZonedDateTime startDate;
 
-    @NotBlank (message = "Address of Order should be entered.")
-    private Address address;
+    @NotNull (message = "Address of Order should be entered.")
+    private Long addressId;
+
+    @NotNull
+    private Long customerId;
+
+    @NotNull
+    private Long homeServiceId;
 }

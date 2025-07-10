@@ -22,6 +22,8 @@ public class OfferOfSpecialist extends BaseEntity<Long> {
     public static final String SUGGESTED_PRICE = "suggested_price";
     public static final String START_DATE_SUGGESTION = "start_date_suggestion";
     public static final String TASK_DURATION = "task_duration";
+    public final static String SPECIALIST_ID = "specialist_id";
+    public final static String ORDER_OF_CUSTOMER_ID = "order_of_customer_id";
 
     @Column(name = OfferOfSpecialist.SUGGESTED_PRICE, nullable = false)
     private BigDecimal suggestedPrice;
@@ -33,9 +35,11 @@ public class OfferOfSpecialist extends BaseEntity<Long> {
     //Duration
     private Double taskDuration;
 
+    @JoinColumn(name = OfferOfSpecialist.SPECIALIST_ID, nullable = false)
     @ManyToOne
     private Specialist specialist;
 
+    @JoinColumn(name = OfferOfSpecialist.ORDER_OF_CUSTOMER_ID, nullable = false)
     @ManyToOne
     private OrderOfCustomer orderOfCustomer;
 }

@@ -25,4 +25,10 @@ public class OfferOfSpecialistResponse {
 
     @NotNull
     private Double taskDuration;
+
+    @NotNull
+    private Long specialistId;
+
+    @NotNull
+    private Long orderOfCustomerId;
 }

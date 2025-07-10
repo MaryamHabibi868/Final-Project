@@ -11,7 +11,8 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
+/*
+@AllArgsConstructor*/
 @DiscriminatorValue(value = "Manager")
 public class Manager extends User {
 }

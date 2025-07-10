@@ -54,36 +54,14 @@ public class CustomerController {
         return ResponseEntity.ok(feedbackRequest);
     }
 
-    @GetMapping("/find-all-offers-to-order")
+  /*  @GetMapping("/find-all-offers-to-order")
     public ResponseEntity<List<OfferOfSpecialistRequest>> findAllOffersToOrder(
             @RequestBody
             CustomerUpdateRequest request) {
         return ResponseEntity.ok(
                 offerOfSpecialistService.
                         findAllOffersOfSpecialistsByCustomerId(request));
-    }
+    }*/
 
-    @PostMapping("/choose-offer")
-    public ResponseEntity<OfferOfSpecialistRequest> chooseOffer(
-            @RequestBody @Valid
-            OfferOfSpecialistRequest request) {
-        return ResponseEntity.ok
-                (offerOfSpecialistService.chooseOfferOfSpecialist(request));
-    }
 
-    @PostMapping("/start-service")
-    public ResponseEntity<OfferOfSpecialistRequest> startService(
-            @RequestBody @Valid
-            OfferOfSpecialistRequest request) {
-        return ResponseEntity.ok(
-                offerOfSpecialistService.startService(request));
-    }
-
-    @PostMapping("/end-service")
-    public ResponseEntity<OfferOfSpecialistRequest> endService(
-            @RequestBody @Valid
-            OfferOfSpecialistRequest request) {
-        return ResponseEntity.ok(
-                offerOfSpecialistService.endService(request));
-    }
 }

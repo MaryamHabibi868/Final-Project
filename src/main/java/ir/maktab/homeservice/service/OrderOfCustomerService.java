@@ -9,6 +9,5 @@ public interface OrderOfCustomerService
         extends BaseService<OrderOfCustomer, Long> {
 
     //✅
-    OrderOfCustomerResponse submitOrderForHomeService(OrderOfCustomerRequest request,
-                                                      Long homeServiceId);
+    OrderOfCustomerResponse submitOrderForHomeService(OrderOfCustomerRequest request);
 }

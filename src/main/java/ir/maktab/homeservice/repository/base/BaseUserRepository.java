@@ -9,6 +9,12 @@ public interface BaseUserRepository<T extends User>
         extends BaseRepository<T, Long> {
 
     //✅
+    boolean existsByEmail(String email);
+
+    //✅
+    boolean existsByPassword(String password);
+
+    //✅
     Optional<T> findByEmailAndPassword(String email, String password);
 }
 

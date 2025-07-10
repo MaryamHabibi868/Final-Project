@@ -13,16 +13,18 @@ public interface OfferOfSpecialistService
 
     //✅ ok
     OfferOfSpecialistResponse submitOfferToOrder(
-            OfferOfSpecialistRequest request,
-            Long orderOfCustomerId);
-
-    List<OfferOfSpecialistRequest>
-    findAllOffersOfSpecialistsByCustomerId(CustomerUpdateRequest request);
-
-    OfferOfSpecialistRequest chooseOfferOfSpecialist(
             OfferOfSpecialistRequest request);
 
-    OfferOfSpecialistRequest startService(OfferOfSpecialistRequest request);
+   /* List<OfferOfSpecialistRequest>
+    findAllOffersOfSpecialistsByCustomerId(CustomerUpdateRequest request);*/
 
-    OfferOfSpecialistRequest endService(OfferOfSpecialistRequest request);
+    //✅ ok
+    OfferOfSpecialistResponse chooseOfferOfSpecialist(
+            OfferOfSpecialistResponse request);
+
+    //✅ ok
+    OfferOfSpecialistResponse startService(OfferOfSpecialistResponse request);
+
+    //✅
+    OfferOfSpecialistResponse endService(OfferOfSpecialistResponse request);
 }
