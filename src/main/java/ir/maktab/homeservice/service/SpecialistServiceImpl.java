@@ -4,7 +4,6 @@ import ir.maktab.homeservice.domains.*;
 import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
-import ir.maktab.homeservice.exception.NotActiveException;
 import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.SpecialistMapper;

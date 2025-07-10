@@ -9,9 +9,8 @@ import java.util.List;
 
 @Repository
 public interface OfferOfSpecialistRepository
-        extends BaseRepository<OfferOfSpecialist, Long> {
+        extends BaseRepository<OfferOfSpecialist, Long> {}
 
-  /*  List<OfferOfSpecialistRequest> findAllByCustomerIdOrderBySuggestedPriceAsc(Long customerId);
-
-    List<OfferOfSpecialist> findAllByCustomerIdOrderBySuggestedPriceDesc(Long customerId);*/
-}
+/*
+  */
+/*  List<OfferOfSpecialistRequest> findAllByCustomerIdOrderBySuggestedPriceAsc(Long customerId)*/

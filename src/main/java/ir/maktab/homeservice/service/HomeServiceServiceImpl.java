@@ -4,15 +4,12 @@ import ir.maktab.homeservice.domains.HomeService;
 import ir.maktab.homeservice.dto.HomeServiceResponse;
 import ir.maktab.homeservice.dto.HomeServiceSaveRequest;
 import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
-import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.HomeServiceMapper;
 import ir.maktab.homeservice.repository.HomeServiceRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HomeServiceServiceImpl

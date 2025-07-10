@@ -17,9 +17,7 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final HomeServiceService homeServiceService;
-    private final OrderOfCustomerService orderOfCustomerService;
-    private final OfferOfSpecialistService offerOfSpecialistService;
+
 
     //✅
     @PostMapping("/register")

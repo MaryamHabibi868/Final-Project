@@ -1,12 +1,10 @@
 package ir.maktab.homeservice.service;
 
-import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.OfferOfSpecialist;
 import ir.maktab.homeservice.domains.OrderOfCustomer;
 import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
 import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
-import ir.maktab.homeservice.dto.CustomerUpdateRequest;
 import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
 import ir.maktab.homeservice.dto.OfferOfSpecialistResponse;
 import ir.maktab.homeservice.exception.NotApprovedException;
@@ -17,7 +15,6 @@ import ir.maktab.homeservice.repository.OfferOfSpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Service
 public class OfferOfSpecialistServiceImpl
@@ -25,18 +22,15 @@ public class OfferOfSpecialistServiceImpl
         implements OfferOfSpecialistService {
 
     private final OfferOfSpecialistMapper offerOfSpecialistMapper;
-    private final CustomerService customerService;
     private final OrderOfCustomerService orderOfCustomerService;
     private final SpecialistService specialistService;
 
     public OfferOfSpecialistServiceImpl(OfferOfSpecialistRepository repository,
                                         OfferOfSpecialistMapper offerOfSpecialistMapper,
-                                        CustomerService customerService,
                                         OrderOfCustomerService orderOfCustomerService,
                                         SpecialistService specialistService) {
         super(repository);
         this.offerOfSpecialistMapper = offerOfSpecialistMapper;
-        this.customerService = customerService;
         this.orderOfCustomerService = orderOfCustomerService;
         this.specialistService = specialistService;
     }

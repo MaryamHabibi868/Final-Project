@@ -1,9 +1,6 @@
 package ir.maktab.homeservice.controller;
 
-import ir.maktab.homeservice.domains.OrderOfCustomer;
 import ir.maktab.homeservice.dto.*;
-import ir.maktab.homeservice.service.HomeServiceService;
-import ir.maktab.homeservice.service.OfferOfSpecialistService;
 import ir.maktab.homeservice.service.SpecialistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class SpecialistController {
 
     private final SpecialistService specialistService;
-    private final OfferOfSpecialistService offerOfSpecialistService;
-    private final HomeServiceService homeServiceService;
 
     //✅
     @PostMapping("/register")

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/offers-of-specialist")
 public class OfferOfSpecialistController {
+
     private final OfferOfSpecialistService offerOfSpecialistService;
 
     //✅ ok
