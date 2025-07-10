@@ -18,4 +18,7 @@ public class FeedbackResponse {
     private Integer feedbackRange;
 
     private String feedbackType;
+
+    @NotNull
+    private Long offerOfSpecialistId;
 }

@@ -6,7 +6,7 @@ import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.CustomerMapper;
-import ir.maktab.homeservice.mapper.FeedBackMapper;
+import ir.maktab.homeservice.mapper.FeedbackMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,13 @@ public class CustomerServiceImpl
 
     private final CustomerMapper customerMapper;
     private final FeedbackService feedbackService;
-    private final FeedBackMapper feedBackMapper;
+    private final FeedbackMapper feedBackMapper;
 
 
     public CustomerServiceImpl(CustomerRepository repository,
                                CustomerMapper customerMapper,
                                FeedbackService feedbackService,
-                               FeedBackMapper feedBackMapper) {
+                               FeedbackMapper feedBackMapper) {
         super(repository);
         this.customerMapper = customerMapper;
         this.feedbackService = feedbackService;
@@ -70,19 +70,5 @@ public class CustomerServiceImpl
         return customerMapper.entityMapToResponse(repository.
                 findByEmailAndPassword(request.getEmail(), request.getPassword())
                 .orElseThrow(() -> new NotFoundException("Customer Not Found")));
-    }
-
-
-    @Override
-    public FeedbackRequest submitFeedback(FeedbackRequest feedbackRequest, Long offerOfSpecialistId) {
-        FeedBack feedBack1 = feedBackMapper.feedbackDTOMapToEntity(feedbackRequest);
-        if (!feedBack1.getOfferOfSpecialist().getId().equals(offerOfSpecialistId)) {
-            throw new NotFoundException("Offer Of Specialist Not Found");
-        }
-        FeedBack feedBack = new FeedBack();
-        feedBack.setFeedbackRange(feedbackRequest.getFeedbackRange());
-        feedBack.setFeedbackDescription(feedbackRequest.getFeedbackType());
-        FeedBack save = feedbackService.save(feedBack);
-        return feedBackMapper.feedbackMapToDTO(save);
     }
 }

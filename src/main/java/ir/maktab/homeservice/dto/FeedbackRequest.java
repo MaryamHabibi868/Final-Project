@@ -15,5 +15,8 @@ public class FeedbackRequest {
     @Size (min =1, max =5)
     private Integer feedbackRange;
 
-    private String feedbackType;
+    private String feedbackDescription;
+
+    @NotNull
+    private Long offerOfSpecialistId;
 }

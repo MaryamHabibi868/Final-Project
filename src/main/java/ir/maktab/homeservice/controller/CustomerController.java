@@ -45,12 +45,7 @@ public class CustomerController {
 
 
 
-    @PostMapping("/submit-feedback")
-    public ResponseEntity<FeedbackRequest> submitFeedback(
-            @RequestBody @Valid
-            FeedbackRequest feedbackRequest) {
-        return ResponseEntity.ok(feedbackRequest);
-    }
+
 
   /*  @GetMapping("/find-all-offers-to-order")
     public ResponseEntity<List<OfferOfSpecialistRequest>> findAllOffersToOrder(
