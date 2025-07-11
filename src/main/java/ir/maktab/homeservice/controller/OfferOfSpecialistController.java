@@ -60,4 +60,14 @@ public class OfferOfSpecialistController {
         return ResponseEntity.ok(
                 offerOfSpecialistService.findByOfferOfSpecialistId(specialistId));
     }
+
+    //✅ ok
+    @GetMapping("/{customerId}")
+    public ResponseEntity<List<OfferOfSpecialistResponse>>
+    findAllOfferOfSpecialistByCustomerId(
+            @PathVariable Long customerId) {
+        return ResponseEntity.ok(
+                offerOfSpecialistService.
+                        findAllOfferOfSpecialistOrderByCustomerId(customerId));
+    }
 }

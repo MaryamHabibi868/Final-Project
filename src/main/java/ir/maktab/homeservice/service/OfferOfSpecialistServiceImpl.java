@@ -156,4 +156,14 @@ public class OfferOfSpecialistServiceImpl
                 .map(offerOfSpecialistMapper::entityMapToResponse)
                 .toList();
     }
+
+    //✅
+    @Override
+    public List<OfferOfSpecialistResponse>
+    findAllOfferOfSpecialistOrderByCustomerId(Long customerId) {
+       return repository.findAllByOrderOfCustomer_CustomerId(customerId)
+                .stream()
+                .map(offerOfSpecialistMapper::entityMapToResponse)
+                .toList();
+    }
 }

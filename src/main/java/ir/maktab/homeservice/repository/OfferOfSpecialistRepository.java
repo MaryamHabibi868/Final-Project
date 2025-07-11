@@ -13,6 +13,9 @@ public interface OfferOfSpecialistRepository
 
     @Query
     List<OfferOfSpecialist> findAllBySpecialistId(Long specialist_id);
+
+
+    List<OfferOfSpecialist> findAllByOrderOfCustomer_CustomerId(Long order_of_customer_id);
 }
 
 /*

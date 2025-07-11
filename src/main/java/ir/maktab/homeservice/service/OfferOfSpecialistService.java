@@ -31,4 +31,8 @@ public interface OfferOfSpecialistService
     //✅
     List<OfferOfSpecialistResponse> findByOfferOfSpecialistId(
             Long specialistId);
+
+    //✅
+    List<OfferOfSpecialistResponse>
+    findAllOfferOfSpecialistOrderByCustomerId(Long customerId);
 }
