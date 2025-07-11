@@ -4,6 +4,8 @@ import ir.maktab.homeservice.domains.FeedBack;
 import ir.maktab.homeservice.domains.OfferOfSpecialist;
 import ir.maktab.homeservice.dto.FeedbackRequest;
 import ir.maktab.homeservice.dto.FeedbackResponse;
+import ir.maktab.homeservice.dto.FeedbackResponseForSpecialist;
+import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.FeedbackMapper;
 import ir.maktab.homeservice.repository.FeedbackRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
@@ -37,5 +39,22 @@ public class FeedbackServiceImpl
         feedback.setOfferOfSpecialist(foundOfferOfSpecialist);
         FeedBack save = repository.save(feedback);
         return feedbackMapper.entityMapToResponse(save);
+    }
+
+    //✅
+    @Override
+    public Integer feedbackRangeForSpecialistToOffer(
+            Long offerOfSpecialistId) {
+        OfferOfSpecialist offer = offerOfSpecialistService
+                .findById(offerOfSpecialistId);
+
+        Long id = offer.getId();
+
+        FeedBack feedBack = repository.findById(id).orElseThrow(
+                () -> new NotFoundException(
+                        "Feedback Not found for this offer"
+                )
+        );
+        return feedBack.getFeedbackRange();
     }
 }

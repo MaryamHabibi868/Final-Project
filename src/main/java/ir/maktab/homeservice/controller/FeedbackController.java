@@ -6,10 +6,7 @@ import ir.maktab.homeservice.service.FeedbackService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,5 +21,13 @@ public class FeedbackController {
             @RequestBody @Valid
             FeedbackRequest feedbackRequest) {
         return ResponseEntity.ok(feedbackService.submitFeedback(feedbackRequest));
+    }
+
+    //✅
+    @GetMapping("/offer-of-specialist-id/{offerOfSpecialistId}")
+    public ResponseEntity<Integer> feedbackRangeForSpecialistToOffer(
+            @PathVariable Long offerOfSpecialistId) {
+        return ResponseEntity.ok(feedbackService.feedbackRangeForSpecialistToOffer(
+                offerOfSpecialistId));
     }
 }

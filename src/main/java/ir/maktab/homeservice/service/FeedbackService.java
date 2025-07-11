@@ -10,4 +10,8 @@ public interface FeedbackService
 
     //✅
     FeedbackResponse submitFeedback(FeedbackRequest request);
+
+    //✅
+    Integer feedbackRangeForSpecialistToOffer(
+            Long offerOfSpecialistId);
 }

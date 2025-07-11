@@ -54,7 +54,7 @@ public class OfferOfSpecialistController {
     }
 
     //✅ ok
-    @GetMapping("{specialistId}")
+    @GetMapping("/specialist-id/{specialistId}")
     public ResponseEntity<List<OfferOfSpecialistResponse>> findByOffersBySpecialistId(
             @PathVariable Long specialistId) {
         return ResponseEntity.ok(
@@ -62,7 +62,7 @@ public class OfferOfSpecialistController {
     }
 
     //✅ ok
-    @GetMapping("/{customerId}")
+    @GetMapping("/customer-id/{customerId}")
     public ResponseEntity<List<OfferOfSpecialistResponse>>
     findAllOfferOfSpecialistByCustomerId(
             @PathVariable Long customerId) {
