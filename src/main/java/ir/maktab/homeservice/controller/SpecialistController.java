@@ -91,6 +91,7 @@ public class SpecialistController {
                         .findAllByLastNameContainsIgnoreCaseOrderByIdAsc(lastName));
     }
 
+    //✅
     @GetMapping("/find-home-services-by-home-service-title")
     public ResponseEntity<List<SpecialistResponse>> findAllHomeServicesByHomeServiceTitle(
             @RequestParam String homeServiceTitle) {

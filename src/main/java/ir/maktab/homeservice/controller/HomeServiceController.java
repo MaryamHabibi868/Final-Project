@@ -4,6 +4,7 @@ import ir.maktab.homeservice.dto.HomeServiceResponse;
 import ir.maktab.homeservice.dto.HomeServiceSaveRequest;
 import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
 import ir.maktab.homeservice.service.HomeServiceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class HomeServiceController {
     //✅ ok
     @PostMapping
     public ResponseEntity<HomeServiceResponse> createHomeService(
-            @RequestBody
+            @RequestBody @Valid
             HomeServiceSaveRequest request) {
         return ResponseEntity.ok(homeServiceService.createHomeService(request));
     }
@@ -27,7 +28,7 @@ public class HomeServiceController {
     //✅
     @PutMapping
     public ResponseEntity<HomeServiceResponse> updateHomeService(
-            @RequestBody
+            @RequestBody @Valid
             HomeServiceUpdateRequest request) {
         return ResponseEntity.ok(homeServiceService.updateHomeService(request));
     }

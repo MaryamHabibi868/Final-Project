@@ -22,14 +22,17 @@ public class Wallet extends BaseEntity<Long> {
      public static final String USER_ID = "user_id";
 
     @Column(name = Wallet.BALANCE)
-    private BigDecimal balance;
-
-    public BigDecimal balance() {
-        balance = BigDecimal.valueOf(0.0);
-        return balance;
-    }
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @JoinColumn(name = Wallet.USER_ID)
     @OneToOne
-    private User userId;
+    private User userInformation;
+
+
+    /*public BigDecimal balance() {
+        balance = BigDecimal.valueOf(0.0);
+        return balance;
+    }*/
+
+
 }
