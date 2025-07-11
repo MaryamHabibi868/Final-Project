@@ -9,6 +9,7 @@ import ir.maktab.homeservice.mapper.FeedbackMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class CustomerServiceImpl
     }
 
     //✅
+    @Transactional
     @Override
     public CustomerResponse registerCustomer(CustomerSaveRequest request) {
         if (repository.existsByEmail(request.getEmail())) {
@@ -51,6 +53,7 @@ public class CustomerServiceImpl
     }
 
     //✅
+    @Transactional
     @Override
     public CustomerResponse updateCustomer(CustomerUpdateRequest request) {
         Customer foundCustomer = repository.findById(request.getId())

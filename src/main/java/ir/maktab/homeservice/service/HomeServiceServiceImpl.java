@@ -9,7 +9,10 @@ import ir.maktab.homeservice.mapper.HomeServiceMapper;
 import ir.maktab.homeservice.repository.HomeServiceRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HomeServiceServiceImpl
@@ -25,26 +28,35 @@ public class HomeServiceServiceImpl
     }
 
     //✅
+    @Transactional
     @Override
     public HomeServiceResponse createHomeService(
             HomeServiceSaveRequest request) {
-        HomeService foundHomeService =
+        Optional<HomeService> foundHomeService =
                 repository.findAllByHomeServiceTitleIgnoreCase(
-                        request.getHomeServiceTitle()).orElseThrow(
+                        request.getHomeServiceTitle());
+
+                        /*.orElseThrow(
                         () -> new NotFoundException(
                                 "Home Service Title Already Exists")
-                );
-
+                );*/
+        if (foundHomeService.isPresent()) {
+            throw new NotFoundException(
+                    "Home Service Title Already Exists");
+        }
         HomeService homeService = new HomeService();
         homeService.setHomeServiceTitle(request.getHomeServiceTitle());
         homeService.setBasePrice(request.getBasePrice());
         homeService.setDescription(request.getDescription());
-        homeService.setParentService(request.getParentService());
+        homeService.setParentService(HomeService.builder()
+                .id(request.getParentServiceId()).build());
+
         HomeService save = repository.save(homeService);
         return homeServiceMapper.entityMapToResponse(save);
     }
 
     //✅
+    @Transactional
     @Override
     public HomeServiceResponse updateHomeService(
             HomeServiceUpdateRequest request) {
@@ -62,6 +74,7 @@ public class HomeServiceServiceImpl
     }
 
     //✅
+    @Transactional
     @Override
     public void deleteHomeService(Long id) {
         deleteById(id);

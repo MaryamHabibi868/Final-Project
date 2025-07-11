@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.dto;
 
 import ir.maktab.homeservice.domains.HomeService;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -18,11 +19,13 @@ public class HomeServiceSaveRequest {
     @NotBlank(message = "The name of main service should be entered.")
     private String homeServiceTitle;
 
-    @NotBlank( message = "The name of main service should be entered.")
+    @NotNull( message = "The base price should be entered.")
+    @DecimalMin(value = "0.0", inclusive = false,
+            message = "The base price must be greater than 0.")
     private BigDecimal basePrice;
 
-    @NotBlank( message = "The name of main service should be entered.")
+    @NotBlank( message = "The Description of home service should be entered.")
     private String description;
 
-    private HomeService parentService;
+    private Long parentServiceId;
 }

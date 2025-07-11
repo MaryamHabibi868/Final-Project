@@ -62,6 +62,7 @@ public class SpecialistServiceImpl
     }
 
     //✅
+    @Transactional
     @Override
     public SpecialistResponse updateSpecialistInfo(SpecialistUpdateInfo request) {
         Specialist specialistFound = repository.findById(request.getId())
@@ -82,6 +83,7 @@ public class SpecialistServiceImpl
     }
 
     //✅
+    @Transactional
     @Override
     public SpecialistSaveRequest approveSpecialistRegistration(Long id) {
         Specialist foundSpecialist = repository.findById(id).orElseThrow(
@@ -96,6 +98,7 @@ public class SpecialistServiceImpl
 
     //✅
     // dto ke ba homeservice rabete dare bayad bezanam? ya hamin doroste?
+    @Transactional
     @Override
     public void addSpecialistToHomeService(
             Long specialistId, Long homeServiceId) {
@@ -118,6 +121,7 @@ public class SpecialistServiceImpl
     //✅
     // soale bala?
     @Override
+    @Transactional
     public void removeSpecialistFromHomeService(
             Long specialistId, Long homeServiceId) {
         Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
@@ -160,6 +164,13 @@ public class SpecialistServiceImpl
         return repository.
                 findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(lastName)
                 .stream()
+                .map(specialistMapper::entityMapToResponse)
+                .toList();
+    }
+
+    public List<SpecialistResponse> findAllByHomeServiceTitle(
+            String homeServiceTitle) {
+       return repository.findAllByHomeServices_HomeServiceTitle(homeServiceTitle).stream()
                 .map(specialistMapper::entityMapToResponse)
                 .toList();
     }

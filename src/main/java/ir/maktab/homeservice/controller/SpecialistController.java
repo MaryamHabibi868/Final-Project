@@ -50,8 +50,8 @@ public class SpecialistController {
 
 
     //✅
-    @PostMapping("/specialists/{specialistId}/home-services")
-    public ResponseEntity<Void> addSpecialistToHomeService(
+    @PostMapping("/add-specialists/{specialistId}/home-services")
+    public ResponseEntity<String> addSpecialistToHomeService(
             @PathVariable Long specialistId,
             @RequestParam Long homeServiceId) {
         specialistService.addSpecialistToHomeService(specialistId, homeServiceId);
@@ -89,6 +89,13 @@ public class SpecialistController {
         return ResponseEntity.ok(
                 specialistService
                         .findAllByLastNameContainsIgnoreCaseOrderByIdAsc(lastName));
+    }
+
+    @GetMapping("/find-home-services-by-home-service-title")
+    public ResponseEntity<List<SpecialistResponse>> findAllHomeServicesByHomeServiceTitle(
+            @RequestParam String homeServiceTitle) {
+        return ResponseEntity.ok(
+                specialistService.findAllByHomeServiceTitle(homeServiceTitle));
     }
 
 
