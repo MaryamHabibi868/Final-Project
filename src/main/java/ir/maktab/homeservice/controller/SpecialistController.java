@@ -73,5 +73,24 @@ public class SpecialistController {
         return ResponseEntity.ok(specialistService.findAllSpecialists());
     }
 
+    //✅
+    @GetMapping("/filter-by-first-name")
+    public ResponseEntity<List<SpecialistResponse>> findAllByFirstNameContainsIgnoreCase(
+            @RequestParam String firstName) {
+        return ResponseEntity.ok(
+                specialistService
+                        .findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(firstName));
+    }
+
+    //✅
+    @GetMapping("/filter-by-last-name")
+    public ResponseEntity<List<SpecialistResponse>> findAllByLastNameContainsIgnoreCase(
+            @RequestParam String lastName) {
+        return ResponseEntity.ok(
+                specialistService
+                        .findAllByLastNameContainsIgnoreCaseOrderByIdAsc(lastName));
+    }
+
+
 
 }

@@ -1,5 +1,6 @@
 package ir.maktab.homeservice.repository.base;
 
+import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.User;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -21,6 +22,14 @@ public interface BaseUserRepository<T extends User>
 
     //✅
     <P> List<P> findUsersByIdNotNull(Class<P> clazz);
+
+    //✅
+    Optional<T> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
+            (String firstName);
+
+    //✅
+    Optional<T> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
+            (String lastName);
 }
 
 

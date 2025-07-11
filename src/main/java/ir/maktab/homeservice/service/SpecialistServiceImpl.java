@@ -10,6 +10,7 @@ import ir.maktab.homeservice.mapper.SpecialistMapper;
 import ir.maktab.homeservice.repository.SpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class SpecialistServiceImpl
 
     //✅
     // IsActiveTrue?
+    @Transactional
     @Override
     public SpecialistResponse registerSpecialist(SpecialistSaveRequest request) {
         if (repository.existsByEmail(request.getEmail())){
@@ -137,6 +139,28 @@ public class SpecialistServiceImpl
     public List<SpecialistResponse> findAllSpecialists() {
         return repository.findUsersByIdNotNull(Specialist.class).stream()
                 .map(specialistMapper :: entityMapToResponse)
+                .toList();
+    }
+
+    //✅
+    @Override
+    public List<SpecialistResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
+    (String firstName) {
+        return repository.
+                findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(firstName)
+                .stream()
+                .map(specialistMapper::entityMapToResponse)
+                .toList();
+    }
+
+    //✅
+    @Override
+    public List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
+    (String lastName) {
+        return repository.
+                findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(lastName)
+                .stream()
+                .map(specialistMapper::entityMapToResponse)
                 .toList();
     }
 }

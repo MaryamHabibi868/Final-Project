@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -47,6 +48,24 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<List<CustomerResponse>> findAllCustomers() {
         return ResponseEntity.ok(customerService.findAllCustomers());
+    }
+
+    //✅
+    @GetMapping("/filter-by-first-name")
+    public ResponseEntity<List<CustomerResponse>> findAllByFirstNameContainsIgnoreCase(
+            @RequestParam String firstName) {
+        return ResponseEntity.ok(
+                customerService
+                        .findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(firstName));
+    }
+
+    //✅
+    @GetMapping("/filter-by-last-name")
+    public ResponseEntity<List<CustomerResponse>> findAllByLastNameContainsIgnoreCase(
+            @RequestParam String lastName) {
+        return ResponseEntity.ok(
+                customerService
+                        .findAllByLastNameContainsIgnoreCaseOrderByIdAsc(lastName));
     }
 
 

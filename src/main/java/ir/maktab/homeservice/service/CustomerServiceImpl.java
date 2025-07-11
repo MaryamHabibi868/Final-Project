@@ -53,16 +53,16 @@ public class CustomerServiceImpl
     //✅
     @Override
     public CustomerResponse updateCustomer(CustomerUpdateRequest request) {
-            Customer foundCustomer = repository.findById(request.getId())
-                    .orElseThrow(
-                    () -> new NotFoundException("Customer not found")
-            );
-            foundCustomer.setFirstName(request.getFirstName());
-            foundCustomer.setLastName(request.getLastName());
-            foundCustomer.setEmail(request.getEmail());
-            foundCustomer.setPassword(request.getPassword());
-            Customer save = repository.save(foundCustomer);
-            return customerMapper.entityMapToResponse(save);
+        Customer foundCustomer = repository.findById(request.getId())
+                .orElseThrow(
+                        () -> new NotFoundException("Customer not found")
+                );
+        foundCustomer.setFirstName(request.getFirstName());
+        foundCustomer.setLastName(request.getLastName());
+        foundCustomer.setEmail(request.getEmail());
+        foundCustomer.setPassword(request.getPassword());
+        Customer save = repository.save(foundCustomer);
+        return customerMapper.entityMapToResponse(save);
     }
 
     //✅
@@ -77,7 +77,29 @@ public class CustomerServiceImpl
     @Override
     public List<CustomerResponse> findAllCustomers() {
         return repository.findUsersByIdNotNull(Customer.class).stream()
-                .map(customerMapper :: entityMapToResponse)
+                .map(customerMapper::entityMapToResponse)
+                .toList();
+    }
+
+    //✅
+    @Override
+    public List<CustomerResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
+    (String firstName) {
+        return repository.
+                findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(firstName)
+                .stream()
+                .map(customerMapper::entityMapToResponse)
+                .toList();
+    }
+
+    //✅
+    @Override
+    public List<CustomerResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
+    (String lastName) {
+        return repository.
+                findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(lastName)
+                .stream()
+                .map(customerMapper::entityMapToResponse)
                 .toList();
     }
 }
