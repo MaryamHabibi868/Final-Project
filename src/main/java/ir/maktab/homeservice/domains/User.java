@@ -23,6 +23,7 @@ public class User extends BaseEntity<Long> {
     public static final String LAST_NAME = "last_name";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
+    public static final String WALLET_ID = "wallet_id";
 
     @Column(name = User.FIRST_NAME, nullable = false)
     private String firstName;
@@ -35,4 +36,8 @@ public class User extends BaseEntity<Long> {
 
     @Column(name = User.PASSWORD, nullable = false, unique = true)
     private String password;
+
+    @JoinColumn(name = User.WALLET_ID)
+    @OneToOne
+    private Wallet wallet;
 }

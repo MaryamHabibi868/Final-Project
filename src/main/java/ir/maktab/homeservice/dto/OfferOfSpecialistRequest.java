@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 
 @Setter
@@ -24,7 +25,7 @@ public class OfferOfSpecialistRequest {
     private ZonedDateTime startDateSuggestion;
 
     @NotNull(message = "Task duration of Offer should be entered.")
-    private Double taskDuration;
+    private Duration taskDuration;
 
     @NotNull
     private Long specialistId;

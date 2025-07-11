@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
@@ -32,8 +33,7 @@ public class OfferOfSpecialist extends BaseEntity<Long> {
     private ZonedDateTime startDateSuggestion;
 
     @Column(name = OfferOfSpecialist.TASK_DURATION, nullable = false)
-    //Duration
-    private Double taskDuration;
+    private Duration taskDuration;
 
     @JoinColumn(name = OfferOfSpecialist.SPECIALIST_ID, nullable = false)
     @ManyToOne
