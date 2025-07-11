@@ -15,6 +15,7 @@ import ir.maktab.homeservice.repository.OfferOfSpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Service
 public class OfferOfSpecialistServiceImpl
@@ -142,5 +143,17 @@ public class OfferOfSpecialistServiceImpl
         foundOfferOfSpecialist.getOrderOfCustomer().setOrderStatus(OrderStatus.DONE);
         OfferOfSpecialist save = repository.save(foundOfferOfSpecialist);
         return offerOfSpecialistMapper.entityMapToResponse(save);
+    }
+
+    //✅
+    @Override
+    public List<OfferOfSpecialistResponse> findByOfferOfSpecialistId(
+            Long specialistId) {
+        Specialist specialist = specialistService.findById(specialistId);
+
+       return repository.findAllBySpecialistId(specialistId)
+               .stream()
+                .map(offerOfSpecialistMapper::entityMapToResponse)
+                .toList();
     }
 }

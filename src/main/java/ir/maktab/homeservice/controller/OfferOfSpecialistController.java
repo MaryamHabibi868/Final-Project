@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/offers-of-specialist")
@@ -49,5 +51,13 @@ public class OfferOfSpecialistController {
             OfferOfSpecialistResponse request) {
         return ResponseEntity.ok(
                 offerOfSpecialistService.endService(request));
+    }
+
+    //✅ ok
+    @GetMapping("{specialistId}")
+    public ResponseEntity<List<OfferOfSpecialistResponse>> findByOffersBySpecialistId(
+            @PathVariable Long specialistId) {
+        return ResponseEntity.ok(
+                offerOfSpecialistService.findByOfferOfSpecialistId(specialistId));
     }
 }

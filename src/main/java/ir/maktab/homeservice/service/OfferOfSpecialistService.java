@@ -27,4 +27,8 @@ public interface OfferOfSpecialistService
 
     //✅
     OfferOfSpecialistResponse endService(OfferOfSpecialistResponse request);
+
+    //✅
+    List<OfferOfSpecialistResponse> findByOfferOfSpecialistId(
+            Long specialistId);
 }

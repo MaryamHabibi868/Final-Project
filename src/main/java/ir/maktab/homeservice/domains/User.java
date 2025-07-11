@@ -10,7 +10,7 @@ import javax.naming.Name;
 @Entity
 @Getter
 @Setter
-@Table (name = "users")
+@Table (name = User.TABLE_NAME)
 @ToString (callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
