@@ -5,6 +5,8 @@ import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.base.BaseService;
 
+import java.util.List;
+
 public interface SpecialistService extends BaseService<Specialist, Long> {
 
     //✅
@@ -30,5 +32,8 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
     //✅
     void removeSpecialistFromHomeService(
             Long specialistId, Long homeServiceId);
+
+    //✅
+    List<SpecialistResponse> findAllSpecialists();
 }
 

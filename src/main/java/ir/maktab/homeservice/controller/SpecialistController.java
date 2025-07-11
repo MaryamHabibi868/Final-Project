@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/specialist")
@@ -63,6 +65,12 @@ public class SpecialistController {
             @RequestParam Long homeServiceId) {
         specialistService.removeSpecialistFromHomeService(specialistId, homeServiceId);
         return ResponseEntity.ok().build();
+    }
+
+    //✅
+    @GetMapping
+    public ResponseEntity<List<SpecialistResponse>> findAllSpecialists() {
+        return ResponseEntity.ok(specialistService.findAllSpecialists());
     }
 
 

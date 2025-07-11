@@ -4,6 +4,8 @@ import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.base.BaseService;
 
+import java.util.List;
+
 public interface CustomerService extends BaseService<Customer, Long> {
 
     //✅
@@ -15,4 +17,6 @@ public interface CustomerService extends BaseService<Customer, Long> {
     //✅
     CustomerResponse loginCustomer(CustomerLoginRequest request);
 
+    //✅
+    List<CustomerResponse> findAllCustomers();
 }

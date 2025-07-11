@@ -11,6 +11,8 @@ import ir.maktab.homeservice.repository.SpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SpecialistServiceImpl
         extends BaseServiceImpl<Specialist, Long, SpecialistRepository>
@@ -127,5 +129,14 @@ public class SpecialistServiceImpl
         foundSpecialist.getHomeServices().remove(foundHomeService);
         repository.save(foundSpecialist);
         homeServiceService.save(foundHomeService);
+    }
+
+
+    //✅
+    @Override
+    public List<SpecialistResponse> findAllSpecialists() {
+        return repository.findUsersByIdNotNull(Specialist.class).stream()
+                .map(specialistMapper :: entityMapToResponse)
+                .toList();
     }
 }

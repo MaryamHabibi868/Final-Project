@@ -43,6 +43,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.updateCustomer(request));
     }
 
+    //✅
+    @GetMapping
+    public ResponseEntity<List<CustomerResponse>> findAllCustomers() {
+        return ResponseEntity.ok(customerService.findAllCustomers());
+    }
+
 
 
 

@@ -1,7 +1,6 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
-import ir.maktab.homeservice.domains.FeedBack;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotFoundException;
@@ -10,6 +9,8 @@ import ir.maktab.homeservice.mapper.FeedbackMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CustomerServiceImpl
@@ -70,5 +71,13 @@ public class CustomerServiceImpl
         return customerMapper.entityMapToResponse(repository.
                 findByEmailAndPassword(request.getEmail(), request.getPassword())
                 .orElseThrow(() -> new NotFoundException("Customer Not Found")));
+    }
+
+    //✅
+    @Override
+    public List<CustomerResponse> findAllCustomers() {
+        return repository.findUsersByIdNotNull(Customer.class).stream()
+                .map(customerMapper :: entityMapToResponse)
+                .toList();
     }
 }
