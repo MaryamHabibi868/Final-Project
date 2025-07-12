@@ -19,18 +19,14 @@ public class CustomerServiceImpl
         implements CustomerService {
 
     private final CustomerMapper customerMapper;
-    private final FeedbackService feedbackService;
-    private final FeedbackMapper feedBackMapper;
+
 
 
     public CustomerServiceImpl(CustomerRepository repository,
-                               CustomerMapper customerMapper,
-                               FeedbackService feedbackService,
-                               FeedbackMapper feedBackMapper) {
+                               CustomerMapper customerMapper) {
         super(repository);
         this.customerMapper = customerMapper;
-        this.feedbackService = feedbackService;
-        this.feedBackMapper = feedBackMapper;
+
     }
 
     //✅
@@ -38,10 +34,10 @@ public class CustomerServiceImpl
     @Override
     public CustomerResponse registerCustomer(CustomerSaveRequest request) {
         if (repository.existsByEmail(request.getEmail())) {
-            throw new DuplicatedException("Email address already in use");
+            throw new DuplicatedException("Email address already exist");
         }
         if (repository.existsByPassword(request.getPassword())) {
-            throw new DuplicatedException("Password already in use");
+            throw new DuplicatedException("Password already exist");
         }
         Customer customer = new Customer();
         customer.setFirstName(request.getFirstName());
@@ -60,6 +56,12 @@ public class CustomerServiceImpl
                 .orElseThrow(
                         () -> new NotFoundException("Customer not found")
                 );
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new DuplicatedException("Email address already exist");
+        }
+        if (repository.existsByPassword(request.getPassword())) {
+            throw new DuplicatedException("Password already exist");
+        }
         foundCustomer.setFirstName(request.getFirstName());
         foundCustomer.setLastName(request.getLastName());
         foundCustomer.setEmail(request.getEmail());
@@ -100,7 +102,7 @@ public class CustomerServiceImpl
     public List<CustomerResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
     (String lastName) {
         return repository.
-                findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(lastName)
+                findAllByLastNameContainsIgnoreCaseOrderByIdAsc(lastName)
                 .stream()
                 .map(customerMapper::entityMapToResponse)
                 .toList();

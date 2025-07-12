@@ -68,7 +68,8 @@ public class HomeServiceServiceImpl
         homeService.setHomeServiceTitle(request.getHomeServiceTitle());
         homeService.setBasePrice(request.getBasePrice());
         homeService.setDescription(request.getDescription());
-        homeService.setParentService(request.getParentService());
+        homeService.setParentService(HomeService.builder()
+                .id(request.getParentServiceId()).build());
         HomeService save = repository.save(homeService);
         return homeServiceMapper.entityMapToResponse(save);
     }

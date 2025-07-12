@@ -11,6 +11,7 @@ import ir.maktab.homeservice.exception.NotValidPriceException;
 import ir.maktab.homeservice.mapper.OrderOfCustomerMapper;
 import ir.maktab.homeservice.repository.OrderOfCustomerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +30,7 @@ public class OrderOfCustomerServiceImpl
     }
 
     //✅
+    @Transactional
     @Override
     public OrderOfCustomerResponse submitOrderForHomeService(
             OrderOfCustomerRequest request) {

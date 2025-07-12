@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -24,7 +23,7 @@ public class OrderOfCustomer extends BaseEntity<Long> {
     public static final String SUGGESTED_PRICE = "suggested_price";
     public static final String START_DATE = "start_date";
     public static final String ADDRESS_ID = "address_id";
-    public static final String OFFER_STATUS = "offer_status";
+    public static final String ORDER_STATUS = "order_status";
     public static final String HOME_SERVICE_ID = "home_service_id";
     public static final String CUSTOMER_ID = "customer_id";
 
@@ -41,8 +40,7 @@ public class OrderOfCustomer extends BaseEntity<Long> {
     @ManyToOne
     private Address address;
 
-    @JoinColumn(name = OrderOfCustomer.OFFER_STATUS, nullable = false)
-    @Column(name = OrderOfCustomer.OFFER_STATUS, nullable = false)
+    @Column(name = OrderOfCustomer.ORDER_STATUS, nullable = false)
     private OrderStatus orderStatus;
 
     @JoinColumn(name = OrderOfCustomer.HOME_SERVICE_ID, nullable = false)

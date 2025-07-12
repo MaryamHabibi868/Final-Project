@@ -4,7 +4,6 @@ import ir.maktab.homeservice.domains.FeedBack;
 import ir.maktab.homeservice.domains.OfferOfSpecialist;
 import ir.maktab.homeservice.dto.FeedbackRequest;
 import ir.maktab.homeservice.dto.FeedbackResponse;
-import ir.maktab.homeservice.dto.FeedbackResponseForSpecialist;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.FeedbackMapper;
 import ir.maktab.homeservice.repository.FeedbackRepository;

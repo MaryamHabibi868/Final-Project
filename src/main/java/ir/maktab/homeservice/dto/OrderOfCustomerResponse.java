@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.dto;
 
 import ir.maktab.homeservice.domains.Address;
+import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -24,9 +25,11 @@ public class OrderOfCustomerResponse {
     @NotNull
     private BigDecimal suggestedPrice;
 
-    @NotBlank
+    @NotNull
     private ZonedDateTime startDate;
 
+    private OrderStatus orderStatus;
+
     @NotBlank
-    private Address address;
+    private Long addressId;
 }

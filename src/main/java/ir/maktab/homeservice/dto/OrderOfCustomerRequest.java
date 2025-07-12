@@ -20,7 +20,7 @@ public class OrderOfCustomerRequest {
     @NotNull(message = "Suggested Price of Order should be entered.")
     private BigDecimal suggestedPrice;
 
-    @NotBlank (message = "Start Date of Order should be entered.")
+    @NotNull(message = "Start Date of Order should be entered.")
     private ZonedDateTime startDate;
 
     @NotNull (message = "Address of Order should be entered.")

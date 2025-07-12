@@ -85,7 +85,7 @@ public class SpecialistServiceImpl
     //✅
     @Transactional
     @Override
-    public SpecialistSaveRequest approveSpecialistRegistration(Long id) {
+    public SpecialistResponse approveSpecialistRegistration(Long id) {
         Specialist foundSpecialist = repository.findById(id).orElseThrow(
                 () -> new NotFoundException("Specialist Not Found")
         );
@@ -93,7 +93,7 @@ public class SpecialistServiceImpl
             foundSpecialist.setAccountStatus(AccountStatus.APPROVED);
             repository.save(foundSpecialist);
         }
-        return specialistMapper.specialistMapToDTO(foundSpecialist);
+        return specialistMapper.entityMapToResponse(foundSpecialist);
     }
 
     //✅
@@ -162,7 +162,7 @@ public class SpecialistServiceImpl
     public List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
     (String lastName) {
         return repository.
-                findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(lastName)
+                findAllByLastNameContainsIgnoreCaseOrderByIdAsc(lastName)
                 .stream()
                 .map(specialistMapper::entityMapToResponse)
                 .toList();

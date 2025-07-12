@@ -23,5 +23,5 @@ public class HomeServiceUpdateRequest {
 
     private String description;
 
-    private HomeService parentService;
+    private Long parentServiceId;
 }

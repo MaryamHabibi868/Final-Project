@@ -21,7 +21,7 @@ public class OfferOfSpecialistRequest {
     @NotNull(message = "Suggestion Price of Offer should be entered.")
     private BigDecimal suggestedPrice;
 
-    @NotBlank(message = "Start date suggestion of Offer should be entered.")
+    @NotNull(message = "Start date suggestion of Offer should be entered.")
     private ZonedDateTime startDateSuggestion;
 
     @NotNull(message = "Task duration of Offer should be entered.")

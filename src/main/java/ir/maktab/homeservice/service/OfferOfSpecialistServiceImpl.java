@@ -12,6 +12,7 @@ import ir.maktab.homeservice.exception.NotValidPriceException;
 import ir.maktab.homeservice.mapper.OfferOfSpecialistMapper;
 import ir.maktab.homeservice.repository.OfferOfSpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -42,6 +43,7 @@ public class OfferOfSpecialistServiceImpl
     }
 
     //✅ ok
+    @Transactional
     @Override
     public OfferOfSpecialistResponse submitOfferToOrder(
             OfferOfSpecialistRequest request) {
@@ -98,7 +100,7 @@ public class OfferOfSpecialistServiceImpl
         );
         if (foundOfferOfSpecialist.getOrderOfCustomer().getOrderStatus()
                 != OrderStatus.WAITING_FOR_SPECIALIST_OFFER) {
-            throw new NotApprovedException("Order is not waiting for special offer");
+            throw new NotApprovedException("Order is not waiting for specialist offer");
         }
 
         foundOfferOfSpecialist.getOrderOfCustomer().

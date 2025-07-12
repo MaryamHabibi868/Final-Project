@@ -42,7 +42,7 @@ public class SpecialistController {
 
     //✅
     @PutMapping("/specialists/{id}/approve")
-    public ResponseEntity<SpecialistSaveRequest>
+    public ResponseEntity<SpecialistResponse>
     approveSpecialistRegistration(
             @PathVariable Long id) {
         return ResponseEntity.ok(specialistService.approveSpecialistRegistration(id));
@@ -55,16 +55,16 @@ public class SpecialistController {
             @PathVariable Long specialistId,
             @RequestParam Long homeServiceId) {
         specialistService.addSpecialistToHomeService(specialistId, homeServiceId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Specialist added to home service");
     }
 
     //✅
     @DeleteMapping("/specialists/{specialistId}/home-services")
-    public ResponseEntity<Void> deleteSpecialistFromHomeService(
+    public ResponseEntity<String> deleteSpecialistFromHomeService(
             @PathVariable Long specialistId,
             @RequestParam Long homeServiceId) {
         specialistService.removeSpecialistFromHomeService(specialistId, homeServiceId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Specialist removed from home service");
     }
 
     //✅

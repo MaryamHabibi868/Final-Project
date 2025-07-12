@@ -22,7 +22,7 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
             SpecialistUpdateInfo request);
 
     //✅
-    SpecialistSaveRequest approveSpecialistRegistration(
+    SpecialistResponse approveSpecialistRegistration(
             Long id);
 
     //✅
