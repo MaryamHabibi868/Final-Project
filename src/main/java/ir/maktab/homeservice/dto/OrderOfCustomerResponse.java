@@ -32,4 +32,8 @@ public class OrderOfCustomerResponse {
 
     @NotBlank
     private Long addressId;
+
+    private Long homeServiceId;
+
+    private Long customerId;
 }
