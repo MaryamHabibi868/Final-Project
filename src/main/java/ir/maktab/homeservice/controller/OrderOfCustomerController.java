@@ -1,8 +1,8 @@
 package ir.maktab.homeservice.controller;
 
-import ir.maktab.homeservice.dto.OrderOfCustomerRequest;
-import ir.maktab.homeservice.dto.OrderOfCustomerResponse;
-import ir.maktab.homeservice.service.OrderOfCustomerService;
+import ir.maktab.homeservice.dto.OrderSaveRequest;
+import ir.maktab.homeservice.dto.OrderResponse;
+import ir.maktab.homeservice.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/orders-of-customer")
 public class OrderOfCustomerController {
 
-    private final OrderOfCustomerService orderOfCustomerService;
+    private final OrderService orderService;
 
     //✅ ok
     @PostMapping
-    public ResponseEntity<OrderOfCustomerResponse> submitOrder(
+    public ResponseEntity<OrderResponse> submitOrder(
             @RequestBody @Valid
-            OrderOfCustomerRequest request) {
+            OrderSaveRequest request) {
         return ResponseEntity.ok(
-                orderOfCustomerService.submitOrderForHomeService(request));
+                orderService.submitOrderForHomeService(request));
     }
 }

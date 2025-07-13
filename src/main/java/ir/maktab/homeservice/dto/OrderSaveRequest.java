@@ -1,6 +1,5 @@
 package ir.maktab.homeservice.dto;
 
-import ir.maktab.homeservice.domains.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -12,7 +11,7 @@ import java.time.ZonedDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderOfCustomerRequest {
+public class OrderSaveRequest {
 
     @NotBlank(message = "Description of Order should be entered.")
     private String description;
