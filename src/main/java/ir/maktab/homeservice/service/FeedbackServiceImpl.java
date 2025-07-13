@@ -1,8 +1,8 @@
 package ir.maktab.homeservice.service;
 
-import ir.maktab.homeservice.domains.FeedBack;
-import ir.maktab.homeservice.domains.OfferOfSpecialist;
-import ir.maktab.homeservice.dto.FeedbackRequest;
+import ir.maktab.homeservice.domains.Feedback;
+import ir.maktab.homeservice.domains.Offer;
+import ir.maktab.homeservice.dto.FeedbackSaveRequest;
 import ir.maktab.homeservice.dto.FeedbackResponse;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.FeedbackMapper;
@@ -12,31 +12,33 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FeedbackServiceImpl
-        extends BaseServiceImpl<FeedBack, Long, FeedbackRepository>
+        extends BaseServiceImpl<Feedback, Long, FeedbackRepository>
         implements FeedbackService {
 
-    private final OfferOfSpecialistService offerOfSpecialistService;
+    private final OfferService offerService;
     private final FeedbackMapper feedbackMapper;
 
     public FeedbackServiceImpl(FeedbackRepository repository,
-                               OfferOfSpecialistService offerOfSpecialistService,
+                               OfferService offerService,
                                FeedbackMapper feedbackMapper) {
         super(repository);
-        this.offerOfSpecialistService = offerOfSpecialistService;
+        this.offerService = offerService;
         this.feedbackMapper = feedbackMapper;
     }
 
     //✅
     @Override
-    public FeedbackResponse submitFeedback(FeedbackRequest request) {
-        OfferOfSpecialist foundOfferOfSpecialist = offerOfSpecialistService.
-                findById(request.getOfferOfSpecialistId());
+    public FeedbackResponse submitFeedback(FeedbackSaveRequest request) {
+        Offer foundOffer = offerService.
+                findById(request.getOfferId());
 
-        FeedBack feedback = new FeedBack();
-        feedback.setFeedbackRange(request.getFeedbackRange());
-        feedback.setFeedbackDescription(request.getFeedbackDescription());
-        feedback.setOfferOfSpecialist(foundOfferOfSpecialist);
-        FeedBack save = repository.save(feedback);
+        Feedback feedback = new Feedback();
+        feedback.setRange(request.getRange());
+        if (request.getDescription() != null) {
+            feedback.setDescription(request.getDescription());
+        }
+        feedback.setOffer(foundOffer);
+        Feedback save = repository.save(feedback);
         return feedbackMapper.entityMapToResponse(save);
     }
 
@@ -44,16 +46,16 @@ public class FeedbackServiceImpl
     @Override
     public Integer feedbackRangeForSpecialistToOffer(
             Long offerOfSpecialistId) {
-        OfferOfSpecialist offer = offerOfSpecialistService
+        Offer offer = offerService
                 .findById(offerOfSpecialistId);
 
         Long id = offer.getId();
 
-        FeedBack feedBack = repository.findById(id).orElseThrow(
+        Feedback feedBack = repository.findById(id).orElseThrow(
                 () -> new NotFoundException(
                         "Feedback Not found for this offer"
                 )
         );
-        return feedBack.getFeedbackRange();
+        return feedBack.getRange();
     }
 }

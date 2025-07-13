@@ -1,6 +1,5 @@
 package ir.maktab.homeservice.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Setter
@@ -12,7 +11,7 @@ public class FeedbackResponseForSpecialist {
 
     private Long id;
 
-    private Integer feedbackRange;
+    private Integer range;
 
-    private Long offerOfSpecialistId;
+    private Long offerId;
 }

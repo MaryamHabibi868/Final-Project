@@ -1,6 +1,6 @@
 package ir.maktab.homeservice.controller;
 
-import ir.maktab.homeservice.dto.FeedbackRequest;
+import ir.maktab.homeservice.dto.FeedbackSaveRequest;
 import ir.maktab.homeservice.dto.FeedbackResponse;
 import ir.maktab.homeservice.service.FeedbackService;
 import jakarta.validation.Valid;
@@ -19,15 +19,15 @@ public class FeedbackController {
     @PostMapping
     public ResponseEntity<FeedbackResponse> submitFeedback(
             @RequestBody @Valid
-            FeedbackRequest feedbackRequest) {
-        return ResponseEntity.ok(feedbackService.submitFeedback(feedbackRequest));
+            FeedbackSaveRequest request) {
+        return ResponseEntity.ok(feedbackService.submitFeedback(request));
     }
 
     //✅
-    @GetMapping("/offer-of-specialist-id/{offerOfSpecialistId}")
+    @GetMapping("/offer-id/{offerId}")
     public ResponseEntity<Integer> feedbackRangeForSpecialistToOffer(
-            @PathVariable Long offerOfSpecialistId) {
+            @PathVariable Long offerId) {
         return ResponseEntity.ok(feedbackService.feedbackRangeForSpecialistToOffer(
-                offerOfSpecialistId));
+                offerId));
     }
 }

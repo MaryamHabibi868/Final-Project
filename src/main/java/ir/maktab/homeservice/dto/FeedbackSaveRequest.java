@@ -9,14 +9,14 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedbackRequest {
+public class FeedbackSaveRequest {
 
     @NotNull(message = "Feedback of Offer should be entered.")
     @Size (min =1, max =5)
-    private Integer feedbackRange;
+    private Integer range;
 
-    private String feedbackDescription;
+    private String description;
 
     @NotNull
-    private Long offerOfSpecialistId;
+    private Long offerId;
 }
