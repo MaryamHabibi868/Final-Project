@@ -28,5 +28,5 @@ public class OfferSaveRequest {
     private Long specialistId;
 
     @NotNull
-    private Long orderOfCustomerId;
+    private Long orderId;
 }

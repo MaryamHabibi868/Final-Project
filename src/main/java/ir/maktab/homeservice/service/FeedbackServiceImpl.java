@@ -45,9 +45,9 @@ public class FeedbackServiceImpl
     //✅
     @Override
     public Integer feedbackRangeForSpecialistToOffer(
-            Long offerOfSpecialistId) {
+            Long offerId) {
         Offer offer = offerService
-                .findById(offerOfSpecialistId);
+                .findById(offerId);
 
         Long id = offer.getId();
 

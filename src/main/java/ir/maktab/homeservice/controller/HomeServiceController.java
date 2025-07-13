@@ -35,10 +35,10 @@ public class HomeServiceController {
 
     //✅
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteHomeService(
+    public ResponseEntity<String> deleteHomeService(
             @PathVariable Long id) {
         homeServiceService.deleteHomeService(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Home Service Deleted");
     }
 
     //✅

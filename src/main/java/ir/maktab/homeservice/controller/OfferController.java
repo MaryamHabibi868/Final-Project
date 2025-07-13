@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/offers-of-specialist")
+@RequestMapping("api/offers")
 public class OfferController {
 
     private final OfferService offerService;

@@ -13,5 +13,5 @@ public interface FeedbackService
 
     //✅
     Integer feedbackRangeForSpecialistToOffer(
-            Long offerOfSpecialistId);
+            Long offerId);
 }

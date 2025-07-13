@@ -24,8 +24,7 @@ public class Wallet extends BaseEntity<Long> {
     @Column(name = Wallet.BALANCE)
     private BigDecimal balance;
 
-    @JoinColumn(name = Wallet.USER_ID)
-    @OneToOne
+    @OneToOne (mappedBy = "wallet")
     private User userInformation;
 
 }

@@ -1,5 +1,7 @@
 package ir.maktab.homeservice.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -12,7 +14,8 @@ import lombok.*;
 public class FeedbackSaveRequest {
 
     @NotNull(message = "Feedback of Offer should be entered.")
-    @Size (min =1, max =5)
+    @Min (1)
+    @Max (5)
     private Integer range;
 
     private String description;
