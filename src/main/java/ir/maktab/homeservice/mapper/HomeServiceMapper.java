@@ -5,12 +5,13 @@ import ir.maktab.homeservice.dto.HomeServiceResponse;
 import ir.maktab.homeservice.dto.HomeServiceSaveRequest;
 import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface HomeServiceMapper {
 
-
+    @Mapping(source = "parentService.id", target = "parentServiceId")
     HomeServiceResponse entityMapToResponse(HomeService homeService);
 
 }
