@@ -37,7 +37,7 @@ public class User extends BaseEntity<Long> {
     @Column(name = User.PASSWORD, nullable = false, unique = true)
     private String password;
 
-    @JoinColumn(name = User.WALLET_ID)
+    @JoinColumn(name = User.WALLET_ID, nullable = false)
     @OneToOne
     private Wallet wallet;
 }
