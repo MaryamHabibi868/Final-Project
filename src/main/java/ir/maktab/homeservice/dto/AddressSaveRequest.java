@@ -20,7 +20,7 @@ public class AddressSaveRequest {
     @Size(min = 10, max = 10 , message = "The length of postal code is 10.")
     private String postalCode;
 
-
+    @NotNull (message = "The description of your address should be entered.")
     private String description;
 
     @NotNull (message = "The customer id should be entered.")

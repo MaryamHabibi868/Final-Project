@@ -4,6 +4,7 @@ import ir.maktab.homeservice.domains.Address;
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.dto.AddressResponse;
 import ir.maktab.homeservice.dto.AddressSaveRequest;
+import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.mapper.AddressMapper;
 import ir.maktab.homeservice.repository.AddressRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
@@ -28,6 +29,9 @@ public class AddressServiceImpl
     //✅
     @Override
     public AddressResponse submitAddress(AddressSaveRequest request) {
+        if (repository.existsByPostalCode(request.getPostalCode())) {
+            throw new DuplicatedException("Postal code already exists");
+        }
         Customer foundCustomer = customerService.findById(request.getCustomerId());
         Address address = new Address();
         address.setProvince(request.getProvince());
