@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,6 +20,7 @@ public class Specialist extends User {
 
     public static final String STATUS = "status";
     public static final String SCORE = "score";
+    public static final String OFFER_ID = "offer_id";
 
     @Enumerated(EnumType.STRING)
     @Column(name = Specialist.STATUS)
@@ -29,7 +31,11 @@ public class Specialist extends User {
 
     @JoinTable(name = "specialist_homeService")
     @ManyToMany
-    private Set<HomeService> homeServices;
+    private Set<HomeService> homeServices = new HashSet<>();
+
+    @Column(name = Specialist.OFFER_ID)
+    @OneToMany(mappedBy = "specialist")
+    private Set<Offer> offers = new HashSet<>();
 
 }
 

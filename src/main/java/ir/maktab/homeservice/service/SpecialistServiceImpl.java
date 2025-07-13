@@ -2,6 +2,7 @@ package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.*;
 import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
+import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotApprovedException;
@@ -21,15 +22,13 @@ public class SpecialistServiceImpl
 
     private final SpecialistMapper specialistMapper;
     private final HomeServiceService homeServiceService;
-    private final OfferService offerService;
 
     public SpecialistServiceImpl(SpecialistRepository repository,
                                  SpecialistMapper specialistMapper,
-                                 HomeServiceService homeServiceService, OfferService offerService) {
+                                 HomeServiceService homeServiceService) {
         super(repository);
         this.specialistMapper = specialistMapper;
         this.homeServiceService = homeServiceService;
-        this.offerService = offerService;
     }
 
     //✅
@@ -69,10 +68,12 @@ public class SpecialistServiceImpl
                 );
 
         Long specialistId = specialistFound.getId();
-        if (offerService.existsByStatus_AcceptedAndSpecialistIdEquals(specialistId)) {
+        if (repository.existsByOffersStatusAndId(
+                OfferStatus.ACCEPTED, specialistId)) {
             throw new NotApprovedException("Specialist has active offers");
         }
-        if (offerService.existsByStatus_PendingAndSpecialistIdEquals(specialistId)) {
+        if (repository.existsByOffersStatusAndId(
+                OfferStatus.PENDING, specialistId)) {
             throw new NotApprovedException("Specialist has pending offers");
         }
 
