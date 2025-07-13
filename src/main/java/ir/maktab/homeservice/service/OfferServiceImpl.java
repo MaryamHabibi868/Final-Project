@@ -49,7 +49,7 @@ public class OfferServiceImpl
     public OfferResponse submitOfferToOrder(
             OfferSaveRequest request) {
         Order foundOrder = orderService.
-                findById(request.getOrderOfCustomerId());
+                findById(request.getOrderId());
 
         Specialist foundSpecialist = specialistService.
                 findById(request.getSpecialistId());
@@ -102,15 +102,18 @@ public class OfferServiceImpl
                 offerId).orElseThrow(
                 () -> new NotFoundException("Offer of specialist not found")
         );
-        if (foundOffer.getOrderInformation().getStatus()
+
+        Order foundOrder = orderService.findById(foundOffer.getOrderInformation().getId());
+        if (foundOrder.getStatus()
                 != OrderStatus.WAITING_FOR_CHOOSING_SPECIALIST) {
             throw new NotApprovedException("Order is no longer waiting for special offer");
         }
 
-        foundOffer.getOrderInformation().
-                setStatus(OrderStatus.WAITING_FOR_SPECIALIST_COMING);
+        foundOrder.setStatus(OrderStatus.WAITING_FOR_SPECIALIST_COMING);
+        orderService.save(foundOrder);
+
         foundOffer.setSpecialist(Specialist.builder()
-                .id(offerId).build());
+                .id(foundOffer.getSpecialist().getId()).build());
         foundOffer.setStatus(OfferStatus.ACCEPTED);
         Offer save = repository.save(foundOffer);
         List<Offer> allByOrderId = repository.findAllByOrderInformation_Id(foundOffer.getOrderInformation().getId());
@@ -124,21 +127,24 @@ public class OfferServiceImpl
     public OfferResponse startService(Long offerId) {
         Offer foundOffer = repository.findById(offerId)
                 .orElseThrow(
-                        () -> new NotFoundException("Offer of specialist not found")
+                        () -> new NotFoundException("Offer not found")
                 );
 
-        if (foundOffer.getOrderInformation().
+        Order foundOrder = orderService.findById(foundOffer.getOrderInformation().getId());
+
+        if (foundOrder.
                 getStatus() != OrderStatus.WAITING_FOR_SPECIALIST_COMING) {
             throw new NotApprovedException("This offer is not approved");
         }
 
-        if (foundOffer.getStartDateSuggestion().isBefore(ZonedDateTime.now())) {
+        if (ZonedDateTime.now().isBefore(foundOffer.getStartDateSuggestion())) {
             throw new NotApprovedException
                     ("Start time is before the suggested time with specialist");
         }
 
-        foundOffer.getOrderInformation().setStatus(
-                OrderStatus.HAS_BEGIN);
+        foundOrder.setStatus(OrderStatus.HAS_BEGIN);
+        orderService.save(foundOrder);
+        foundOffer.setStatus(OfferStatus.ACCEPTED);
         Offer save = repository.save(foundOffer);
         return offerMapper.entityMapToResponse(save);
     }
