@@ -17,14 +17,14 @@ import java.math.BigDecimal;
 public class HomeService extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "home_service";
-    public static final String HOME_SERVICE_TITLE = "home_service_title";
+    public static final String TITLE = "title";
     public static final String BASE_PRICE = "base_price";
     public static final String DESCRIPTION = "description";
     public static final String PARENT_SERVICE = "parent_service";
 
 
-    @Column(name = HomeService.HOME_SERVICE_TITLE, nullable = false, unique = true)
-    private String homeServiceTitle;
+    @Column(name = HomeService.TITLE, nullable = false, unique = true)
+    private String title;
 
     @Column(name = HomeService.BASE_PRICE, nullable = false)
     private BigDecimal basePrice;

@@ -4,6 +4,7 @@ import ir.maktab.homeservice.domains.HomeService;
 import ir.maktab.homeservice.dto.HomeServiceResponse;
 import ir.maktab.homeservice.dto.HomeServiceSaveRequest;
 import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
+import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.HomeServiceMapper;
 import ir.maktab.homeservice.repository.HomeServiceRepository;
@@ -33,24 +34,25 @@ public class HomeServiceServiceImpl
     public HomeServiceResponse createHomeService(
             HomeServiceSaveRequest request) {
         Optional<HomeService> foundHomeService =
-                repository.findAllByHomeServiceTitleIgnoreCase(
-                        request.getHomeServiceTitle());
+                repository.findAllByTitleIgnoreCase(
+                        request.getTitle());
 
-                        /*.orElseThrow(
-                        () -> new NotFoundException(
-                                "Home Service Title Already Exists")
-                );*/
         if (foundHomeService.isPresent()) {
-            throw new NotFoundException(
+            throw new DuplicatedException(
                     "Home Service Title Already Exists");
         }
         HomeService homeService = new HomeService();
-        homeService.setHomeServiceTitle(request.getHomeServiceTitle());
+        homeService.setTitle(request.getTitle());
         homeService.setBasePrice(request.getBasePrice());
         homeService.setDescription(request.getDescription());
-        homeService.setParentService(HomeService.builder()
-                .id(request.getParentServiceId()).build());
-
+        if (request.getParentServiceId() != null) {
+            Optional<HomeService> parent = repository.findById(request.getParentServiceId());
+            if (parent.isPresent()) {
+                homeService.setParentService(parent.get());
+            } else {
+                throw new NotFoundException("Parent Service Not Found");
+            }
+        }
         HomeService save = repository.save(homeService);
         return homeServiceMapper.entityMapToResponse(save);
     }
@@ -60,17 +62,21 @@ public class HomeServiceServiceImpl
     @Override
     public HomeServiceResponse updateHomeService(
             HomeServiceUpdateRequest request) {
-        HomeService foundMainService = repository
+        HomeService foundHomeService = repository
                 .findById(request.getId()).orElseThrow(
                         () -> new NotFoundException("Home Service Not Found")
                 );
-        HomeService homeService = homeServiceMapper.updateRequestMapToEntity(request);
-        homeService.setHomeServiceTitle(request.getHomeServiceTitle());
-        homeService.setBasePrice(request.getBasePrice());
-        homeService.setDescription(request.getDescription());
-        homeService.setParentService(HomeService.builder()
-                .id(request.getParentServiceId()).build());
-        HomeService save = repository.save(homeService);
+        if (request.getTitle() != null) {
+            foundHomeService.setTitle(request.getTitle());
+        } else if (request.getBasePrice() != null) {
+            foundHomeService.setBasePrice(request.getBasePrice());
+        } else if (request.getDescription() != null) {
+            foundHomeService.setDescription(request.getDescription());
+        } else if (request.getParentServiceId() != null) {
+            foundHomeService.setParentService(HomeService.builder()
+                    .id(request.getParentServiceId()).build());
+        }
+        HomeService save = repository.save(foundHomeService);
         return homeServiceMapper.entityMapToResponse(save);
     }
 

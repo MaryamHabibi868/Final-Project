@@ -1,8 +1,5 @@
 package ir.maktab.homeservice.dto;
 
-import ir.maktab.homeservice.domains.HomeService;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -14,17 +11,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class HomeServiceResponse {
 
-    @NotNull
+
     private Long id;
 
-    @NotBlank
-    private String homeServiceTitle;
+    private String title;
 
-    @NotBlank
     private BigDecimal basePrice;
 
-    @NotBlank
     private String description;
 
-    private HomeService parentService;
+    private Long parentServiceId;
 }

@@ -1,7 +1,5 @@
 package ir.maktab.homeservice.dto;
 
-import ir.maktab.homeservice.domains.HomeService;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -17,7 +15,7 @@ public class HomeServiceUpdateRequest {
     @NotNull
     private Long id;
 
-    private String homeServiceTitle;
+    private String title;
 
     private BigDecimal basePrice;
 
