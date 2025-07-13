@@ -12,16 +12,14 @@ import lombok.*;
 @NoArgsConstructor
 public class ManagerResponse {
 
-    @NotNull
+
     private Long id;
 
-    @NotBlank
     private String firstName;
 
-    @NotBlank
     private String lastName;
 
-    @NotBlank
-    @Email
     private String email;
+
+    private Long walletId;
 }
