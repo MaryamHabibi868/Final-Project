@@ -68,13 +68,17 @@ public class HomeServiceServiceImpl
                 );
         if (request.getTitle() != null) {
             foundHomeService.setTitle(request.getTitle());
-        } else if (request.getBasePrice() != null) {
+        }
+        if (request.getBasePrice() != null) {
             foundHomeService.setBasePrice(request.getBasePrice());
-        } else if (request.getDescription() != null) {
+        }
+        if (request.getDescription() != null) {
             foundHomeService.setDescription(request.getDescription());
-        } else if (request.getParentServiceId() != null) {
-            foundHomeService.setParentService(HomeService.builder()
-                    .id(request.getParentServiceId()).build());
+        }
+        if (request.getParentServiceId() != null) {
+            HomeService parent = repository.findById(request.getParentServiceId())
+                    .orElseThrow(() -> new NotFoundException("Parent Home Service Not Found"));
+            foundHomeService.setParentService(parent);
         }
         HomeService save = repository.save(foundHomeService);
         return homeServiceMapper.entityMapToResponse(save);

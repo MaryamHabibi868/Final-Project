@@ -36,12 +36,18 @@ public class CustomerServiceImpl
         if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicatedException("Email address already exist");
         }
+
+        Wallet wallet = new Wallet();
+        wallet.setBalance(BigDecimal.ZERO);
+
         Customer customer = new Customer();
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         customer.setEmail(request.getEmail());
         customer.setPassword(request.getPassword());
-        customer.setWallet(Wallet.builder().balance(BigDecimal.ZERO).build());
+        customer.setWallet(wallet);
+        wallet.setUserInformation(customer);
+
         Customer save = repository.save(customer);
         return customerMapper.entityMapToResponse(save);
     }
@@ -59,11 +65,14 @@ public class CustomerServiceImpl
         }
         if (request.getFirstName() != null) {
             foundCustomer.setFirstName(request.getFirstName());
-        } else if (request.getLastName() != null) {
+        }
+        if (request.getLastName() != null) {
             foundCustomer.setLastName(request.getLastName());
-        } else if (request.getEmail() != null) {
+        }
+        if (request.getEmail() != null) {
             foundCustomer.setEmail(request.getEmail());
-        } else if (request.getPassword() != null) {
+        }
+        if (request.getPassword() != null) {
             foundCustomer.setPassword(request.getPassword());
         }
         Customer save = repository.save(foundCustomer);

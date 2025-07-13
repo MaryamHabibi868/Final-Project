@@ -40,9 +40,10 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
     (String firstName);
 
     //✅
-    public List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
+    List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
     (String lastName);
 
+    //✅
     List<SpecialistResponse> findAllByHomeServiceTitle(
             String homeServiceTitle);
 }

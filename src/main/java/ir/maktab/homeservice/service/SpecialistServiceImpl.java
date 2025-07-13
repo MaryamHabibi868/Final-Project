@@ -13,6 +13,7 @@ import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -39,12 +40,20 @@ public class SpecialistServiceImpl
         if (repository.existsByEmail(request.getEmail())){
             throw new DuplicatedException("Email already exists");
         }
+
+        Wallet wallet = new Wallet();
+        wallet.setBalance(BigDecimal.ZERO);
+
         Specialist specialist = new Specialist();
         specialist.setFirstName(request.getFirstName());
         specialist.setLastName(request.getLastName());
         specialist.setEmail(request.getEmail());
         specialist.setPassword(request.getPassword());
         specialist.setStatus(AccountStatus.PENDING);
+        specialist.setScore(0);
+        specialist.setWallet(wallet);
+        wallet.setUserInformation(specialist);
+
         Specialist save = repository.save(specialist);
         return specialistMapper.entityMapToResponse(save);
     }
@@ -174,6 +183,8 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
+    //✅
+    @Override
     public List<SpecialistResponse> findAllByHomeServiceTitle(
             String homeServiceTitle) {
        return repository.findAllByHomeServices_title(homeServiceTitle).stream()

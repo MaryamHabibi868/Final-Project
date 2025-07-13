@@ -21,7 +21,9 @@ public class ManagerServiceImpl
 
     private final ManagerMapper managerMapper;
 
-    public ManagerServiceImpl(ManagerRepository repository, ManagerMapper managerMapper) {
+
+    public ManagerServiceImpl(ManagerRepository repository,
+                              ManagerMapper managerMapper) {
         super(repository);
         this.managerMapper = managerMapper;
     }
@@ -33,12 +35,18 @@ public class ManagerServiceImpl
         if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicatedException("Email address already exist");
         }
+
+        Wallet wallet = new Wallet();
+        wallet.setBalance(BigDecimal.ZERO);
+
         Manager manager = new Manager();
         manager.setFirstName(request.getFirstName());
         manager.setLastName(request.getLastName());
         manager.setEmail(request.getEmail());
         manager.setPassword(request.getPassword());
-        manager.setWallet(Wallet.builder().balance(BigDecimal.ZERO).build());
+        manager.setWallet(wallet);
+        wallet.setUserInformation(manager);
+
         Manager save = repository.save(manager);
         return managerMapper.entityMapToResponse(save);
     }
@@ -56,11 +64,14 @@ public class ManagerServiceImpl
         }
         if (request.getFirstName() != null) {
             foundManager.setFirstName(request.getFirstName());
-        } else if (request.getLastName() != null) {
+        }
+        if (request.getLastName() != null) {
             foundManager.setLastName(request.getLastName());
-        } else if (request.getEmail() != null) {
+        }
+        if (request.getEmail() != null) {
             foundManager.setEmail(request.getEmail());
-        } else if (request.getPassword() != null) {
+        }
+        if (request.getPassword() != null) {
             foundManager.setPassword(request.getPassword());
         }
         Manager save = repository.save(foundManager);
