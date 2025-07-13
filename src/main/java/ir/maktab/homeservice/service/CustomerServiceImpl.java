@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
+import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotFoundException;
@@ -11,6 +12,7 @@ import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -36,14 +38,12 @@ public class CustomerServiceImpl
         if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicatedException("Email address already exist");
         }
-        if (repository.existsByPassword(request.getPassword())) {
-            throw new DuplicatedException("Password already exist");
-        }
         Customer customer = new Customer();
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         customer.setEmail(request.getEmail());
         customer.setPassword(request.getPassword());
+        customer.setWallet(Wallet.builder().balance(BigDecimal.ZERO).build());
         Customer save = repository.save(customer);
         return customerMapper.entityMapToResponse(save);
     }
@@ -59,13 +59,15 @@ public class CustomerServiceImpl
         if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicatedException("Email address already exist");
         }
-        if (repository.existsByPassword(request.getPassword())) {
-            throw new DuplicatedException("Password already exist");
+        if (request.getFirstName() != null) {
+            foundCustomer.setFirstName(request.getFirstName());
+        } else if (request.getLastName() != null) {
+            foundCustomer.setLastName(request.getLastName());
+        } else if (request.getEmail() != null) {
+            foundCustomer.setEmail(request.getEmail());
+        } else if (request.getPassword() != null) {
+            foundCustomer.setPassword(request.getPassword());
         }
-        foundCustomer.setFirstName(request.getFirstName());
-        foundCustomer.setLastName(request.getLastName());
-        foundCustomer.setEmail(request.getEmail());
-        foundCustomer.setPassword(request.getPassword());
         Customer save = repository.save(foundCustomer);
         return customerMapper.entityMapToResponse(save);
     }
