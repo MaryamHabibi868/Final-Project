@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.repository;
 
 import ir.maktab.homeservice.domains.Offer;
+import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
 import ir.maktab.homeservice.repository.base.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,14 +16,11 @@ public interface OfferRepository
     List<Offer> findAllBySpecialistId(Long specialist_id);
 
 
-    List<Offer> findAllByOrder_Id(Long order_id);
+    List<Offer> findAllByOrderInformation_Id(Long order_id);
 
 
-Boolean existsByStatus_AcceptedAndSpecialistIdEquals(Long specialist_id);
-
-Boolean existsByStatus_PendingAndSpecialistIdEquals(Long specialist_id);
 }
 
 /*
-  */
+ */
 /*  List<OfferOfSpecialistRequest> findAllByCustomerIdOrderBySuggestedPriceAsc(Long customerId)*/

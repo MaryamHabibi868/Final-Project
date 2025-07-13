@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/offers-of-specialist")
-public class OfferOfSpecialistController {
+public class OfferController {
 
     private final OfferService offerService;
 
@@ -57,7 +57,7 @@ public class OfferOfSpecialistController {
                 offerService.findByOfferOfSpecialistId(specialistId));
     }
 
-    //✅ ok
+    /*//✅ ok
     @GetMapping("/customer-id/{customerId}")
     public ResponseEntity<List<OfferResponse>>
     findAllOfferOfSpecialistByCustomerId(
@@ -65,5 +65,5 @@ public class OfferOfSpecialistController {
         return ResponseEntity.ok(
                 offerService.
                         findAllOfferOrderByCustomerId(customerId));
-    }
+    }*/
 }

@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Offer;
+import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
 import ir.maktab.homeservice.dto.OfferSaveRequest;
 import ir.maktab.homeservice.dto.OfferResponse;
 import ir.maktab.homeservice.service.base.BaseService;
@@ -31,11 +32,8 @@ public interface OfferService
     List<OfferResponse> findByOfferOfSpecialistId(
             Long specialistId);
 
-    //✅
+    /*//✅
     List<OfferResponse>
-    findAllOfferOrderByCustomerId(Long customerId);
+    findAllOfferOrderByCustomerId(Long customerId);*/
 
-    Boolean existsByStatus_AcceptedAndSpecialistIdEquals(Long specialistId);
-
-    Boolean existsByStatus_PendingAndSpecialistIdEquals(Long specialistId);
 }

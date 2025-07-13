@@ -43,7 +43,6 @@ public class OfferServiceImpl
     }
 
 
-
     //✅ ok
     @Transactional
     @Override
@@ -79,7 +78,7 @@ public class OfferServiceImpl
         offer.setTaskDuration(request.getTaskDuration());
         offer.setStatus(OfferStatus.PENDING);
         offer.setSpecialist(foundSpecialist);
-        offer.setOrder(foundOrder);
+        offer.setOrderInformation(foundOrder);
         Offer save = repository.save(offer);
         return offerMapper.entityMapToResponse(save);
     }
@@ -103,18 +102,18 @@ public class OfferServiceImpl
                 offerId).orElseThrow(
                 () -> new NotFoundException("Offer of specialist not found")
         );
-        if (foundOffer.getOrder().getStatus()
+        if (foundOffer.getOrderInformation().getStatus()
                 != OrderStatus.WAITING_FOR_CHOOSING_SPECIALIST) {
             throw new NotApprovedException("Order is no longer waiting for special offer");
         }
 
-        foundOffer.getOrder().
+        foundOffer.getOrderInformation().
                 setStatus(OrderStatus.WAITING_FOR_SPECIALIST_COMING);
         foundOffer.setSpecialist(Specialist.builder()
                 .id(offerId).build());
         foundOffer.setStatus(OfferStatus.ACCEPTED);
         Offer save = repository.save(foundOffer);
-        List<Offer> allByOrderId = repository.findAllByOrder_Id(foundOffer.getOrder().getId());
+        List<Offer> allByOrderId = repository.findAllByOrderInformation_Id(foundOffer.getOrderInformation().getId());
         allByOrderId.forEach(offer -> offer.setStatus(OfferStatus.REJECTED));
         repository.saveAll(allByOrderId);
         return offerMapper.entityMapToResponse(save);
@@ -128,7 +127,7 @@ public class OfferServiceImpl
                         () -> new NotFoundException("Offer of specialist not found")
                 );
 
-        if (foundOffer.getOrder().
+        if (foundOffer.getOrderInformation().
                 getStatus() != OrderStatus.WAITING_FOR_SPECIALIST_COMING) {
             throw new NotApprovedException("This offer is not approved");
         }
@@ -138,7 +137,7 @@ public class OfferServiceImpl
                     ("Start time is before the suggested time with specialist");
         }
 
-        foundOffer.getOrder().setStatus(
+        foundOffer.getOrderInformation().setStatus(
                 OrderStatus.HAS_BEGIN);
         Offer save = repository.save(foundOffer);
         return offerMapper.entityMapToResponse(save);
@@ -152,14 +151,14 @@ public class OfferServiceImpl
                         () -> new NotFoundException("Offer of specialist not found")
                 );
 
-        if (foundOffer.getOrder().getStatus() !=
+        if (foundOffer.getOrderInformation().getStatus() !=
                 OrderStatus.HAS_BEGIN) {
             throw new NotApprovedException("This offer is not begin");
         }
-        foundOffer.getOrder().setStatus(OrderStatus.DONE);
+        foundOffer.getOrderInformation().setStatus(OrderStatus.DONE);
         foundOffer.setStatus(OfferStatus.Done);
         Offer save = repository.save(foundOffer);
-        orderService.save(foundOffer.getOrder());
+        orderService.save(foundOffer.getOrderInformation());
         return offerMapper.entityMapToResponse(save);
     }
 
@@ -175,7 +174,7 @@ public class OfferServiceImpl
                 .toList();
     }
 
-    //✅
+    /*//✅
     @Override
     public List<OfferResponse>
     findAllOfferOrderByCustomerId(Long customerId) {
@@ -183,17 +182,8 @@ public class OfferServiceImpl
                 .stream()
                 .map(offerMapper::entityMapToResponse)
                 .toList();
-    }
+    }*/
 
-    @Override
-    public Boolean existsByStatus_AcceptedAndSpecialistIdEquals(Long specialistId) {
-       return repository.existsByStatus_AcceptedAndSpecialistIdEquals(specialistId);
-    }
-
-    @Override
-    public Boolean existsByStatus_PendingAndSpecialistIdEquals(Long specialistId) {
-        return repository.existsByStatus_PendingAndSpecialistIdEquals(specialistId);
-    }
 
     public void paySpecialist(Long offerId) {
         ZonedDateTime actualEndService = ZonedDateTime.now();
@@ -203,7 +193,7 @@ public class OfferServiceImpl
         );
 
         Order foundOrder = orderService.findById(
-                foundOffer.getOrder().getId());
+                foundOffer.getOrderInformation().getId());
 
         ZonedDateTime timeToComplete = foundOffer.getStartDateSuggestion()
                 .plus(foundOffer.getTaskDuration());
