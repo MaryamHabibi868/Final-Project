@@ -57,6 +57,13 @@ public class OfferController {
                 offerService.findByOfferOfSpecialistId(specialistId));
     }
 
+    @PostMapping("/pay-specialist/{offerId}")
+    public ResponseEntity<String> paySpecialist(
+            @PathVariable Long offerId) {
+        offerService.paySpecialist(offerId);
+        return ResponseEntity.ok("Transaction Successful");
+    }
+
     /*//✅ ok
     @GetMapping("/customer-id/{customerId}")
     public ResponseEntity<List<OfferResponse>>
