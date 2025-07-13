@@ -25,6 +25,6 @@ public interface CustomerService extends BaseService<Customer, Long> {
             (String firstName);
 
     //✅
-    public List<CustomerResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
+    List<CustomerResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
     (String lastName);
 }

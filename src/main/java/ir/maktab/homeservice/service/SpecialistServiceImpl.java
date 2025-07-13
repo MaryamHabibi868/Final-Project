@@ -50,7 +50,7 @@ public class SpecialistServiceImpl
         specialist.setEmail(request.getEmail());
         specialist.setPassword(request.getPassword());
         specialist.setStatus(AccountStatus.PENDING);
-        specialist.setScore(0);
+        specialist.setScore(0.0);
         specialist.setWallet(wallet);
         wallet.setUserInformation(specialist);
 

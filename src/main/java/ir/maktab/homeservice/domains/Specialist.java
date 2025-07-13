@@ -27,7 +27,7 @@ public class Specialist extends User {
     private AccountStatus status;
 
     @Column(name = Specialist.SCORE)
-    private Integer score;
+    private Double score;
 
     @JoinTable(name = "specialist_homeService")
     @ManyToMany

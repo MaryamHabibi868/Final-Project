@@ -22,11 +22,11 @@ public interface BaseUserRepository<T extends User>
     <P> List<P> findUsersByIdNotNull(Class<P> clazz);
 
     //✅
-    Optional<T> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
+    List<T> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
             (String firstName);
 
     //✅
-    Optional<T> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
+    List<T> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
             (String lastName);
 }
 

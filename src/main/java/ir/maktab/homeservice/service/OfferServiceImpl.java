@@ -30,16 +30,20 @@ public class OfferServiceImpl
     private final OrderService orderService;
     private final SpecialistService specialistService;
     private final TransactionService transactionService;
+    private final WalletService walletService;
 
     public OfferServiceImpl(OfferRepository repository,
                             OfferMapper offerMapper,
                             OrderService orderService,
-                            SpecialistService specialistService, TransactionService transactionService) {
+                            SpecialistService specialistService,
+                            TransactionService transactionService,
+                            WalletService walletService) {
         super(repository);
         this.offerMapper = offerMapper;
         this.orderService = orderService;
         this.specialistService = specialistService;
         this.transactionService = transactionService;
+        this.walletService = walletService;
     }
 
 
@@ -190,13 +194,23 @@ public class OfferServiceImpl
                 .toList();
     }*/
 
-
+    //✅
+    @Transactional
+    @Override
     public void paySpecialist(Long offerId) {
         ZonedDateTime actualEndService = ZonedDateTime.now();
 
         Offer foundOffer = repository.findById(offerId).orElseThrow(
                 () -> new NotFoundException("Offer not found")
         );
+
+        if (foundOffer.getStatus() == OfferStatus.PAID) {
+            throw new NotApprovedException("This offer is paid");
+        }
+
+        if (!(foundOffer.getStatus() == OfferStatus.Done)) {
+            throw new NotApprovedException("This offer in Not done");
+        }
 
         Order foundOrder = orderService.findById(
                 foundOffer.getOrderInformation().getId());
@@ -215,40 +229,44 @@ public class OfferServiceImpl
 
         Wallet specialistWallet = foundSpecialist.getWallet();
 
-        if (foundOrder.getStatus() == OrderStatus.DONE) {
-
-            if (customerWallet.getBalance()
-                    .compareTo(foundOffer.getSuggestedPrice()) < 0) {
-                throw new NotValidPriceException("Balance in customer wallet is lower than suggested price");
-            }
-
-            Transaction transaction = new Transaction();
-            transaction.setAmount(foundOffer.getSuggestedPrice());
-            transaction.setDate(ZonedDateTime.now());
-            transaction.setType(TransactionType.WITHDRAWAL);
-            transaction.setWallet(customerWallet);
-            customerWallet.getBalance().subtract(foundOffer.getSuggestedPrice());
-            transactionService.save(transaction);
-
-            Transaction transaction1 = new Transaction();
-            transaction1.setAmount(foundOffer.getSuggestedPrice()
-                    .multiply(BigDecimal.valueOf(0.70)));
-
-            transaction1.setDate(ZonedDateTime.now());
-            transaction1.setType(TransactionType.DEPOSIT);
-            transaction1.setWallet(specialistWallet);
-            specialistWallet.getBalance().add(
-                    foundOffer.getSuggestedPrice()
-                            .multiply(BigDecimal.valueOf(0.70)));
-            transactionService.save(transaction1);
-
-            if (actualEndService.isAfter(timeToComplete)) {
-                long hoursLate = Duration.between(timeToComplete, actualEndService).toHours();
-                int penalty = (int) hoursLate * -1;
-                Integer score = foundSpecialist.getScore();
-                score += penalty;
-            }
+        if (customerWallet.getBalance()
+                .compareTo(foundOffer.getSuggestedPrice()) < 0) {
+            throw new NotValidPriceException("Balance in customer wallet is lower than suggested price");
         }
-        throw new NotApprovedException("This offer in Not done");
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(foundOffer.getSuggestedPrice());
+        transaction.setDate(ZonedDateTime.now());
+        transaction.setType(TransactionType.WITHDRAWAL);
+        transaction.setWallet(customerWallet);
+        customerWallet.setBalance(
+                customerWallet.getBalance().subtract(foundOffer.getSuggestedPrice()));
+        walletService.save(customerWallet);
+        transactionService.save(transaction);
+
+        Transaction transaction1 = new Transaction();
+        transaction1.setAmount(foundOffer.getSuggestedPrice()
+                .multiply(BigDecimal.valueOf(0.70)));
+
+        transaction1.setDate(ZonedDateTime.now());
+        transaction1.setType(TransactionType.DEPOSIT);
+        transaction1.setWallet(specialistWallet);
+        specialistWallet.setBalance(specialistWallet.getBalance().add(
+                foundOffer.getSuggestedPrice()
+                        .multiply(BigDecimal.valueOf(0.70))));
+        walletService.save(specialistWallet);
+        transactionService.save(transaction1);
+
+        foundOffer.setStatus(OfferStatus.PAID);
+        repository.save(foundOffer);
+
+        if (actualEndService.isAfter(timeToComplete)) {
+            long hoursLate = Duration.between(timeToComplete, actualEndService).toHours();
+            int penalty = (int) hoursLate * -1;
+            Double score = foundSpecialist.getScore();
+            score += penalty;
+        }
+
     }
+
 }

@@ -31,6 +31,9 @@ public interface OfferService
     //✅
     List<OfferResponse> findByOfferOfSpecialistId(
             Long specialistId);
+    //✅
+    void paySpecialist(Long offerId);
+
 
     /*//✅
     List<OfferResponse>
