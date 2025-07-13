@@ -14,8 +14,6 @@ public interface BaseUserRepository<T extends User>
     //✅
     boolean existsByEmail(String email);
 
-    //✅
-    boolean existsByPassword(String password);
 
     //✅
     Optional<T> findByEmailAndPassword(String email, String password);

@@ -17,7 +17,4 @@ public interface BaseService <T extends BaseEntity<ID> , ID extends Serializable
     //✅
     void deleteById(ID id);
 
-
-   /* //✅
-    void customDeleteById(ID id);*/
 }

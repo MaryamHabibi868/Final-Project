@@ -40,21 +40,4 @@ public class BaseServiceImpl
         );
         repository.deleteById(id);
     }
-
-
-
-
-
-    /*
-    //✅
-    @Override
-    public void customDeleteById(ID id) {
-        Optional<T> foundEntity = repository.findById(id);
-        if (foundEntity.isPresent()) {
-            T entity = foundEntity.get();
-            entity.setIsActive(false);
-            repository.save(entity);
-        }
-        throw new NotFoundException("Entity Not Found");
-    }*/
 }
