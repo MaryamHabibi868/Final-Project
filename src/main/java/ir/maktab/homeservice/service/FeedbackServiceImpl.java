@@ -2,8 +2,11 @@ package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Feedback;
 import ir.maktab.homeservice.domains.Offer;
+import ir.maktab.homeservice.domains.Specialist;
+import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
 import ir.maktab.homeservice.dto.FeedbackSaveRequest;
 import ir.maktab.homeservice.dto.FeedbackResponse;
+import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.FeedbackMapper;
 import ir.maktab.homeservice.repository.FeedbackRepository;
@@ -17,13 +20,16 @@ public class FeedbackServiceImpl
 
     private final OfferService offerService;
     private final FeedbackMapper feedbackMapper;
+    private final SpecialistService specialistService;
 
     public FeedbackServiceImpl(FeedbackRepository repository,
                                OfferService offerService,
-                               FeedbackMapper feedbackMapper) {
+                               FeedbackMapper feedbackMapper,
+                               SpecialistService specialistService) {
         super(repository);
         this.offerService = offerService;
         this.feedbackMapper = feedbackMapper;
+        this.specialistService = specialistService;
     }
 
     //✅
@@ -32,14 +38,30 @@ public class FeedbackServiceImpl
         Offer foundOffer = offerService.
                 findById(request.getOfferId());
 
-        Feedback feedback = new Feedback();
-        feedback.setRange(request.getRange());
-        if (request.getDescription() != null) {
-            feedback.setDescription(request.getDescription());
+        if (foundOffer.getStatus() == OfferStatus.Done ||
+        foundOffer.getStatus() == OfferStatus.PAID) {
+
+
+            Feedback feedback = new Feedback();
+            feedback.setRange(request.getRange());
+            if (request.getDescription() != null) {
+                feedback.setDescription(request.getDescription());
+            }
+            feedback.setOffer(foundOffer);
+            Feedback save = repository.save(feedback);
+
+            Specialist foundOfferSpecialist = foundOffer.getSpecialist();
+            Double averageRangeBySpecialistId = repository.
+                    findAverageRangeBySpecialistId(foundOfferSpecialist.getId());
+
+            foundOfferSpecialist.setScore(averageRangeBySpecialistId);
+            specialistService.save(foundOfferSpecialist);
+
+            return feedbackMapper.entityMapToResponse(save);
         }
-        feedback.setOffer(foundOffer);
-        Feedback save = repository.save(feedback);
-        return feedbackMapper.entityMapToResponse(save);
+        else {
+            throw new NotApprovedException("This offer is not done yet");
+        }
     }
 
     //✅
@@ -49,13 +71,7 @@ public class FeedbackServiceImpl
         Offer offer = offerService
                 .findById(offerId);
 
-        Long id = offer.getId();
-
-        Feedback feedBack = repository.findById(id).orElseThrow(
-                () -> new NotFoundException(
-                        "Feedback Not found for this offer"
-                )
-        );
-        return feedBack.getRange();
+        Feedback foundOffer = repository.findByOfferId(offerId);
+       return foundOffer.getRange();
     }
 }
