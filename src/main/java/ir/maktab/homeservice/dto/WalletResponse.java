@@ -1,8 +1,6 @@
 package ir.maktab.homeservice.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
 import java.math.BigDecimal;
 
 @Setter
@@ -14,8 +12,7 @@ public class WalletResponse {
 
     private Long id;
 
-    private BigDecimal balance = BigDecimal.ZERO;
-
+    private BigDecimal balance;
 
     private Long userId;
 }

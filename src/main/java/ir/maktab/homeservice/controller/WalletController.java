@@ -1,7 +1,6 @@
 package ir.maktab.homeservice.controller;
 
 import ir.maktab.homeservice.dto.WalletResponse;
-import ir.maktab.homeservice.dto.WalletSaveRequest;
 import ir.maktab.homeservice.service.WalletService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +16,6 @@ public class WalletController {
 
     private final WalletService walletService;
 
-    //✅
-    @PostMapping
-    public ResponseEntity<WalletResponse> createWallet(
-            @RequestBody @Valid
-            WalletSaveRequest walletSaveRequest) {
-        return ResponseEntity.ok(
-                walletService.createWallet(walletSaveRequest));
-    }
 
     //✅
     @GetMapping("/{walletId}")
