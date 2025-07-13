@@ -1,8 +1,8 @@
 package ir.maktab.homeservice.domains.enumClasses;
 
-public enum AccountStatus {
-    NEW,
+public enum OfferStatus {
     PENDING,
-    APPROVED,
-    INACTIVE
+    ACCEPTED,
+    REJECTED,
+    Done
 }
