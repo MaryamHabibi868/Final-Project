@@ -64,6 +64,6 @@ public class OfferOfSpecialistController {
             @PathVariable Long customerId) {
         return ResponseEntity.ok(
                 offerService.
-                        findAllOffeOrderByCustomerId(customerId));
+                        findAllOfferOrderByCustomerId(customerId));
     }
 }

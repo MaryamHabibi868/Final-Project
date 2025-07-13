@@ -9,13 +9,6 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface OfferMapper {
 
-    OfferSaveRequest offerOfSpecialistMapToDTO(Offer offer);
-
-    Offer offerOfSpecialistDTOMapToEntity(
-            OfferSaveRequest offerSaveRequest);
-
-    Offer responseMapToEntity(OfferResponse offerResponse);
-
     OfferResponse entityMapToResponse(Offer offer);
 }
 

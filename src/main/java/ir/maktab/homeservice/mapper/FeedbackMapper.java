@@ -9,12 +9,6 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface FeedbackMapper {
 
-    FeedbackSaveRequest entityMapToRequest(Feedback feedBack);
-
-    Feedback requestMapToEntity(
-            FeedbackSaveRequest feedbackSaveRequest);
-
-    FeedbackResponse requestMapToResponse(FeedbackSaveRequest feedbackSaveRequest);
 
     FeedbackResponse entityMapToResponse(Feedback feedBack);
 }

@@ -33,7 +33,7 @@ public interface OfferService
 
     //✅
     List<OfferResponse>
-    findAllOffeOrderByCustomerId(Long customerId);
+    findAllOfferOrderByCustomerId(Long customerId);
 
     Boolean existsByStatus_AcceptedAndSpecialistIdEquals(Long specialistId);
 

@@ -10,17 +10,7 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface HomeServiceMapper {
 
-    HomeServiceSaveRequest homeServiceMapToDTO(HomeService homeService);
-
-    HomeService homeServiceDTOMapToEntity(HomeServiceSaveRequest homeServiceSaveRequest);
-
-    HomeService foundHomeServiceToEntity(HomeServiceUpdateRequest homeServiceUpdateRequest);
-
-    HomeService responseMapToEntity(HomeServiceResponse homeServiceResponse);
 
     HomeServiceResponse entityMapToResponse(HomeService homeService);
 
-    HomeService saveRequestMapToEntity(HomeServiceSaveRequest homeServiceSaveRequest);
-
-    HomeService updateRequestMapToEntity(HomeServiceUpdateRequest homeServiceUpdateRequest);
 }

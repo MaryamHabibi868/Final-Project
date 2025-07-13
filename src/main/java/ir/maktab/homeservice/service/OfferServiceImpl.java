@@ -178,7 +178,7 @@ public class OfferServiceImpl
     //✅
     @Override
     public List<OfferResponse>
-    findAllOffeOrderByCustomerId(Long customerId) {
+    findAllOfferOrderByCustomerId(Long customerId) {
         return repository.findAllByOrder_Id(customerId)
                 .stream()
                 .map(offerMapper::entityMapToResponse)

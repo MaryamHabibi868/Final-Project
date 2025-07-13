@@ -15,13 +15,11 @@ public class TransactionServiceImpl extends
         BaseServiceImpl<Transaction, Long, TransactionRepository>
         implements TransactionService {
 
-    private final WalletService walletService;
     private final TransactionMapper transactionMapper;
 
     public TransactionServiceImpl(TransactionRepository repository,
-                                  WalletService walletService, TransactionMapper transactionMapper) {
+                                  TransactionMapper transactionMapper) {
         super(repository);
-        this.walletService = walletService;
         this.transactionMapper = transactionMapper;
     }
 
