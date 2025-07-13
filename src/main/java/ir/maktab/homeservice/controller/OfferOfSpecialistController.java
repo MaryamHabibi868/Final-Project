@@ -1,8 +1,8 @@
 package ir.maktab.homeservice.controller;
 
-import ir.maktab.homeservice.dto.OfferOfSpecialistRequest;
-import ir.maktab.homeservice.dto.OfferOfSpecialistResponse;
-import ir.maktab.homeservice.service.OfferOfSpecialistService;
+import ir.maktab.homeservice.dto.OfferSaveRequest;
+import ir.maktab.homeservice.dto.OfferResponse;
+import ir.maktab.homeservice.service.OfferService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,59 +15,55 @@ import java.util.List;
 @RequestMapping("api/offers-of-specialist")
 public class OfferOfSpecialistController {
 
-    private final OfferOfSpecialistService offerOfSpecialistService;
+    private final OfferService offerService;
 
     //✅ ok
     @PostMapping
-    public ResponseEntity<OfferOfSpecialistResponse> submitOfferToOrder(
+    public ResponseEntity<OfferResponse> submitOfferToOrder(
             @RequestBody @Valid
-            OfferOfSpecialistRequest request) {
-        return ResponseEntity.ok(
-                offerOfSpecialistService.submitOfferToOrder(request));
+            OfferSaveRequest request) {
+
+                return ResponseEntity.ok(offerService.submitOfferToOrder(request));
     }
 
     //✅ ok
-    @PostMapping("/choose-offer")
-    public ResponseEntity<OfferOfSpecialistResponse> chooseOffer(
-            @RequestBody @Valid
-            OfferOfSpecialistResponse request) {
-        return ResponseEntity.ok
-                (offerOfSpecialistService.chooseOfferOfSpecialist(request));
+    @PostMapping("/choose-offer/{offerId}")
+    public ResponseEntity<OfferResponse> chooseOffer(
+            @PathVariable Long offerId) {
+               return ResponseEntity.ok(offerService.chooseOfferOfSpecialist(offerId));
     }
 
     //✅ ok
-    @PostMapping("/start-service")
-    public ResponseEntity<OfferOfSpecialistResponse> startService(
-            @RequestBody @Valid
-            OfferOfSpecialistResponse request) {
+    @PostMapping("/start-service/{offerId}")
+    public ResponseEntity<OfferResponse> startService(
+            @PathVariable Long offerId) {
         return ResponseEntity.ok(
-                offerOfSpecialistService.startService(request));
+                offerService.startService(offerId));
     }
 
     //✅ ok
-    @PostMapping("/end-service")
-    public ResponseEntity<OfferOfSpecialistResponse> endService(
-            @RequestBody @Valid
-            OfferOfSpecialistResponse request) {
+    @PostMapping("/end-service/{offerId}")
+    public ResponseEntity<OfferResponse> endService(
+            @PathVariable Long offerId) {
         return ResponseEntity.ok(
-                offerOfSpecialistService.endService(request));
+                offerService.endService(offerId));
     }
 
     //✅ ok
     @GetMapping("/specialist-id/{specialistId}")
-    public ResponseEntity<List<OfferOfSpecialistResponse>> findByOffersBySpecialistId(
+    public ResponseEntity<List<OfferResponse>> findByOffersBySpecialistId(
             @PathVariable Long specialistId) {
         return ResponseEntity.ok(
-                offerOfSpecialistService.findByOfferOfSpecialistId(specialistId));
+                offerService.findByOfferOfSpecialistId(specialistId));
     }
 
     //✅ ok
     @GetMapping("/customer-id/{customerId}")
-    public ResponseEntity<List<OfferOfSpecialistResponse>>
+    public ResponseEntity<List<OfferResponse>>
     findAllOfferOfSpecialistByCustomerId(
             @PathVariable Long customerId) {
         return ResponseEntity.ok(
-                offerOfSpecialistService.
-                        findAllOfferOfSpecialistOrderByCustomerId(customerId));
+                offerService.
+                        findAllOffeOrderByCustomerId(customerId));
     }
 }
