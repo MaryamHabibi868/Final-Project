@@ -1,6 +1,5 @@
 package ir.maktab.homeservice.controller;
 
-import ir.maktab.homeservice.domains.Manager;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.ManagerService;
 import jakarta.validation.Valid;
