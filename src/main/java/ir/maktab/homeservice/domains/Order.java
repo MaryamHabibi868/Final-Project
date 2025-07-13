@@ -12,13 +12,14 @@ import java.time.ZonedDateTime;
 @Entity
 @Getter
 @Setter
+@Table (name = Order.TABLE_NAME)
 @ToString(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order extends BaseEntity<Long> {
 
-    public static final String TABLE_NAME = "order";
+    public static final String TABLE_NAME = "orders";
     public static final String DESCRIPTION = "description";
     public static final String SUGGESTED_PRICE = "suggested_price";
     public static final String START_DATE = "start_date";
