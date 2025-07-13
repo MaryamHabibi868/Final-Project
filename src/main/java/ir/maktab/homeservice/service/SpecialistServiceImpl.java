@@ -21,13 +21,15 @@ public class SpecialistServiceImpl
 
     private final SpecialistMapper specialistMapper;
     private final HomeServiceService homeServiceService;
+    private final OfferService offerService;
 
     public SpecialistServiceImpl(SpecialistRepository repository,
                                  SpecialistMapper specialistMapper,
-                                 HomeServiceService homeServiceService) {
+                                 HomeServiceService homeServiceService, OfferService offerService) {
         super(repository);
         this.specialistMapper = specialistMapper;
         this.homeServiceService = homeServiceService;
+        this.offerService = offerService;
     }
 
     //✅
@@ -38,21 +40,17 @@ public class SpecialistServiceImpl
         if (repository.existsByEmail(request.getEmail())){
             throw new DuplicatedException("Email already exists");
         }
-        if (repository.existsByPassword(request.getPassword())){
-            throw new DuplicatedException("Password already exists");
-        }
         Specialist specialist = new Specialist();
         specialist.setFirstName(request.getFirstName());
         specialist.setLastName(request.getLastName());
         specialist.setEmail(request.getEmail());
         specialist.setPassword(request.getPassword());
-        specialist.setAccountStatus(AccountStatus.PENDING);
+        specialist.setStatus(AccountStatus.PENDING);
         Specialist save = repository.save(specialist);
         return specialistMapper.entityMapToResponse(save);
     }
 
     //✅
-    //IsActiveTrue?
     @Override
     public SpecialistResponse loginSpecialist(
             SpecialistLoginRequest request) {
@@ -69,15 +67,24 @@ public class SpecialistServiceImpl
                 .orElseThrow(
                         () -> new NotFoundException("Specialist Not Found")
                 );
+
+        Long specialistId = specialistFound.getId();
+        if (offerService.existsByStatus_AcceptedAndSpecialistIdEquals(specialistId)) {
+            throw new NotApprovedException("Specialist has active offers");
+        }
+        if (offerService.existsByStatus_PendingAndSpecialistIdEquals(specialistId)) {
+            throw new NotApprovedException("Specialist has pending offers");
+        }
+
         if (repository.existsByEmail(request.getEmail())){
             throw new DuplicatedException("Email already exists");
         }
-        if (repository.existsByPassword(request.getPassword())){
-            throw new DuplicatedException("Password already exists");
+        if (request.getEmail() != null) {
+            specialistFound.setEmail(request.getEmail());
+        } else if (request.getPassword() != null) {
+            specialistFound.setPassword(request.getPassword());
         }
-        specialistFound.setEmail(request.getEmail());
-        specialistFound.setPassword(request.getPassword());
-        specialistFound.setAccountStatus(AccountStatus.PENDING);
+        specialistFound.setStatus(AccountStatus.PENDING);
         repository.save(specialistFound);
         return specialistMapper.entityMapToResponse(specialistFound);
     }
@@ -89,15 +96,14 @@ public class SpecialistServiceImpl
         Specialist foundSpecialist = repository.findById(id).orElseThrow(
                 () -> new NotFoundException("Specialist Not Found")
         );
-        if (foundSpecialist.getAccountStatus() != AccountStatus.APPROVED) {
-            foundSpecialist.setAccountStatus(AccountStatus.APPROVED);
+        if (foundSpecialist.getStatus() != AccountStatus.APPROVED) {
+            foundSpecialist.setStatus(AccountStatus.APPROVED);
             repository.save(foundSpecialist);
         }
         return specialistMapper.entityMapToResponse(foundSpecialist);
     }
 
     //✅
-    // dto ke ba homeservice rabete dare bayad bezanam? ya hamin doroste?
     @Transactional
     @Override
     public void addSpecialistToHomeService(
@@ -110,7 +116,7 @@ public class SpecialistServiceImpl
         HomeService foundHomeService = homeServiceService.
                 findById(homeServiceId);
 
-        if (foundSpecialist.getAccountStatus() != AccountStatus.APPROVED) {
+        if (foundSpecialist.getStatus() != AccountStatus.APPROVED) {
             throw new NotApprovedException("This Specialist Not Approved");
         }
         foundSpecialist.getHomeServices().add(foundHomeService);
@@ -119,7 +125,6 @@ public class SpecialistServiceImpl
     }
 
     //✅
-    // soale bala?
     @Override
     @Transactional
     public void removeSpecialistFromHomeService(
@@ -129,7 +134,7 @@ public class SpecialistServiceImpl
         );
         HomeService foundHomeService = homeServiceService.
                 findById(homeServiceId);
-        if (foundSpecialist.getAccountStatus() != AccountStatus.APPROVED) {
+        if (foundSpecialist.getStatus() != AccountStatus.APPROVED) {
             throw new NotApprovedException("This Specialist Not Approved");
         }
         foundSpecialist.getHomeServices().remove(foundHomeService);
@@ -170,7 +175,7 @@ public class SpecialistServiceImpl
 
     public List<SpecialistResponse> findAllByHomeServiceTitle(
             String homeServiceTitle) {
-       return repository.findAllByHomeServices_HomeServiceTitle(homeServiceTitle).stream()
+       return repository.findAllByHomeServices_title(homeServiceTitle).stream()
                 .map(specialistMapper::entityMapToResponse)
                 .toList();
     }

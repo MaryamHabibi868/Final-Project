@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -18,11 +17,12 @@ import java.util.Set;
 @DiscriminatorValue(value = "Specialist")
 public class Specialist extends User {
 
-    public static final String ACCOUNT_STATUS = "account_status";
+    public static final String STATUS = "status";
     public static final String SCORE = "score";
 
-    @Column(name = Specialist.ACCOUNT_STATUS)
-    private AccountStatus accountStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(name = Specialist.STATUS)
+    private AccountStatus status;
 
     @Column(name = Specialist.SCORE)
     private Integer score;

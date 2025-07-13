@@ -13,18 +13,19 @@ import lombok.*;
 @NoArgsConstructor
 public class SpecialistResponse {
 
-    @NotNull
+
     private Long id;
 
-    @NotBlank
     private String firstName;
 
-    @NotBlank
     private String lastName;
 
-    @NotBlank
-    @Email
     private String email;
 
-    private AccountStatus accountStatus;
+    private Long walletId;
+
+    private AccountStatus status;
+
+    private Integer score;
+
 }

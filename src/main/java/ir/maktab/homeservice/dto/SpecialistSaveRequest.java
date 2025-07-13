@@ -27,8 +27,4 @@ public class SpecialistSaveRequest {
             message = "Password should be combination of letters and numbers"
     )
     private String password;
-
-//?
-   /* @OneToMany
-    private Set<Long> homeServicesId;*/
 }

@@ -41,11 +41,12 @@ public class SpecialistController {
     }
 
     //✅
-    @PutMapping("/specialists/{id}/approve")
+    @PutMapping("/specialists/{specialistId}/approve")
     public ResponseEntity<SpecialistResponse>
     approveSpecialistRegistration(
-            @PathVariable Long id) {
-        return ResponseEntity.ok(specialistService.approveSpecialistRegistration(id));
+            @PathVariable Long specialistId) {
+        return ResponseEntity.ok(
+                specialistService.approveSpecialistRegistration(specialistId));
     }
 
 
@@ -92,11 +93,11 @@ public class SpecialistController {
     }
 
     //✅
-    @GetMapping("/find-home-services-by-home-service-title")
-    public ResponseEntity<List<SpecialistResponse>> findAllHomeServicesByHomeServiceTitle(
-            @RequestParam String homeServiceTitle) {
+    @GetMapping("/find-home-services-by-title")
+    public ResponseEntity<List<SpecialistResponse>> findAllHomeServicesByTitle(
+            @RequestParam String title) {
         return ResponseEntity.ok(
-                specialistService.findAllByHomeServiceTitle(homeServiceTitle));
+                specialistService.findAllByHomeServiceTitle(title));
     }
 
 

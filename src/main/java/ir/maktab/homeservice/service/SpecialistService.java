@@ -1,6 +1,5 @@
 package ir.maktab.homeservice.service;
 
-import ir.maktab.homeservice.domains.OrderOfCustomer;
 import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.base.BaseService;

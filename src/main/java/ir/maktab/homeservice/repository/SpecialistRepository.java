@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface SpecialistRepository extends BaseUserRepository<Specialist> {
 
-    Optional<Specialist> findAllByHomeServices_HomeServiceTitle(String homeServices_homeServiceTitle);
+    Optional<Specialist> findAllByHomeServices_title(String title);
 }
