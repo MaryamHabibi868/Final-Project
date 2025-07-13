@@ -1,11 +1,6 @@
 package ir.maktab.homeservice.dto;
 
-import ir.maktab.homeservice.domains.Transaction;
-import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.domains.enumClasses.TransactionType;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -22,9 +17,9 @@ public class TransactionResponse {
 
     private BigDecimal amount;
 
-    private TransactionType transactionType;
+    private TransactionType type;
 
-    private ZonedDateTime transactionDate;
+    private ZonedDateTime date;
 
     private Long walletId;
 }
