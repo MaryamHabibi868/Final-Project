@@ -1,10 +1,7 @@
 package ir.maktab.homeservice.mapper;
 
 import ir.maktab.homeservice.domains.Specialist;
-import ir.maktab.homeservice.dto.SpecialistLoginRequest;
 import ir.maktab.homeservice.dto.SpecialistResponse;
-import ir.maktab.homeservice.dto.SpecialistSaveRequest;
-import ir.maktab.homeservice.dto.SpecialistUpdateInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

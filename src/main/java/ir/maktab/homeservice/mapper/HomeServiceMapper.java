@@ -2,8 +2,6 @@ package ir.maktab.homeservice.mapper;
 
 import ir.maktab.homeservice.domains.HomeService;
 import ir.maktab.homeservice.dto.HomeServiceResponse;
-import ir.maktab.homeservice.dto.HomeServiceSaveRequest;
-import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
