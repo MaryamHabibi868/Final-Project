@@ -90,6 +90,7 @@ public class CustomerServiceImpl
                 .orElseThrow(() -> new NotFoundException("Customer Not Found")));
     }
 
+    // ☑️ final check
     //✅
     @Override
     public List<CustomerResponse> findAllCustomers() {
@@ -98,6 +99,7 @@ public class CustomerServiceImpl
                 .toList();
     }
 
+    // ☑️ final check
     //✅
     @Override
     public List<CustomerResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
@@ -109,6 +111,7 @@ public class CustomerServiceImpl
                 .toList();
     }
 
+    // ☑️ final check
     //✅
     @Override
     public List<CustomerResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc

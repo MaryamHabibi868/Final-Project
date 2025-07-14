@@ -44,12 +44,13 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.updateCustomer(request));
     }
 
-    //
+    // ☑️ final check
     @GetMapping
     public ResponseEntity<List<CustomerResponse>> findAllCustomers() {
         return ResponseEntity.ok(customerService.findAllCustomers());
     }
 
+    // ☑️ final check
     //✅
     @GetMapping("/filter-by-first-name")
     public ResponseEntity<List<CustomerResponse>> findAllByFirstNameContainsIgnoreCase(
@@ -59,6 +60,7 @@ public class CustomerController {
                         .findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(firstName));
     }
 
+    // ☑️ final check
     //✅
     @GetMapping("/filter-by-last-name")
     public ResponseEntity<List<CustomerResponse>> findAllByLastNameContainsIgnoreCase(

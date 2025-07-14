@@ -12,6 +12,7 @@ public interface FeedbackService
     //✅
     FeedbackResponse submitFeedback(FeedbackSaveRequest request);
 
+    // ☑️ final check
     //✅
     Integer feedbackRangeForSpecialistToOffer(
             Long offerId);

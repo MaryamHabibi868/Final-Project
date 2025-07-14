@@ -16,4 +16,6 @@ public interface HomeServiceRepository
 
     // ☑️ final check
     List<HomeService> findAllByParentService_Id(Long id);
+
+
 }

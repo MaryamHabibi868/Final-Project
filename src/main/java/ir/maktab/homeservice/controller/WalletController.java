@@ -17,6 +17,7 @@ public class WalletController {
     private final WalletService walletService;
 
 
+    // ☑️ final check
     //✅
     @GetMapping("/{walletId}")
     public ResponseEntity<BigDecimal> walletBalance(

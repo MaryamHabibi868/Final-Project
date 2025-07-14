@@ -24,6 +24,7 @@ public class FeedbackController {
         return ResponseEntity.ok(feedbackService.submitFeedback(request));
     }
 
+    // ☑️ final check
     //✅
     @GetMapping("/offer-id/{offerId}")
     public ResponseEntity<Integer> feedbackRangeForSpecialistToOffer(

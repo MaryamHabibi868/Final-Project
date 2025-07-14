@@ -64,6 +64,7 @@ public class FeedbackServiceImpl
         }
     }
 
+    // ☑️ final check
     //✅
     @Override
     public Integer feedbackRangeForSpecialistToOffer(

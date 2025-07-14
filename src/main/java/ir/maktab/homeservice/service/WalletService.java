@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public interface WalletService extends BaseService<Wallet, Long> {
 
 
+    // ☑️ final check
     //✅
     BigDecimal walletBalance(Long walletId);
 }
