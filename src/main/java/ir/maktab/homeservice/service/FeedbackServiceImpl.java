@@ -38,9 +38,7 @@ public class FeedbackServiceImpl
         Offer foundOffer = offerService.
                 findById(request.getOfferId());
 
-        if (foundOffer.getStatus() == OfferStatus.DONE ||
-        foundOffer.getStatus() == OfferStatus.PAID) {
-
+        if (foundOffer.getStatus() == OfferStatus.PAID) {
 
             Feedback feedback = new Feedback();
             feedback.setRange(request.getRange());
@@ -60,7 +58,7 @@ public class FeedbackServiceImpl
             return feedbackMapper.entityMapToResponse(save);
         }
         else {
-            throw new NotApprovedException("This offer is not done yet");
+            throw new NotApprovedException("This offer is not paid yet");
         }
     }
 
