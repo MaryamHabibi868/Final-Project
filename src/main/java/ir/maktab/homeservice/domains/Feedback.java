@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class Feedback extends BaseEntity<Long> {
 
-    public static final String TABLE_NAME = "feedback";
+    public static final String TABLE_NAME = "feedbacks";
     public static final String RANGE = "range";
     public static final String DESCRIPTION = "description";
     public static final String OFFER_ID = "offer_id";

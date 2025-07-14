@@ -4,7 +4,6 @@ import ir.maktab.homeservice.domains.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.math.BigDecimal;
 
 @Entity
@@ -16,7 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class HomeService extends BaseEntity<Long> {
 
-    public static final String TABLE_NAME = "home_service";
+    public static final String TABLE_NAME = "home_services";
     public static final String TITLE = "title";
     public static final String BASE_PRICE = "base_price";
     public static final String DESCRIPTION = "description";

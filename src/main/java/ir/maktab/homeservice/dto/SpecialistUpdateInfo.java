@@ -3,8 +3,6 @@ package ir.maktab.homeservice.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-
-
 @Setter
 @Getter
 @ToString

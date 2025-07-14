@@ -4,7 +4,6 @@ import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +17,7 @@ import java.util.Set;
 @DiscriminatorValue(value = "Specialist")
 public class Specialist extends User {
 
+    public static final String TABLE_NAME = "specialists";
     public static final String STATUS = "status";
     public static final String SCORE = "score";
     public static final String OFFER_ID = "offer_id";

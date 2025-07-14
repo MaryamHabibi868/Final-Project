@@ -1,7 +1,6 @@
 package ir.maktab.homeservice.dto;
 
 import lombok.*;
-
 import java.math.BigDecimal;
 
 @Setter

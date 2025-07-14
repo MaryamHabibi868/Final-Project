@@ -2,7 +2,6 @@ package ir.maktab.homeservice.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Setter
 @Getter

@@ -5,7 +5,6 @@ import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -19,7 +18,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class Offer extends BaseEntity<Long> {
 
-    public static final String TABLE_NAME = "offer";
+    public static final String TABLE_NAME = "offers";
     public static final String SUGGESTED_PRICE = "suggested_price";
     public static final String START_DATE_SUGGESTION = "start_date_suggestion";
     public static final String TASK_DURATION = "task_duration";

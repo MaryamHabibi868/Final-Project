@@ -5,7 +5,6 @@ import ir.maktab.homeservice.domains.enumClasses.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
@@ -18,7 +17,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class Transaction extends BaseEntity<Long> {
 
-    public static final String TABLE_NAME = "transaction";
+    public static final String TABLE_NAME = "transactions";
     public static final String AMOUNT = "amount";
     public static final String TYPE = "type";
     public static final String DATE = "date";

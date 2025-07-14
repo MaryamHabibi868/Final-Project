@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Set;
-
 @Entity
 @Getter
 @Setter
@@ -15,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class Address extends BaseEntity<Long> {
 
-    public static final String TABLE_NAME = "address";
+    public static final String TABLE_NAME = "addresses";
     public static final String PROVINCE = "province";
     public static final String CITY = "city";
     public static final String POSTAL_CODE = "postal_code";
