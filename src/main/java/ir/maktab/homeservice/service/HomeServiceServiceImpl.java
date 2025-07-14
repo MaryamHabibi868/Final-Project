@@ -28,6 +28,7 @@ public class HomeServiceServiceImpl
         this.homeServiceMapper = homeServiceMapper;
     }
 
+    // ☑️ final check
     //✅
     @Transactional
     @Override
@@ -57,6 +58,7 @@ public class HomeServiceServiceImpl
         return homeServiceMapper.entityMapToResponse(save);
     }
 
+    // ☑️ final check
     //✅
     @Transactional
     @Override
@@ -84,6 +86,7 @@ public class HomeServiceServiceImpl
         return homeServiceMapper.entityMapToResponse(save);
     }
 
+    // ☑️ final check
     //✅
     @Transactional
     @Override
@@ -91,10 +94,30 @@ public class HomeServiceServiceImpl
         deleteById(id);
     }
 
+    // ☑️ final check
     //✅
     @Override
     public List<HomeServiceResponse> findAllHomeServices() {
         return repository.findAll().stream()
+                .map(homeServiceMapper::entityMapToResponse)
+                .toList();
+    }
+
+    // ☑️ final check
+    //✅
+    @Override
+    public HomeServiceResponse findHomeServiceById(Long id) {
+        HomeService foundHomeService = repository.findById(id).orElseThrow(
+                () -> new NotFoundException("Home service Not found"));
+
+        return homeServiceMapper.entityMapToResponse(foundHomeService);
+    }
+
+    // ☑️ final check
+    //✅
+    @Override
+    public List<HomeServiceResponse> findAllHomeServiceByParentServiceId(Long id) {
+       return repository.findAllByParentService_Id(id).stream()
                 .map(homeServiceMapper::entityMapToResponse)
                 .toList();
     }
