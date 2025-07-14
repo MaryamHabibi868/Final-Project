@@ -66,5 +66,8 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
     // ☑️ final check
     List<TransactionResponse> findAllTransactionsBySpecialistId(
             Long specialistId);
+
+    // ☑️ final check
+    void inActivateSpecialist();
 }
 

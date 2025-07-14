@@ -265,4 +265,11 @@ public class SpecialistServiceImpl
                 .stream().map(transactionMapper :: entityMapToResponse)
                 .toList();
     }
+
+    // ☑️ final check
+    @Override
+    public void inActivateSpecialist() {
+        repository.findAllByScoreIsLessThan(0.0).forEach(specialist -> {
+            specialist.setStatus(AccountStatus.INACTIVE);});
+    }
 }

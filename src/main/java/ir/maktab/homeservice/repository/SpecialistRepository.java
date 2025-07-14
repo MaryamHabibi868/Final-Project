@@ -26,4 +26,6 @@ public interface SpecialistRepository extends BaseUserRepository<Specialist> {
     // ☑️ final check
     List<Specialist> findAllByScoreIsBetween(Double lower, Double higher);
 
+    List<Specialist> findAllByScoreIsLessThan(Double lower);
+
 }

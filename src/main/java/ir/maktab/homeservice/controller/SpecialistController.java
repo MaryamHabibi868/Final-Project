@@ -140,4 +140,11 @@ public class SpecialistController {
                 specialistService.findAllTransactionsBySpecialistId(specialistId));
     }
 
+    @PostMapping("/in-activate-specialists")
+    public ResponseEntity<String> inActivateSpecialists() {
+        specialistService.inActivateSpecialist();
+        return ResponseEntity.ok(
+                "Specialist by score less than ZERO In Activated");
+    }
+
 }
