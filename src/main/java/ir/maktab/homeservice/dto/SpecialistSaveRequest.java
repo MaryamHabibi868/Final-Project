@@ -2,6 +2,7 @@ package ir.maktab.homeservice.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Setter
 @Getter
@@ -27,4 +28,6 @@ public class SpecialistSaveRequest {
             message = "Password should be combination of letters and numbers"
     )
     private String password;
+
+    private String profileImagePath;
 }

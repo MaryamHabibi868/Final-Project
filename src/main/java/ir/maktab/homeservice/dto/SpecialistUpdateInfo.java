@@ -27,4 +27,6 @@ public class SpecialistUpdateInfo {
     )
     private String password;
 
+    private String profileImagePath;
+
 }

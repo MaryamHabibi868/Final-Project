@@ -12,8 +12,10 @@ import ir.maktab.homeservice.repository.SpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -37,7 +39,7 @@ public class SpecialistServiceImpl
     @Transactional
     @Override
     public SpecialistResponse registerSpecialist(SpecialistSaveRequest request) {
-        if (repository.existsByEmail(request.getEmail())){
+        if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicatedException("Email already exists");
         }
 
@@ -49,7 +51,16 @@ public class SpecialistServiceImpl
         specialist.setLastName(request.getLastName());
         specialist.setEmail(request.getEmail());
         specialist.setPassword(request.getPassword());
-        specialist.setStatus(AccountStatus.PENDING);
+
+        if (request.getProfileImagePath() != null) {
+            specialist.setProfileImagePath(request.getProfileImagePath());
+            /*if ((request.getProfileImagePath()).getSize() > 300 * 1024 ){
+                throw new NotApprovedException("Profile image is too large");
+            }*/
+            specialist.setStatus(AccountStatus.NEW);
+        } else {
+            specialist.setStatus(AccountStatus.PENDING);
+        }
         specialist.setScore(0.0);
         specialist.setWallet(wallet);
         wallet.setUserInformation(specialist);
@@ -58,6 +69,7 @@ public class SpecialistServiceImpl
         return specialistMapper.entityMapToResponse(save);
     }
 
+    // ☑️ final check
     //✅
     @Override
     public SpecialistResponse loginSpecialist(
@@ -86,19 +98,24 @@ public class SpecialistServiceImpl
             throw new NotApprovedException("Specialist has pending offers");
         }
 
-        if (repository.existsByEmail(request.getEmail())){
+        if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicatedException("Email already exists");
         }
         if (request.getEmail() != null) {
             specialistFound.setEmail(request.getEmail());
-        } else if (request.getPassword() != null) {
+        }
+        if (request.getPassword() != null) {
             specialistFound.setPassword(request.getPassword());
+        }
+        if (request.getProfileImagePath() != null) {
+            specialistFound.setProfileImagePath(request.getProfileImagePath());
         }
         specialistFound.setStatus(AccountStatus.PENDING);
         repository.save(specialistFound);
         return specialistMapper.entityMapToResponse(specialistFound);
     }
 
+    // ☑️ final check
     //✅
     @Transactional
     @Override
@@ -113,6 +130,7 @@ public class SpecialistServiceImpl
         return specialistMapper.entityMapToResponse(foundSpecialist);
     }
 
+    // ☑️ final check
     //✅
     @Transactional
     @Override
@@ -134,6 +152,7 @@ public class SpecialistServiceImpl
         homeServiceService.save(foundHomeService);
     }
 
+    // ☑️ final check
     //✅
     @Override
     @Transactional
@@ -157,7 +176,7 @@ public class SpecialistServiceImpl
     @Override
     public List<SpecialistResponse> findAllSpecialists() {
         return repository.findUsersByIdNotNull(Specialist.class).stream()
-                .map(specialistMapper :: entityMapToResponse)
+                .map(specialistMapper::entityMapToResponse)
                 .toList();
     }
 
@@ -187,7 +206,7 @@ public class SpecialistServiceImpl
     @Override
     public List<SpecialistResponse> findAllByHomeServiceTitle(
             String homeServiceTitle) {
-       return repository.findAllByHomeServices_title(homeServiceTitle).stream()
+        return repository.findAllByHomeServices_title(homeServiceTitle).stream()
                 .map(specialistMapper::entityMapToResponse)
                 .toList();
     }

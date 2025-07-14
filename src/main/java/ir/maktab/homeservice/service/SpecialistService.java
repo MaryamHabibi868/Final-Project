@@ -12,6 +12,7 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
     SpecialistResponse registerSpecialist(
             SpecialistSaveRequest request);
 
+    // ☑️ final check
     //✅
     SpecialistResponse loginSpecialist(
             SpecialistLoginRequest request);
@@ -20,14 +21,17 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
     SpecialistResponse updateSpecialistInfo(
             SpecialistUpdateInfo request);
 
+    // ☑️ final check
     //✅
     SpecialistResponse approveSpecialistRegistration(
             Long id);
 
+    // ☑️ final check
     //✅
     void addSpecialistToHomeService(
             Long specialistId, Long homeServiceId);
 
+    // ☑️ final check
     //✅
     void removeSpecialistFromHomeService(
             Long specialistId, Long homeServiceId);

@@ -21,6 +21,7 @@ public class Specialist extends User {
     public static final String STATUS = "status";
     public static final String SCORE = "score";
     public static final String OFFER_ID = "offer_id";
+    public static final String PROFILE_IMAGE_PATH = "profile_image_path";
 
     @Enumerated(EnumType.STRING)
     @Column(name = Specialist.STATUS)
@@ -28,6 +29,9 @@ public class Specialist extends User {
 
     @Column(name = Specialist.SCORE)
     private Double score;
+
+    @Column(name = Specialist.PROFILE_IMAGE_PATH)
+    private String profileImagePath;
 
     @JoinTable(name = "specialist_homeService")
     @ManyToMany

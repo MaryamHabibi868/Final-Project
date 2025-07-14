@@ -24,6 +24,7 @@ public class SpecialistController {
         return ResponseEntity.ok(specialistService.registerSpecialist(request));
     }
 
+    // ☑️ final check
     //✅
     @PostMapping("/login")
     public ResponseEntity<SpecialistResponse> loginSpecialist(
@@ -40,6 +41,7 @@ public class SpecialistController {
         return ResponseEntity.ok(specialistService.updateSpecialistInfo(request));
     }
 
+    // ☑️ final check
     //✅
     @PutMapping("/specialists/{specialistId}/approve")
     public ResponseEntity<SpecialistResponse>
@@ -50,6 +52,7 @@ public class SpecialistController {
     }
 
 
+    // ☑️ final check
     //✅
     @PostMapping("/add-specialists/{specialistId}/home-services")
     public ResponseEntity<String> addSpecialistToHomeService(
@@ -59,6 +62,7 @@ public class SpecialistController {
         return ResponseEntity.ok("Specialist added to home service");
     }
 
+    // ☑️ final check
     //✅
     @DeleteMapping("/specialists/{specialistId}/home-services")
     public ResponseEntity<String> deleteSpecialistFromHomeService(
