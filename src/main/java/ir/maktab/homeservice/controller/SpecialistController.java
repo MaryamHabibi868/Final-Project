@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -16,7 +15,7 @@ public class SpecialistController {
 
     private final SpecialistService specialistService;
 
-    //✅
+
     @PostMapping("/register")
     public ResponseEntity<SpecialistResponse> registerSpecialist(
             @RequestBody @Valid
@@ -24,8 +23,7 @@ public class SpecialistController {
         return ResponseEntity.ok(specialistService.registerSpecialist(request));
     }
 
-    // ☑️ final check
-    //✅
+
     @PostMapping("/login")
     public ResponseEntity<SpecialistResponse> loginSpecialist(
             @RequestBody @Valid
@@ -33,7 +31,7 @@ public class SpecialistController {
         return ResponseEntity.ok(specialistService.loginSpecialist(request));
     }
 
-    //✅
+
     @PutMapping
     public ResponseEntity<SpecialistResponse> updateSpecialist(
             @RequestBody @Valid
@@ -41,8 +39,7 @@ public class SpecialistController {
         return ResponseEntity.ok(specialistService.updateSpecialistInfo(request));
     }
 
-    // ☑️ final check
-    //✅
+
     @PutMapping("/specialists/{specialistId}/approve")
     public ResponseEntity<SpecialistResponse>
     approveSpecialistRegistration(
@@ -52,8 +49,7 @@ public class SpecialistController {
     }
 
 
-    // ☑️ final check
-    //✅
+
     @PostMapping("/add-specialists/{specialistId}/home-services")
     public ResponseEntity<String> addSpecialistToHomeService(
             @PathVariable Long specialistId,
@@ -62,8 +58,7 @@ public class SpecialistController {
         return ResponseEntity.ok("Specialist added to home service");
     }
 
-    // ☑️ final check
-    //✅
+
     @DeleteMapping("/specialists/{specialistId}/home-services")
     public ResponseEntity<String> deleteSpecialistFromHomeService(
             @PathVariable Long specialistId,
@@ -72,15 +67,13 @@ public class SpecialistController {
         return ResponseEntity.ok("Specialist removed from home service");
     }
 
-    // ☑️ final check
-    //✅
+
     @GetMapping
     public ResponseEntity<List<SpecialistResponse>> findAllSpecialists() {
         return ResponseEntity.ok(specialistService.findAllSpecialists());
     }
 
-    // ☑️ final check
-    //✅
+
     @GetMapping("/filter-by-first-name")
     public ResponseEntity<List<SpecialistResponse>> findAllByFirstNameContainsIgnoreCase(
             @RequestParam String firstName) {
@@ -89,8 +82,7 @@ public class SpecialistController {
                         .findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(firstName));
     }
 
-    // ☑️ final check
-    //✅
+
     @GetMapping("/filter-by-last-name")
     public ResponseEntity<List<SpecialistResponse>> findAllByLastNameContainsIgnoreCase(
             @RequestParam String lastName) {
@@ -99,7 +91,7 @@ public class SpecialistController {
                         .findAllByLastNameContainsIgnoreCaseOrderByIdAsc(lastName));
     }
 
-    //✅
+
     @GetMapping("/find-home-services-by-title")
     public ResponseEntity<List<SpecialistResponse>> findAllHomeServicesByTitle(
             @RequestParam String title) {
@@ -107,7 +99,7 @@ public class SpecialistController {
                 specialistService.findAllByHomeServiceTitle(title));
     }
 
-    // ☑️ final check
+
     @GetMapping("/find-all-home-services-by-specialist-id/{specialistId}")
     public ResponseEntity<List<HomeServiceResponse>> findAllHomeServicesBySpecialistId(
             @PathVariable Long specialistId) {
@@ -115,7 +107,7 @@ public class SpecialistController {
                 specialistService.findAllHomeServicesBySpecialistId(specialistId));
     }
 
-    // ☑️ final check
+
     @GetMapping("/score-between/{lower}/{higher}")
     public ResponseEntity<List<SpecialistResponse>> findAllByScoreBetween(
             @PathVariable Double lower,
@@ -124,7 +116,7 @@ public class SpecialistController {
                 specialistService.findAllByScoreIsBetween(lower, higher));
     }
 
-    // ☑️ final check
+
     @GetMapping("/get-score-by-specialist-id/{specialistId}")
     public ResponseEntity<Double> findScoreBySpecialistId(
             @PathVariable Long specialistId) {
@@ -132,7 +124,7 @@ public class SpecialistController {
                 specialistService.findScoreBySpecialistId(specialistId));
     }
 
-    // ☑️ final check
+
     @GetMapping("/find-all-transaction-by-specialist-id/{specialistId}")
     public ResponseEntity<List<TransactionResponse>> findAllTransactionsBySpecialistId(
             @PathVariable Long specialistId) {

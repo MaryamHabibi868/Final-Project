@@ -15,8 +15,7 @@ public class FeedbackController {
 
     private final FeedbackService feedbackService;
 
-    // ☑️ final check
-    //✅
+
     @PostMapping
     public ResponseEntity<FeedbackResponse> submitFeedback(
             @RequestBody @Valid
@@ -24,8 +23,7 @@ public class FeedbackController {
         return ResponseEntity.ok(feedbackService.submitFeedback(request));
     }
 
-    // ☑️ final check
-    //✅
+
     @GetMapping("/offer-id/{offerId}")
     public ResponseEntity<Integer> feedbackRangeForSpecialistToOffer(
             @PathVariable Long offerId) {

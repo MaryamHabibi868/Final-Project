@@ -15,7 +15,7 @@ public class ManagerController {
     private final ManagerService managerService;
 
 
-    //✅
+
     @PostMapping("/register")
     public ResponseEntity<ManagerResponse> registerManager(
             @RequestBody @Valid
@@ -23,7 +23,7 @@ public class ManagerController {
         return ResponseEntity.ok(managerService.registerManager(request));
     }
 
-    //✅
+
     @PostMapping("/login")
     public ResponseEntity<ManagerResponse> loginManager(
             @RequestBody @Valid
@@ -31,7 +31,7 @@ public class ManagerController {
         return ResponseEntity.ok(managerService.loginManager(request));
     }
 
-    //✅
+
     @PutMapping
     public ResponseEntity<ManagerResponse> updateManager(
             @RequestBody @Valid

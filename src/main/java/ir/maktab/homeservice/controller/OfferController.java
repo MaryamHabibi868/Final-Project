@@ -4,12 +4,10 @@ import ir.maktab.homeservice.dto.OfferSaveRequest;
 import ir.maktab.homeservice.dto.OfferResponse;
 import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.service.OfferService;
-import ir.maktab.homeservice.service.SpecialistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,10 +16,8 @@ import java.util.List;
 public class OfferController {
 
     private final OfferService offerService;
-    private final SpecialistService specialistService;
 
-    // ☑️ final check
-    //✅ ok
+
     @PostMapping
     public ResponseEntity<OfferResponse> submitOfferToOrder(
             @RequestBody @Valid
@@ -30,16 +26,14 @@ public class OfferController {
                 return ResponseEntity.ok(offerService.submitOfferToOrder(request));
     }
 
-    // ☑️ final check
-    //✅ ok
+
     @PostMapping("/choose-offer/{offerId}")
     public ResponseEntity<OfferResponse> chooseOffer(
             @PathVariable Long offerId) {
                return ResponseEntity.ok(offerService.chooseOfferOfSpecialist(offerId));
     }
 
-    // ☑️ final check
-    //✅ ok
+
     @PostMapping("/start-service/{offerId}")
     public ResponseEntity<OfferResponse> startService(
             @PathVariable Long offerId) {
@@ -47,8 +41,7 @@ public class OfferController {
                 offerService.startService(offerId));
     }
 
-    // ☑️ final check
-    //✅ ok
+
     @PostMapping("/end-service/{offerId}")
     public ResponseEntity<OfferResponse> endService(
             @PathVariable Long offerId) {
@@ -56,7 +49,7 @@ public class OfferController {
                 offerService.endService(offerId));
     }
 
-    //✅ ok
+
     @GetMapping("/specialist-id/{specialistId}")
     public ResponseEntity<List<OfferResponse>> findByOffersBySpecialistId(
             @PathVariable Long specialistId) {
@@ -64,7 +57,7 @@ public class OfferController {
                 offerService.findByOfferOfSpecialistId(specialistId));
     }
 
-    // ☑️ final check
+
     @GetMapping("/sort-by-suggested-price/{orderId}")
     public ResponseEntity<List<OfferResponse>> findAllOffersBySuggestedPrice(
             @PathVariable Long orderId) {
@@ -72,7 +65,7 @@ public class OfferController {
                 offerService.findAllOffersBySuggestedPrice(orderId));
     }
 
-    // ☑️ final check
+
     @GetMapping("/sort-by-specialist-score/{orderId}")
     public ResponseEntity<List<OfferResponse>> findAllOffersBySpecialistScore(
             @PathVariable Long orderId) {
@@ -80,7 +73,7 @@ public class OfferController {
                 offerService.findAllOffersBySpecialistScore(orderId));
     }
 
-    // ☑️ final check
+
     @PostMapping("/pay-specialist/{offerId}")
     public ResponseEntity<String> paySpecialist(
             @PathVariable Long offerId) {
@@ -88,21 +81,11 @@ public class OfferController {
         return ResponseEntity.ok("Transaction Successful");
     }
 
-    // ☑️ final check
+
     @GetMapping("/find-all-orders-by-specialist-id/{specialistId}")
     public ResponseEntity<List<OrderResponse>> findAllOrdersBySpecialistId(
             @PathVariable Long specialistId) {
         return ResponseEntity.ok(
                 offerService.findOrdersBySpecialistId(specialistId));
     }
-
-    /*//✅ ok
-    @GetMapping("/customer-id/{customerId}")
-    public ResponseEntity<List<OfferResponse>>
-    findAllOfferOfSpecialistByCustomerId(
-            @PathVariable Long customerId) {
-        return ResponseEntity.ok(
-                offerService.
-                        findAllOfferOrderByCustomerId(customerId));
-    }*/
 }

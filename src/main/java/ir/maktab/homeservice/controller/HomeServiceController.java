@@ -17,8 +17,7 @@ public class HomeServiceController {
 
     private final HomeServiceService homeServiceService;
 
-    // ☑️ final check
-    //✅ ok
+
     @PostMapping
     public ResponseEntity<HomeServiceResponse> createHomeService(
             @RequestBody @Valid
@@ -26,8 +25,7 @@ public class HomeServiceController {
         return ResponseEntity.ok(homeServiceService.createHomeService(request));
     }
 
-    // ☑️ final check
-    //✅
+
     @PutMapping
     public ResponseEntity<HomeServiceResponse> updateHomeService(
             @RequestBody @Valid
@@ -35,8 +33,7 @@ public class HomeServiceController {
         return ResponseEntity.ok(homeServiceService.updateHomeService(request));
     }
 
-    // ☑️ final check
-    //✅
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteHomeService(
             @PathVariable Long id) {
@@ -44,21 +41,20 @@ public class HomeServiceController {
         return ResponseEntity.ok("Home Service Deleted");
     }
 
-    // ☑️ final check
-    //✅
+
     @GetMapping
     public ResponseEntity<List<HomeServiceResponse>> findAllHomeServices() {
         return ResponseEntity.ok(homeServiceService.findAllHomeServices());
     }
 
-    // ☑️ final check
+
     @GetMapping("/find-home-service-by-id/{homeServiceId}")
     public ResponseEntity<HomeServiceResponse> findHomeServiceById(
             @PathVariable Long homeServiceId) {
         return ResponseEntity.ok(homeServiceService.findHomeServiceById(homeServiceId));
     }
 
-    // ☑️ final check
+
     @GetMapping("/find-all-by-parent-service-id/{parentServiceId}")
     public ResponseEntity<List<HomeServiceResponse>> findAllHomeServiceByParentServiceId(
             @PathVariable Long parentServiceId) {
