@@ -284,7 +284,12 @@ public class OfferServiceImpl
             long hoursLate = Duration.between(timeToComplete, actualEndService).toHours();
             int penalty = (int) hoursLate * -1;
             Double score = foundSpecialist.getScore();
-            score += penalty;
+            double newScore = score + penalty;
+            foundSpecialist.setScore(newScore);
+            if (newScore < 0.0) {
+                foundSpecialist.setStatus(AccountStatus.INACTIVE);
+            }
+            specialistService.save(foundSpecialist);
         }
     }
 }
