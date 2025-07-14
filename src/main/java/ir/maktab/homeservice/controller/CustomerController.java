@@ -17,6 +17,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
 
+    // ☑️ final check
     //✅
     @PostMapping("/register")
     public ResponseEntity<CustomerResponse> registerCustomer(
@@ -25,6 +26,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.registerCustomer(request));
     }
 
+    // ☑️ final check
     //✅
     @PostMapping("/login")
     public ResponseEntity<CustomerResponse> loginCustomer(
@@ -33,6 +35,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.loginCustomer(request));
     }
 
+    // ☑️ final check
     //✅
     @PutMapping
     public ResponseEntity<CustomerResponse> updateCustomer(

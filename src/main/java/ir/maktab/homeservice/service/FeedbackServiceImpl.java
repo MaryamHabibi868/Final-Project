@@ -7,7 +7,6 @@ import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
 import ir.maktab.homeservice.dto.FeedbackSaveRequest;
 import ir.maktab.homeservice.dto.FeedbackResponse;
 import ir.maktab.homeservice.exception.NotApprovedException;
-import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.FeedbackMapper;
 import ir.maktab.homeservice.repository.FeedbackRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
@@ -32,13 +31,14 @@ public class FeedbackServiceImpl
         this.specialistService = specialistService;
     }
 
+    // ☑️ final check
     //✅
     @Override
     public FeedbackResponse submitFeedback(FeedbackSaveRequest request) {
         Offer foundOffer = offerService.
                 findById(request.getOfferId());
 
-        if (foundOffer.getStatus() == OfferStatus.Done ||
+        if (foundOffer.getStatus() == OfferStatus.DONE ||
         foundOffer.getStatus() == OfferStatus.PAID) {
 
 
@@ -50,12 +50,12 @@ public class FeedbackServiceImpl
             feedback.setOffer(foundOffer);
             Feedback save = repository.save(feedback);
 
-            Specialist foundOfferSpecialist = foundOffer.getSpecialist();
+            Specialist foundSpecialist = foundOffer.getSpecialist();
             Double averageRangeBySpecialistId = repository.
-                    findAverageRangeBySpecialistId(foundOfferSpecialist.getId());
+                    findAverageRangeBySpecialistId(foundSpecialist.getId());
 
-            foundOfferSpecialist.setScore(averageRangeBySpecialistId);
-            specialistService.save(foundOfferSpecialist);
+            foundSpecialist.setScore(averageRangeBySpecialistId);
+            specialistService.save(foundSpecialist);
 
             return feedbackMapper.entityMapToResponse(save);
         }

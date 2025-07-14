@@ -8,12 +8,15 @@ import java.util.List;
 
 public interface CustomerService extends BaseService<Customer, Long> {
 
+    // ☑️ final check
     //✅
     CustomerResponse registerCustomer(CustomerSaveRequest request);
 
+    // ☑️ final check
     //✅
     CustomerResponse updateCustomer(CustomerUpdateRequest request);
 
+    // ☑️ final check
     //✅
     CustomerResponse loginCustomer(CustomerLoginRequest request);
 

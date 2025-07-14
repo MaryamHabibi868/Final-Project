@@ -29,6 +29,7 @@ public class CustomerServiceImpl
 
     }
 
+    // ☑️ final check
     //✅
     @Transactional
     @Override
@@ -52,6 +53,7 @@ public class CustomerServiceImpl
         return customerMapper.entityMapToResponse(save);
     }
 
+    // ☑️ final check
     //✅
     @Transactional
     @Override
@@ -79,6 +81,7 @@ public class CustomerServiceImpl
         return customerMapper.entityMapToResponse(save);
     }
 
+    // ☑️ final check
     //✅
     @Override
     public CustomerResponse loginCustomer(CustomerLoginRequest request) {

@@ -15,6 +15,7 @@ public class FeedbackController {
 
     private final FeedbackService feedbackService;
 
+    // ☑️ final check
     //✅
     @PostMapping
     public ResponseEntity<FeedbackResponse> submitFeedback(
