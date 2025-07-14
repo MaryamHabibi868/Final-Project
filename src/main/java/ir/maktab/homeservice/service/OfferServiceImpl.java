@@ -7,10 +7,12 @@ import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import ir.maktab.homeservice.domains.enumClasses.TransactionType;
 import ir.maktab.homeservice.dto.OfferSaveRequest;
 import ir.maktab.homeservice.dto.OfferResponse;
+import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.exception.NotValidPriceException;
 import ir.maktab.homeservice.mapper.OfferMapper;
+import ir.maktab.homeservice.mapper.OrderMapper;
 import ir.maktab.homeservice.repository.OfferRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
@@ -32,19 +34,22 @@ public class OfferServiceImpl
     private final SpecialistService specialistService;
     private final TransactionService transactionService;
     private final WalletService walletService;
+    private final OrderMapper orderMapper;
 
     public OfferServiceImpl(OfferRepository repository,
                             OfferMapper offerMapper,
                             OrderService orderService,
                             SpecialistService specialistService,
                             TransactionService transactionService,
-                            WalletService walletService) {
+                            WalletService walletService,
+                            OrderMapper orderMapper) {
         super(repository);
         this.offerMapper = offerMapper;
         this.orderService = orderService;
         this.specialistService = specialistService;
         this.transactionService = transactionService;
         this.walletService = walletService;
+        this.orderMapper = orderMapper;
     }
 
     // ☑️ final check
@@ -99,6 +104,7 @@ public class OfferServiceImpl
 *//*
     }*/
 
+    // ☑️ final check
     //✅ ok
     @Override
     public OfferResponse chooseOfferOfSpecialist(
@@ -127,6 +133,7 @@ public class OfferServiceImpl
         return offerMapper.entityMapToResponse(save);
     }
 
+    // ☑️ final check
     //✅ ok
     @Override
     public OfferResponse startService(Long offerId) {
@@ -154,6 +161,7 @@ public class OfferServiceImpl
         return offerMapper.entityMapToResponse(save);
     }
 
+    // ☑️ final check
     //✅
     @Override
     public OfferResponse endService(Long offerId) {
@@ -184,6 +192,15 @@ public class OfferServiceImpl
                 .map(offerMapper::entityMapToResponse)
                 .toList();
     }
+
+    // ☑️ final check
+    @Override
+    public List<OrderResponse> findOrdersBySpecialistId(Long specialistId) {
+      return repository.findOrdersBySpecialistId(specialistId)
+                .stream().map(orderMapper :: entityMapToResponse)
+                .toList();
+    }
+
 
     // ☑️ final check
     @Override
@@ -224,6 +241,7 @@ public class OfferServiceImpl
                 .toList();
     }*/
 
+    // ☑️ final check
     //✅
     @Transactional
     @Override

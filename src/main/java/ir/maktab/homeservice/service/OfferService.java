@@ -4,6 +4,7 @@ import ir.maktab.homeservice.domains.Offer;
 import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
 import ir.maktab.homeservice.dto.OfferSaveRequest;
 import ir.maktab.homeservice.dto.OfferResponse;
+import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.service.base.BaseService;
 
 import java.util.List;
@@ -19,19 +20,24 @@ public interface OfferService
    /* List<OfferOfSpecialistRequest>
     findAllOffersOfSpecialistsByCustomerId(CustomerUpdateRequest request);*/
 
+    // ☑️ final check
     //✅ ok
     OfferResponse chooseOfferOfSpecialist(
             Long offerId);
 
+    // ☑️ final check
     //✅ ok
     OfferResponse startService(Long offerId);
 
+    // ☑️ final check
     //✅
     OfferResponse endService(Long offerId);
 
     //✅
     List<OfferResponse> findByOfferOfSpecialistId(
             Long specialistId);
+
+    // ☑️ final check
     //✅
     void paySpecialist(Long offerId);
 
@@ -44,4 +50,6 @@ public interface OfferService
     List<OfferResponse>
     findAllOfferOrderByCustomerId(Long customerId);*/
 
+    // ☑️ final check
+    List<OrderResponse> findOrdersBySpecialistId(Long specialistId);
 }

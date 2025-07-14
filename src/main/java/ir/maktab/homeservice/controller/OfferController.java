@@ -2,7 +2,9 @@ package ir.maktab.homeservice.controller;
 
 import ir.maktab.homeservice.dto.OfferSaveRequest;
 import ir.maktab.homeservice.dto.OfferResponse;
+import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.service.OfferService;
+import ir.maktab.homeservice.service.SpecialistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 public class OfferController {
 
     private final OfferService offerService;
+    private final SpecialistService specialistService;
 
     // ☑️ final check
     //✅ ok
@@ -27,6 +30,7 @@ public class OfferController {
                 return ResponseEntity.ok(offerService.submitOfferToOrder(request));
     }
 
+    // ☑️ final check
     //✅ ok
     @PostMapping("/choose-offer/{offerId}")
     public ResponseEntity<OfferResponse> chooseOffer(
@@ -34,6 +38,7 @@ public class OfferController {
                return ResponseEntity.ok(offerService.chooseOfferOfSpecialist(offerId));
     }
 
+    // ☑️ final check
     //✅ ok
     @PostMapping("/start-service/{offerId}")
     public ResponseEntity<OfferResponse> startService(
@@ -42,6 +47,7 @@ public class OfferController {
                 offerService.startService(offerId));
     }
 
+    // ☑️ final check
     //✅ ok
     @PostMapping("/end-service/{offerId}")
     public ResponseEntity<OfferResponse> endService(
@@ -74,11 +80,20 @@ public class OfferController {
                 offerService.findAllOffersBySpecialistScore(orderId));
     }
 
+    // ☑️ final check
     @PostMapping("/pay-specialist/{offerId}")
     public ResponseEntity<String> paySpecialist(
             @PathVariable Long offerId) {
         offerService.paySpecialist(offerId);
         return ResponseEntity.ok("Transaction Successful");
+    }
+
+    // ☑️ final check
+    @GetMapping("/find-all-orders-by-specialist-id/{specialistId}")
+    public ResponseEntity<List<OrderResponse>> findAllOrdersBySpecialistId(
+            @PathVariable Long specialistId) {
+        return ResponseEntity.ok(
+                offerService.findOrdersBySpecialistId(specialistId));
     }
 
     /*//✅ ok
