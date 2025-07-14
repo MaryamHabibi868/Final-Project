@@ -23,12 +23,18 @@ public class TransactionServiceImpl extends
         this.transactionMapper = transactionMapper;
     }
 
-    //✅
+    // ☑️ final check
+    @Override
+    public List<Transaction> findAllByWalletId(Long walletId) {
+        return repository.findAllByWalletId(walletId);
+    }
+
+    /*//✅
     @Override
     public List<TransactionResponse> findAllForSpecialist(
             Long walletId) {
         return repository.findAllByWalletId(walletId)
                 .stream().map(transactionMapper :: entityMapToResponse)
                 .toList();
-    }
+    }*/
 }

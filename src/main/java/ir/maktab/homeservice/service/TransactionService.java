@@ -9,8 +9,10 @@ import java.util.List;
 public interface TransactionService
 extends BaseService<Transaction, Long> {
 
-    //✅
+   /* //✅
     List<TransactionResponse> findAllForSpecialist(
-            Long walletId);
+            Long walletId);*/
 
+    // ☑️ final check
+    List<Transaction> findAllByWalletId(Long walletId);
 }

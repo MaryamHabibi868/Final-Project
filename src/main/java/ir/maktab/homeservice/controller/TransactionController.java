@@ -18,11 +18,11 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
-    //✅
+    /*//✅
     @GetMapping("/{walletId}")
     public ResponseEntity<List<TransactionResponse>> findAllForWalletId(
             @PathVariable Long walletId) {
         return ResponseEntity.ok(
                transactionService.findAllForSpecialist(walletId));
-    }
+    }*/
 }

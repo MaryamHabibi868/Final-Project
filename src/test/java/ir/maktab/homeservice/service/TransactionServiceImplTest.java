@@ -21,10 +21,10 @@ class TransactionServiceImplTest {
     }
 
 
-    @Test
+/*    @Test
     void findAllForSpecialist() {
     Mockito.when(service.findAllForSpecialist(Mockito.anyLong()))
             .thenReturn(List.of(response));
     assertEquals(List.of(response), service.findAllForSpecialist(Mockito.anyLong()));
-    }
+    }*/
 }
