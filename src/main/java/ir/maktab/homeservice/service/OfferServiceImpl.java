@@ -14,6 +14,7 @@ import ir.maktab.homeservice.mapper.OfferMapper;
 import ir.maktab.homeservice.repository.OfferRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -46,7 +47,7 @@ public class OfferServiceImpl
         this.walletService = walletService;
     }
 
-
+    // ☑️ final check
     //✅ ok
     @Transactional
     @Override
@@ -166,7 +167,7 @@ public class OfferServiceImpl
             throw new NotApprovedException("This offer is not begin");
         }
         foundOffer.getOrderInformation().setStatus(OrderStatus.DONE);
-        foundOffer.setStatus(OfferStatus.Done);
+        foundOffer.setStatus(OfferStatus.DONE);
         Offer save = repository.save(foundOffer);
         orderService.save(foundOffer.getOrderInformation());
         return offerMapper.entityMapToResponse(save);
@@ -183,6 +184,35 @@ public class OfferServiceImpl
                 .map(offerMapper::entityMapToResponse)
                 .toList();
     }
+
+    // ☑️ final check
+    @Override
+    public List<OfferResponse> findAllOffersBySuggestedPrice(Long orderId) {
+        orderService.findById(orderId);
+
+        Sort sort = Sort.by(Sort.Direction.ASC, "suggestedPrice");
+
+        List<Offer> offers = repository.findAllByOrderInformation_Id(orderId, sort);
+
+        return offers.stream()
+                .map(offerMapper::entityMapToResponse)
+                .toList();
+    }
+
+    // ☑️ final check
+    @Override
+    public List<OfferResponse> findAllOffersBySpecialistScore(Long orderId) {
+        orderService.findById(orderId);
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "specialist.score");
+
+        List<Offer> offers = repository.findAllByOrderInformation_Id(orderId, sort);
+
+        return offers.stream()
+                .map(offerMapper::entityMapToResponse)
+                .toList();
+    }
+
 
     /*//✅
     @Override
@@ -208,7 +238,7 @@ public class OfferServiceImpl
             throw new NotApprovedException("This offer is paid");
         }
 
-        if (!(foundOffer.getStatus() == OfferStatus.Done)) {
+        if (!(foundOffer.getStatus() == OfferStatus.DONE)) {
             throw new NotApprovedException("This offer in Not done");
         }
 

@@ -11,6 +11,7 @@ import java.util.List;
 public interface OfferService
         extends BaseService<Offer, Long> {
 
+    // ☑️ final check
     //✅ ok
     OfferResponse submitOfferToOrder(
             OfferSaveRequest request);
@@ -34,7 +35,11 @@ public interface OfferService
     //✅
     void paySpecialist(Long offerId);
 
+    // ☑️ final check
+    List<OfferResponse> findAllOffersBySuggestedPrice(Long orderId);
 
+    // ☑️ final check
+    List<OfferResponse> findAllOffersBySpecialistScore(Long orderId);
     /*//✅
     List<OfferResponse>
     findAllOfferOrderByCustomerId(Long customerId);*/

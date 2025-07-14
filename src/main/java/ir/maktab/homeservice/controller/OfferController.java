@@ -17,6 +17,7 @@ public class OfferController {
 
     private final OfferService offerService;
 
+    // ☑️ final check
     //✅ ok
     @PostMapping
     public ResponseEntity<OfferResponse> submitOfferToOrder(
@@ -55,6 +56,22 @@ public class OfferController {
             @PathVariable Long specialistId) {
         return ResponseEntity.ok(
                 offerService.findByOfferOfSpecialistId(specialistId));
+    }
+
+    // ☑️ final check
+    @GetMapping("/sort-by-suggested-price/{orderId}")
+    public ResponseEntity<List<OfferResponse>> findAllOffersBySuggestedPrice(
+            @PathVariable Long orderId) {
+        return ResponseEntity.ok(
+                offerService.findAllOffersBySuggestedPrice(orderId));
+    }
+
+    // ☑️ final check
+    @GetMapping("/sort-by-specialist-score/{orderId}")
+    public ResponseEntity<List<OfferResponse>> findAllOffersBySpecialistScore(
+            @PathVariable Long orderId) {
+        return ResponseEntity.ok(
+                offerService.findAllOffersBySpecialistScore(orderId));
     }
 
     @PostMapping("/pay-specialist/{offerId}")
