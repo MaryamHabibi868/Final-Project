@@ -11,7 +11,6 @@ import ir.maktab.homeservice.repository.HomeServiceRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +27,7 @@ public class HomeServiceServiceImpl
         this.homeServiceMapper = homeServiceMapper;
     }
 
-    // ☑️ final check
-    //✅
+
     @Transactional
     @Override
     public HomeServiceResponse createHomeService(
@@ -58,8 +56,7 @@ public class HomeServiceServiceImpl
         return homeServiceMapper.entityMapToResponse(save);
     }
 
-    // ☑️ final check
-    //✅
+
     @Transactional
     @Override
     public HomeServiceResponse updateHomeService(
@@ -86,16 +83,14 @@ public class HomeServiceServiceImpl
         return homeServiceMapper.entityMapToResponse(save);
     }
 
-    // ☑️ final check
-    //✅
+
     @Transactional
     @Override
     public void deleteHomeService(Long id) {
         deleteById(id);
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public List<HomeServiceResponse> findAllHomeServices() {
         return repository.findAll().stream()
@@ -103,8 +98,7 @@ public class HomeServiceServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public HomeServiceResponse findHomeServiceById(Long id) {
         HomeService foundHomeService = repository.findById(id).orElseThrow(
@@ -113,8 +107,7 @@ public class HomeServiceServiceImpl
         return homeServiceMapper.entityMapToResponse(foundHomeService);
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public List<HomeServiceResponse> findAllHomeServiceByParentServiceId(Long id) {
        return repository.findAllByParentService_Id(id).stream()

@@ -21,7 +21,6 @@ public class CustomerServiceImpl
     private final CustomerMapper customerMapper;
 
 
-
     public CustomerServiceImpl(CustomerRepository repository,
                                CustomerMapper customerMapper) {
         super(repository);
@@ -29,8 +28,7 @@ public class CustomerServiceImpl
 
     }
 
-    // ☑️ final check
-    //✅
+
     @Transactional
     @Override
     public CustomerResponse registerCustomer(CustomerSaveRequest request) {
@@ -53,8 +51,7 @@ public class CustomerServiceImpl
         return customerMapper.entityMapToResponse(save);
     }
 
-    // ☑️ final check
-    //✅
+
     @Transactional
     @Override
     public CustomerResponse updateCustomer(CustomerUpdateRequest request) {
@@ -81,8 +78,7 @@ public class CustomerServiceImpl
         return customerMapper.entityMapToResponse(save);
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public CustomerResponse loginCustomer(CustomerLoginRequest request) {
         return customerMapper.entityMapToResponse(repository.
@@ -90,8 +86,7 @@ public class CustomerServiceImpl
                 .orElseThrow(() -> new NotFoundException("Customer Not Found")));
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public List<CustomerResponse> findAllCustomers() {
         return repository.findUsersByIdNotNull(Customer.class).stream()
@@ -99,8 +94,7 @@ public class CustomerServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public List<CustomerResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
     (String firstName) {
@@ -111,8 +105,7 @@ public class CustomerServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public List<CustomerResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
     (String lastName) {

@@ -31,8 +31,7 @@ public class FeedbackServiceImpl
         this.specialistService = specialistService;
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public FeedbackResponse submitFeedback(FeedbackSaveRequest request) {
         Offer foundOffer = offerService.
@@ -62,8 +61,7 @@ public class FeedbackServiceImpl
         }
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public Integer feedbackRangeForSpecialistToOffer(
             Long offerId) {

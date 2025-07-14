@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class BaseUserServiceImpl
         <T extends User, ID extends Serializable,
                 R extends BaseUserRepository<T>>
-        implements BaseUserService<T, ID>{
-
+        implements BaseUserService<T, ID> {
 
 }

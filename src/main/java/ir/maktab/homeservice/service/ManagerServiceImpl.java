@@ -1,6 +1,5 @@
 package ir.maktab.homeservice.service;
 
-import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.Manager;
 import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.dto.*;
@@ -11,7 +10,6 @@ import ir.maktab.homeservice.repository.ManagerRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 
 @Service
@@ -28,7 +26,7 @@ public class ManagerServiceImpl
         this.managerMapper = managerMapper;
     }
 
-    //✅
+
     @Transactional
     @Override
     public ManagerResponse registerManager(ManagerSaveRequest request) {
@@ -51,7 +49,7 @@ public class ManagerServiceImpl
         return managerMapper.entityMapToResponse(save);
     }
 
-    //✅
+
     @Transactional
     @Override
     public ManagerResponse updateManager(ManagerUpdateRequest request) {
@@ -78,7 +76,7 @@ public class ManagerServiceImpl
         return managerMapper.entityMapToResponse(save);
     }
 
-    //✅
+
     @Override
     public ManagerResponse loginManager(ManagerLoginRequest request) {
         return managerMapper.entityMapToResponse(repository.

@@ -11,7 +11,9 @@ public interface ManagerService extends BaseService<Manager, Long> {
 
     ManagerResponse registerManager(ManagerSaveRequest request);
 
+
     ManagerResponse updateManager(ManagerUpdateRequest request);
+
 
     ManagerResponse loginManager(ManagerLoginRequest request);
 }

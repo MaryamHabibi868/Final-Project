@@ -8,12 +8,10 @@ import ir.maktab.homeservice.service.base.BaseService;
 public interface FeedbackService
         extends BaseService<Feedback, Long> {
 
-    // ☑️ final check
-    //✅
+
     FeedbackResponse submitFeedback(FeedbackSaveRequest request);
 
-    // ☑️ final check
-    //✅
+
     Integer feedbackRangeForSpecialistToOffer(
             Long offerId);
 }

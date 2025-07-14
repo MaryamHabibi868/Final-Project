@@ -8,17 +8,13 @@ import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.HomeServiceMapper;
-import ir.maktab.homeservice.mapper.ManagerMapper;
 import ir.maktab.homeservice.mapper.SpecialistMapper;
 import ir.maktab.homeservice.mapper.TransactionMapper;
 import ir.maktab.homeservice.repository.SpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -46,8 +42,7 @@ public class SpecialistServiceImpl
         this.transactionMapper = transactionMapper;
     }
 
-    //✅
-    // IsActiveTrue?
+
     @Transactional
     @Override
     public SpecialistResponse registerSpecialist(SpecialistSaveRequest request) {
@@ -81,8 +76,7 @@ public class SpecialistServiceImpl
         return specialistMapper.entityMapToResponse(save);
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public SpecialistResponse loginSpecialist(
             SpecialistLoginRequest request) {
@@ -91,7 +85,7 @@ public class SpecialistServiceImpl
                 .orElseThrow(() -> new NotFoundException("Specialist Not Found")));
     }
 
-    //✅
+
     @Transactional
     @Override
     public SpecialistResponse updateSpecialistInfo(SpecialistUpdateInfo request) {
@@ -127,8 +121,7 @@ public class SpecialistServiceImpl
         return specialistMapper.entityMapToResponse(specialistFound);
     }
 
-    // ☑️ final check
-    //✅
+
     @Transactional
     @Override
     public SpecialistResponse approveSpecialistRegistration(Long id) {
@@ -142,8 +135,7 @@ public class SpecialistServiceImpl
         return specialistMapper.entityMapToResponse(foundSpecialist);
     }
 
-    // ☑️ final check
-    //✅
+
     @Transactional
     @Override
     public void addSpecialistToHomeService(
@@ -164,8 +156,7 @@ public class SpecialistServiceImpl
         homeServiceService.save(foundHomeService);
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     @Transactional
     public void removeSpecialistFromHomeService(
@@ -184,8 +175,6 @@ public class SpecialistServiceImpl
     }
 
 
-    // ☑️ final check
-    //✅
     @Override
     public List<SpecialistResponse> findAllSpecialists() {
         return repository.findUsersByIdNotNull(Specialist.class).stream()
@@ -193,8 +182,7 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public List<SpecialistResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
     (String firstName) {
@@ -205,8 +193,7 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
     (String lastName) {
@@ -217,7 +204,7 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
+
     @Override
     public List<HomeServiceResponse> findAllHomeServicesBySpecialistId(Long specialistId) {
         return repository.findHomeServicesBySpecialistId(specialistId)
@@ -226,7 +213,7 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
-    //✅
+
     @Override
     public List<SpecialistResponse> findAllByHomeServiceTitle(
             String homeServiceTitle) {
@@ -235,7 +222,7 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
+
     @Override
     public List<SpecialistResponse> findAllByScoreIsBetween(Double lower, Double higher) {
         return repository.findAllByScoreIsBetween(lower , higher)
@@ -243,7 +230,7 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
+
     @Override
     public Double findScoreBySpecialistId(Long specialistId) {
        Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
@@ -252,7 +239,7 @@ public class SpecialistServiceImpl
        return foundSpecialist.getScore();
     }
 
-    // ☑️ final check
+
     @Override
     public List<TransactionResponse> findAllTransactionsBySpecialistId(
             Long specialistId) {
@@ -266,7 +253,7 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
+
     @Override
     public void inActivateSpecialist() {
         repository.findAllByScoreIsLessThan(0.0).forEach(specialist -> {

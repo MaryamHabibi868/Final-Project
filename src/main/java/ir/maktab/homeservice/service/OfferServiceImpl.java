@@ -18,7 +18,6 @@ import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -52,8 +51,7 @@ public class OfferServiceImpl
         this.orderMapper = orderMapper;
     }
 
-    // ☑️ final check
-    //✅ ok
+
     @Transactional
     @Override
     public OfferResponse submitOfferToOrder(
@@ -93,19 +91,7 @@ public class OfferServiceImpl
         return offerMapper.entityMapToResponse(save);
     }
 
-   /* @Override
-    public List<OfferOfSpecialistRequest>
-    findAllOffersOfSpecialistsByCustomerId(
-            CustomerUpdateRequest request) {
-        Customer customer = customerService.findByIdIsActiveTrue(request.getId());
-        return null;
-*//*
-                repository.findAllByCustomerIdOrderBySuggestedPriceAsc(customer.getId());
-*//*
-    }*/
 
-    // ☑️ final check
-    //✅ ok
     @Override
     public OfferResponse chooseOfferOfSpecialist(
             Long offerId) {
@@ -133,8 +119,7 @@ public class OfferServiceImpl
         return offerMapper.entityMapToResponse(save);
     }
 
-    // ☑️ final check
-    //✅ ok
+
     @Override
     public OfferResponse startService(Long offerId) {
         Offer foundOffer = repository.findById(offerId)
@@ -161,8 +146,7 @@ public class OfferServiceImpl
         return offerMapper.entityMapToResponse(save);
     }
 
-    // ☑️ final check
-    //✅
+
     @Override
     public OfferResponse endService(Long offerId) {
         Offer foundOffer = repository.findById(offerId)
@@ -181,7 +165,7 @@ public class OfferServiceImpl
         return offerMapper.entityMapToResponse(save);
     }
 
-    //✅
+
     @Override
     public List<OfferResponse> findByOfferOfSpecialistId(
             Long specialistId) {
@@ -193,7 +177,7 @@ public class OfferServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
+
     @Override
     public List<OrderResponse> findOrdersBySpecialistId(Long specialistId) {
       return repository.findOrdersBySpecialistId(specialistId)
@@ -202,7 +186,6 @@ public class OfferServiceImpl
     }
 
 
-    // ☑️ final check
     @Override
     public List<OfferResponse> findAllOffersBySuggestedPrice(Long orderId) {
         orderService.findById(orderId);
@@ -216,7 +199,7 @@ public class OfferServiceImpl
                 .toList();
     }
 
-    // ☑️ final check
+
     @Override
     public List<OfferResponse> findAllOffersBySpecialistScore(Long orderId) {
         orderService.findById(orderId);
@@ -231,18 +214,7 @@ public class OfferServiceImpl
     }
 
 
-    /*//✅
-    @Override
-    public List<OfferResponse>
-    findAllOfferOrderByCustomerId(Long customerId) {
-        return repository.findAllByOrder_Id(customerId)
-                .stream()
-                .map(offerMapper::entityMapToResponse)
-                .toList();
-    }*/
 
-    // ☑️ final check
-    //✅
     @Transactional
     @Override
     public void paySpecialist(Long offerId) {
@@ -314,7 +286,5 @@ public class OfferServiceImpl
             Double score = foundSpecialist.getScore();
             score += penalty;
         }
-
     }
-
 }

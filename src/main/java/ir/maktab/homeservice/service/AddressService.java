@@ -8,6 +8,6 @@ import ir.maktab.homeservice.service.base.BaseService;
 public interface AddressService
         extends BaseService<Address, Long> {
 
-    //✅
+
     AddressResponse submitAddress(AddressSaveRequest request);
 }

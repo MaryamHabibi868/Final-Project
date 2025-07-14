@@ -6,7 +6,6 @@ import ir.maktab.homeservice.repository.WalletRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 
 @Service
@@ -19,8 +18,6 @@ public class WalletServiceImpl
     }
 
 
-    // ☑️ final check
-    //✅
     @Transactional
     @Override
     public BigDecimal walletBalance(Long walletId) {
