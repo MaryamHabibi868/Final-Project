@@ -7,7 +7,10 @@ import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
+import ir.maktab.homeservice.mapper.HomeServiceMapper;
+import ir.maktab.homeservice.mapper.ManagerMapper;
 import ir.maktab.homeservice.mapper.SpecialistMapper;
+import ir.maktab.homeservice.mapper.TransactionMapper;
 import ir.maktab.homeservice.repository.SpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
@@ -25,13 +28,22 @@ public class SpecialistServiceImpl
 
     private final SpecialistMapper specialistMapper;
     private final HomeServiceService homeServiceService;
+    private final HomeServiceMapper homeServiceMapper;
+    private final TransactionService transactionService;
+    private final TransactionMapper transactionMapper;
 
     public SpecialistServiceImpl(SpecialistRepository repository,
                                  SpecialistMapper specialistMapper,
-                                 HomeServiceService homeServiceService) {
+                                 HomeServiceService homeServiceService,
+                                 HomeServiceMapper homeServiceMapper,
+                                 TransactionService transactionService,
+                                 TransactionMapper transactionMapper) {
         super(repository);
         this.specialistMapper = specialistMapper;
         this.homeServiceService = homeServiceService;
+        this.homeServiceMapper = homeServiceMapper;
+        this.transactionService = transactionService;
+        this.transactionMapper = transactionMapper;
     }
 
     //✅
@@ -172,6 +184,7 @@ public class SpecialistServiceImpl
     }
 
 
+    // ☑️ final check
     //✅
     @Override
     public List<SpecialistResponse> findAllSpecialists() {
@@ -180,6 +193,7 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
+    // ☑️ final check
     //✅
     @Override
     public List<SpecialistResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
@@ -191,6 +205,7 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
+    // ☑️ final check
     //✅
     @Override
     public List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
@@ -202,12 +217,52 @@ public class SpecialistServiceImpl
                 .toList();
     }
 
+    // ☑️ final check
+    @Override
+    public List<HomeServiceResponse> findAllHomeServicesBySpecialistId(Long specialistId) {
+        return repository.findHomeServicesBySpecialistId(specialistId)
+                .stream()
+                .map(homeServiceMapper :: entityMapToResponse)
+                .toList();
+    }
+
     //✅
     @Override
     public List<SpecialistResponse> findAllByHomeServiceTitle(
             String homeServiceTitle) {
         return repository.findAllByHomeServices_title(homeServiceTitle).stream()
                 .map(specialistMapper::entityMapToResponse)
+                .toList();
+    }
+
+    // ☑️ final check
+    @Override
+    public List<SpecialistResponse> findAllByScoreIsBetween(Double lower, Double higher) {
+        return repository.findAllByScoreIsBetween(lower , higher)
+                .stream().map(specialistMapper :: entityMapToResponse)
+                .toList();
+    }
+
+    // ☑️ final check
+    @Override
+    public Double findScoreBySpecialistId(Long specialistId) {
+       Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
+                () -> new NotFoundException("Specialist Not Found"));
+
+       return foundSpecialist.getScore();
+    }
+
+    // ☑️ final check
+    @Override
+    public List<TransactionResponse> findAllTransactionsBySpecialistId(
+            Long specialistId) {
+        Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
+                () -> new NotFoundException("Specialist Not Found")
+        );
+
+        Long walletId = foundSpecialist.getWallet().getId();
+        return transactionService.findAllByWalletId(walletId)
+                .stream().map(transactionMapper :: entityMapToResponse)
                 .toList();
     }
 }

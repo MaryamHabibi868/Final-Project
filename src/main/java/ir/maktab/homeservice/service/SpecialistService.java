@@ -36,13 +36,16 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
     void removeSpecialistFromHomeService(
             Long specialistId, Long homeServiceId);
 
+    // ☑️ final check
     //✅
     List<SpecialistResponse> findAllSpecialists();
 
+    // ☑️ final check
     //✅
     List<SpecialistResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
     (String firstName);
 
+    // ☑️ final check
     //✅
     List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
     (String lastName);
@@ -50,5 +53,18 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
     //✅
     List<SpecialistResponse> findAllByHomeServiceTitle(
             String homeServiceTitle);
+
+    // ☑️ final check
+    List<HomeServiceResponse> findAllHomeServicesBySpecialistId(Long specialistId);
+
+    // ☑️ final check
+    List<SpecialistResponse> findAllByScoreIsBetween(Double lower, Double higher);
+
+    // ☑️ final check
+    Double findScoreBySpecialistId(Long specialistId);
+
+    // ☑️ final check
+    List<TransactionResponse> findAllTransactionsBySpecialistId(
+            Long specialistId);
 }
 
