@@ -5,9 +5,7 @@ import ir.maktab.homeservice.dto.OfferSaveRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -56,6 +54,21 @@ class OfferServiceImplTest {
         Mockito.when(service.findByOfferOfSpecialistId(Mockito.anyLong()))
                         .thenReturn(List.of(response));
         assertEquals(List.of(response), service.findByOfferOfSpecialistId(Mockito.anyLong()));
+    }
+
+    @Test
+    void findAllOffersBySuggestedPrice() {
+        Mockito.when(service.findAllOffersBySuggestedPrice(Mockito.anyLong()))
+                .thenReturn(List.of(response));
+        assertEquals(List.of(response), service.findAllOffersBySuggestedPrice(Mockito.anyLong()));
+    }
+
+
+    @Test
+    void findAllOffersBySpecialistScore(){
+        Mockito.when(service.findAllOffersBySpecialistScore(Mockito.anyLong()))
+                .thenReturn(List.of(response));
+        assertEquals(List.of(response), service.findAllOffersBySpecialistScore(Mockito.anyLong()));
     }
 
     // void method

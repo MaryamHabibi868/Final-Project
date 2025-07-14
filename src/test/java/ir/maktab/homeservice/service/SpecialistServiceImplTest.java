@@ -1,17 +1,12 @@
 package ir.maktab.homeservice.service;
 
-import ir.maktab.homeservice.domains.Specialist;
-import ir.maktab.homeservice.dto.SpecialistLoginRequest;
-import ir.maktab.homeservice.dto.SpecialistResponse;
-import ir.maktab.homeservice.dto.SpecialistSaveRequest;
-import ir.maktab.homeservice.dto.SpecialistUpdateInfo;
+import ir.maktab.homeservice.dto.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class SpecialistServiceImplTest {
 
@@ -20,6 +15,8 @@ class SpecialistServiceImplTest {
     private SpecialistSaveRequest saveRequest;
     private SpecialistUpdateInfo updateRequest;
     private SpecialistLoginRequest loginRequest;
+    private HomeServiceResponse homeServiceResponse;
+    private TransactionResponse transactionResponse;
 
     @BeforeEach
     void setUp() {
@@ -28,6 +25,8 @@ class SpecialistServiceImplTest {
         saveRequest = Mockito.mock(SpecialistSaveRequest.class);
         updateRequest = Mockito.mock(SpecialistUpdateInfo.class);
         loginRequest = Mockito.mock(SpecialistLoginRequest.class);
+        homeServiceResponse = Mockito.mock(HomeServiceResponse.class);
+        transactionResponse = Mockito.mock(TransactionResponse.class);
     }
 
     @Test
@@ -99,11 +98,55 @@ class SpecialistServiceImplTest {
                         (Mockito.anyString()));
     }
 
+
+    @Test
+    void findAllHomeServicesBySpecialistId() {
+        Mockito.when(service.findAllHomeServicesBySpecialistId(Mockito.anyLong()))
+                .thenReturn(List.of(homeServiceResponse));
+        assertEquals(List.of(homeServiceResponse),
+                service.findAllHomeServicesBySpecialistId(Mockito.anyLong()));
+    }
+
+
     @Test
     void findAllByHomeServiceTitle() {
         Mockito.when(service.findAllByHomeServiceTitle(Mockito.anyString()))
                 .thenReturn(List.of(response));
-        assertEquals(List.of(response) ,
+        assertEquals(List.of(response),
                 service.findAllByHomeServiceTitle(Mockito.anyString()));
+    }
+
+
+    @Test
+    void findAllByScoreIsBetween() {
+        Mockito.when(service.findAllByScoreIsBetween(Mockito.anyDouble(), Mockito.anyDouble()))
+                .thenReturn(List.of(response));
+        assertEquals(List.of(response),
+                service.findAllByScoreIsBetween(Mockito.anyDouble(), Mockito.anyDouble()));
+    }
+
+
+    @Test
+    void findScoreBySpecialistId() {
+        Mockito.when(service.findScoreBySpecialistId(Mockito.anyLong()))
+                .thenReturn(1.0);
+        assertEquals(1.0, service.findScoreBySpecialistId(Mockito.anyLong()));
+    }
+
+
+    @Test
+    void findAllTransactionsBySpecialistId() {
+        Mockito.when(service.findAllTransactionsBySpecialistId(Mockito.anyLong()))
+                .thenReturn(List.of(transactionResponse));
+        assertEquals(List.of(transactionResponse),
+                service.findAllTransactionsBySpecialistId(Mockito.anyLong()));
+    }
+
+
+    @Test
+    void inActivateSpecialist() {
+        Mockito.doNothing().when(service).inActivateSpecialist();
+        Mockito.verify(service, Mockito.times(0))
+                .inActivateSpecialist();
     }
 }

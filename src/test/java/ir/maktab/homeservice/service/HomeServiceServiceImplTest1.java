@@ -6,12 +6,10 @@ import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-// ☑️ final check
+
 class HomeServiceServiceImplTest1 {
 
     private HomeServiceService service;
@@ -52,5 +50,18 @@ class HomeServiceServiceImplTest1 {
     void findAllHomeServices() {
         Mockito.when(service.findAllHomeServices()).thenReturn(List.of(response));
         assertEquals(List.of(response), service.findAllHomeServices());
+    }
+
+    @Test
+    void findHomeServiceById(){
+        Mockito.when(service.findHomeServiceById(Mockito.anyLong())).thenReturn(response);
+        assertEquals(response, service.findHomeServiceById(Mockito.anyLong()));
+    }
+
+    @Test
+    void findAllHomeServiceByParentServiceId(){
+        Mockito.when(service.findAllHomeServiceByParentServiceId(Mockito.anyLong()))
+                .thenReturn(List.of(response));
+        assertEquals(List.of(response), service.findAllHomeServiceByParentServiceId(Mockito.anyLong()));
     }
 }
