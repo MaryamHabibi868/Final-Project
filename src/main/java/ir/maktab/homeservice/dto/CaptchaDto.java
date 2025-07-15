@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class CaptchaDto {
 
-        private String text;          // متن کپچا که برای اعتبارسنجی ذخیره می‌شود
-        private String imageBase64;   // مثلا یک UUID
+        private String text;
+        private String imageBase64;
 
 }

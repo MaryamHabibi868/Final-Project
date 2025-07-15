@@ -4,8 +4,9 @@ import ir.maktab.homeservice.dto.CaptchaDto;
 
 public interface CaptchaService {
 
-    CaptchaDto generate();            // ایجاد کپچا جدید
+
+    CaptchaDto generate();
 
 
-    boolean verify(String token, String userAnswer);   // اعتبارسنجی پاسخ کاربر
+    boolean verify(String token, String userAnswer);
 }

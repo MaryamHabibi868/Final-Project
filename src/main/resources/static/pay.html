@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>درگاه پرداخت</title>
 
-    <!-- برای زیبایی ساده از CDNs Bootstrap استفاده می‌کنیم -->
+
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css"
@@ -38,18 +38,15 @@
 <div class="card p-4">
     <h4 class="mb-3 text-center">درگاه پرداخت</h4>
 
-    <!-- شمارش معکوس -->
     <div class="mb-3 text-center">
         زمان باقی‌مانده: <span id="timer">10:00</span>
     </div>
 
-    <!-- شناسهٔ پیشنهاد برای پرداخت -->
     <div class="mb-3">
         <label for="offerId" class="form-label">شناسهٔ پیشنهاد (Offer ID)</label>
         <input type="number" class="form-control" id="offerId" placeholder="مثلاً 3" required />
     </div>
 
-    <!-- شماره کارت -->
     <div class="mb-3">
         <label for="cardNumber" class="form-label">شماره کارت (۱۶ رقم)</label>
         <input
@@ -63,7 +60,6 @@
     </div>
 
     <div class="row mb-3">
-        <!-- تاریخ انقضا -->
         <div class="col">
             <label for="expiryDate" class="form-label">تاریخ انقضا (MM/YY)</label>
             <input
@@ -74,7 +70,6 @@
                     required
             />
         </div>
-        <!-- CVV2 -->
         <div class="col">
             <label for="cvv2" class="form-label">CVV2</label>
             <input
@@ -88,7 +83,6 @@
         </div>
     </div>
 
-    <!-- رمز دوم -->
     <div class="mb-3">
         <label for="secondPassword" class="form-label">رمز دوم (PIN2)</label>
         <input
@@ -101,7 +95,6 @@
         />
     </div>
 
-    <!-- کپچا -->
     <div class="mb-3 d-flex align-items-center">
         <img id="captcha-img" alt="captcha" title="برای تازه‌سازی کلیک کنید" onclick="refreshCaptcha()" />
         <input
@@ -112,16 +105,12 @@
                 required
         />
     </div>
-    <!-- توکن مخفی کپچا -->
     <input type="hidden" id="captcha-token" />
 
-    <!-- دکمهٔ پرداخت -->
     <button class="btn btn-success w-100" onclick="pay()">پرداخت</button>
 </div>
 
-<!-- ============ اسکریپت ============ -->
 <script>
-    /* ----- تایمر ده دقیقه‌ای ----- */
     let deadline = Date.now() + 10 * 60 * 1000; // 10min
 
     function startTimer() {
@@ -143,7 +132,7 @@
         tick();
     }
 
-    /* ----- گرفتن کپچا از بک‌اند ----- */
+
     async function refreshCaptcha() {
         try {
             const res  = await fetch("/api/captcha");
@@ -157,7 +146,6 @@
         }
     }
 
-    /* ----- ارسال درخواست پرداخت به بک‌اند ----- */
     async function pay() {
         const body = {
             offerId:        document.getElementById("offerId").value,
@@ -179,7 +167,7 @@
             const txt = await res.text();
             if (res.ok) {
                 alert("✅ " + txt);
-                location.reload(); // صفحه و کپچا ریست شود
+                location.reload();
             } else {
                 alert("❌ " + txt);
                 refreshCaptcha();

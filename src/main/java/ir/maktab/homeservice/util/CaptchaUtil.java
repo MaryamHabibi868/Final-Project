@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 
 public class CaptchaUtil {
@@ -20,11 +19,11 @@ public class CaptchaUtil {
         BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
 
-        // پس زمینه سفید
+
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        // رسم نویز یا خطوط اختیاری
+
         g.setColor(Color.LIGHT_GRAY);
         Random random = new Random();
         for (int i = 0; i < 15; i++) {
@@ -35,14 +34,14 @@ public class CaptchaUtil {
             g.drawLine(x1, y1, x2, y2);
         }
 
-        // متن کپچا را رسم کن
+
         g.setFont(new Font("Arial", Font.BOLD, 30));
         g.setColor(Color.BLACK);
         g.drawString(text, 20, 35);
 
         g.dispose();
 
-        // تبدیل تصویر به Base64
+
         String base64Image = renderBase64Image(image);
 
         return new String[]{text, base64Image};

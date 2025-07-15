@@ -15,10 +15,7 @@ public class CaptchaController {
 
     private final CaptchaService captchaService;
 
-    /**
-     * GET /api/captcha
-     * یک کپچا (تصویر Base64 + توکن) برمی‌گرداند.
-     */
+
     @GetMapping("/captcha")
     public ResponseEntity<CaptchaDto> newCaptcha() {
         return ResponseEntity.ok(captchaService.generate());
