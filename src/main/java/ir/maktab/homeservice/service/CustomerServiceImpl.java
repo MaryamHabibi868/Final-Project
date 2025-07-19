@@ -86,26 +86,4 @@ public class CustomerServiceImpl
                 .orElseThrow(() -> new NotFoundException("Customer Not Found")));
     }
 
-
-
-    @Override
-    public List<CustomerResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
-    (String firstName) {
-        return repository.
-                findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(firstName)
-                .stream()
-                .map(customerMapper::entityMapToResponse)
-                .toList();
-    }
-
-
-    @Override
-    public List<CustomerResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
-    (String lastName) {
-        return repository.
-                findAllByLastNameContainsIgnoreCaseOrderByIdAsc(lastName)
-                .stream()
-                .map(customerMapper::entityMapToResponse)
-                .toList();
-    }
 }

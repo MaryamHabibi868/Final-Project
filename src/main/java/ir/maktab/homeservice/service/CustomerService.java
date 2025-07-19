@@ -15,13 +15,4 @@ public interface CustomerService extends BaseService<Customer, Long> {
 
 
     CustomerResponse loginCustomer(CustomerLoginRequest request);
-
-
-
-    List<CustomerResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
-            (String firstName);
-
-
-    List<CustomerResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
-    (String lastName);
 }

@@ -39,13 +39,6 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
             Long homeServiceId, Pageable pageable);
 
 
-    List<SpecialistResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
-    (String firstName);
-
-
-    List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
-    (String lastName);
-
 
 
     Page<HomeServiceResponse> findAllHomeServicesBySpecialistId(

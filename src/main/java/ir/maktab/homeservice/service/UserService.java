@@ -12,6 +12,6 @@ public interface UserService extends BaseService<User, Long> {
 
     Page<UserResponse> filterByRole(String role, Pageable pageable);
 
-   Page<UserResponse> findAllUsersFilterByName(
+   Page<UserResponse> findAllByNameFilter(
            String firstName , String lastName, Pageable pageable);
 }

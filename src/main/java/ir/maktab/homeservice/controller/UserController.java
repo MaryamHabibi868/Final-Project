@@ -36,6 +36,6 @@ public class UserController {
             @RequestParam String lastName,
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                userService.findAllUsersFilterByName(firstName, lastName, pageable));
+                userService.findAllByNameFilter(firstName, lastName, pageable));
     }
 }

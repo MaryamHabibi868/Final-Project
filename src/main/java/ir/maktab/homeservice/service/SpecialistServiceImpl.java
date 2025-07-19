@@ -177,30 +177,6 @@ public class SpecialistServiceImpl
     }
 
 
-
-
-    @Override
-    public List<SpecialistResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
-    (String firstName) {
-        return repository.
-                findAllByFirstNameContainsIgnoreCaseOrderByIdAsc(firstName)
-                .stream()
-                .map(specialistMapper::entityMapToResponse)
-                .toList();
-    }
-
-
-    @Override
-    public List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
-    (String lastName) {
-        return repository.
-                findAllByLastNameContainsIgnoreCaseOrderByIdAsc(lastName)
-                .stream()
-                .map(specialistMapper::entityMapToResponse)
-                .toList();
-    }
-
-
     @Override
     public Page<HomeServiceResponse> findAllHomeServicesBySpecialistId(
             Long specialistId, Pageable pageable) {

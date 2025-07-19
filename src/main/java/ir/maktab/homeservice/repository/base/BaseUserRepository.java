@@ -15,14 +15,6 @@ public interface BaseUserRepository<T extends User>
 
     Optional<T> findByEmailAndPassword(String email, String password);
 
-
-
-    List<T> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
-            (String firstName);
-
-
-    List<T> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
-            (String lastName);
 }
 
 

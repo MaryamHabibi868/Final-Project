@@ -10,8 +10,9 @@ import ir.maktab.homeservice.repository.UserRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import ir.maktab.homeservice.repository.specification.UserSpecification;
 
 @Service
 public class UserServiceImpl
@@ -42,11 +43,13 @@ public class UserServiceImpl
     }
 
     @Override
-    public Page<UserResponse> findAllUsersFilterByName(
+    public Page<UserResponse> findAllByNameFilter(
             String firstName , String lastName, Pageable pageable) {
-        return repository.findByFirstNameOrLastNameContainsIgnoreCase(
-                firstName , lastName, pageable)
-                .map(userMapper :: entityMapToResponse);
+        Specification<User> spec =  UserSpecification.firstNameContains(firstName)
+                .and(UserSpecification.lastNameContains(lastName));
+
+        return repository.findAll(spec, pageable)
+                .map(userMapper::entityMapToResponse);
     }
 
 
