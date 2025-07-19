@@ -1,5 +1,6 @@
 package ir.maktab.homeservice.dto;
 
+
 import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
 import lombok.*;
 
@@ -8,8 +9,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpecialistResponse {
-
+public class UserResponse {
 
     private Long id;
 
@@ -24,5 +24,4 @@ public class SpecialistResponse {
     private AccountStatus status;
 
     private Double score;
-
 }

@@ -70,11 +70,6 @@ class SpecialistServiceImplTest {
                 .removeSpecialistFromHomeService(Mockito.anyLong(), Mockito.anyLong());
     }
 
-    @Test
-    void findAllSpecialists() {
-        Mockito.when(service.findAllSpecialists()).thenReturn(List.of(response));
-        assertEquals(List.of(response), service.findAllSpecialists());
-    }
 
     @Test
     void findAllByFirstNameContainsIgnoreCaseOrderByIdAsc() {

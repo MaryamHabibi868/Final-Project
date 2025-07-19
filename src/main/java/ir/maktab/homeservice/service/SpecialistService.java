@@ -32,8 +32,6 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
             Long specialistId, Long homeServiceId);
 
 
-    List<SpecialistResponse> findAllSpecialists();
-
 
     List<SpecialistResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
     (String firstName);

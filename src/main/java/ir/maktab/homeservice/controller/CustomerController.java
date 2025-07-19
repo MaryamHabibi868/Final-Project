@@ -41,11 +41,6 @@ public class CustomerController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<CustomerResponse>> findAllCustomers() {
-        return ResponseEntity.ok(customerService.findAllCustomers());
-    }
-
 
     @GetMapping("/filter-by-first-name")
     public ResponseEntity<List<CustomerResponse>> findAllByFirstNameContainsIgnoreCase(

@@ -46,12 +46,6 @@ class CustomerServiceImplTest {
 
     }
 
-    @Test
-    void findAllCustomers() {
-        Mockito.when(service.findAllCustomers())
-                .thenReturn(List.of(response));
-        assertEquals(List.of(response), service.findAllCustomers());
-    }
 
     @Test
     void findAllByFirstNameContainsIgnoreCaseOrderByIdAsc() {

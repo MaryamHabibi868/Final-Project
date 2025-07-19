@@ -87,13 +87,6 @@ public class CustomerServiceImpl
     }
 
 
-    @Override
-    public List<CustomerResponse> findAllCustomers() {
-        return repository.findUsersByIdNotNull(Customer.class).stream()
-                .map(customerMapper::entityMapToResponse)
-                .toList();
-    }
-
 
     @Override
     public List<CustomerResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc

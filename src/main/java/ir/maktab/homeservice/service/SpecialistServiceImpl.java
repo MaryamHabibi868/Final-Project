@@ -64,9 +64,9 @@ public class SpecialistServiceImpl
             /*if ((request.getProfileImagePath()).getSize() > 300 * 1024 ){
                 throw new NotApprovedException("Profile image is too large");
             }*/
-            specialist.setStatus(AccountStatus.NEW);
-        } else {
             specialist.setStatus(AccountStatus.PENDING);
+        } else {
+            specialist.setStatus(AccountStatus.NEW);
         }
         specialist.setScore(0.0);
         specialist.setWallet(wallet);
@@ -175,12 +175,6 @@ public class SpecialistServiceImpl
     }
 
 
-    @Override
-    public List<SpecialistResponse> findAllSpecialists() {
-        return repository.findUsersByIdNotNull(Specialist.class).stream()
-                .map(specialistMapper::entityMapToResponse)
-                .toList();
-    }
 
 
     @Override

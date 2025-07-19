@@ -68,10 +68,6 @@ public class SpecialistController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<SpecialistResponse>> findAllSpecialists() {
-        return ResponseEntity.ok(specialistService.findAllSpecialists());
-    }
 
 
     @GetMapping("/filter-by-first-name")
