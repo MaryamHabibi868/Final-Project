@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class OrderResponse {
 
 

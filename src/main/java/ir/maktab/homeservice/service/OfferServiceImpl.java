@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -181,8 +182,24 @@ public class OfferServiceImpl
     @Override
     public Page<OrderResponse> findOrdersBySpecialistId(
             Long specialistId, Pageable pageable) {
-      return repository.findOrdersBySpecialistId(specialistId, pageable)
-               .map(orderMapper :: entityMapToResponse);
+
+        Specialist foundSpecialist = specialistService.findById(specialistId);
+
+        List<Long> allowedOrderIds = foundSpecialist.getOffers().stream()
+                .filter(offer -> offer.getStatus() == OfferStatus.DONE
+                        || offer.getStatus() == OfferStatus.PAID)
+                .map(offer -> offer.getOrderInformation().getId())
+                .distinct()
+                .toList();
+
+        return repository.findOrdersBySpecialistId(specialistId, pageable)
+                .map(order -> {
+                    if (allowedOrderIds.contains(order.getId())) {
+                        return orderMapper.entityMapToResponse(order);
+                    } else {
+                        return orderMapper.entityMapToResponseByFilter(order);
+                    }
+                });
     }
 
 
@@ -209,7 +226,6 @@ public class OfferServiceImpl
 
         return offers.map(offerMapper::entityMapToResponse);
     }
-
 
 
     @Transactional

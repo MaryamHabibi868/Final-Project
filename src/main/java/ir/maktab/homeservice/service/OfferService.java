@@ -44,5 +44,6 @@ public interface OfferService
             Long orderId, Pageable pageable);
 
 
-    Page<OrderResponse> findOrdersBySpecialistId(Long specialistId, Pageable pageable);
+    Page<OrderResponse> findOrdersBySpecialistId(
+            Long specialistId, Pageable pageable);
 }
