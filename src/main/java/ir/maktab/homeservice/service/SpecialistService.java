@@ -32,6 +32,8 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
             Long specialistId, Long homeServiceId);
 
 
+    List<SpecialistResponse> findAllByHomeServiceId(Long homeServiceId);
+
 
     List<SpecialistResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
     (String firstName);
@@ -40,9 +42,6 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
     List<SpecialistResponse> findAllByLastNameContainsIgnoreCaseOrderByIdAsc
     (String lastName);
 
-
-    List<SpecialistResponse> findAllByHomeServiceTitle(
-            String homeServiceTitle);
 
 
     List<HomeServiceResponse> findAllHomeServicesBySpecialistId(Long specialistId);

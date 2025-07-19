@@ -103,13 +103,6 @@ class SpecialistServiceImplTest {
     }
 
 
-    @Test
-    void findAllByHomeServiceTitle() {
-        Mockito.when(service.findAllByHomeServiceTitle(Mockito.anyString()))
-                .thenReturn(List.of(response));
-        assertEquals(List.of(response),
-                service.findAllByHomeServiceTitle(Mockito.anyString()));
-    }
 
 
     @Test

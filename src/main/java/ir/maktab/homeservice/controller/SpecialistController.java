@@ -88,11 +88,11 @@ public class SpecialistController {
     }
 
 
-    @GetMapping("/find-home-services-by-title")
-    public ResponseEntity<List<SpecialistResponse>> findAllHomeServicesByTitle(
-            @RequestParam String title) {
+    @GetMapping("/find-all-by-home-service-id/{homeServiceId}")
+    public ResponseEntity<List<SpecialistResponse>> findAllByHomeServiceId(
+            @PathVariable Long homeServiceId) {
         return ResponseEntity.ok(
-                specialistService.findAllByHomeServiceTitle(title));
+                specialistService.findAllByHomeServiceId(homeServiceId));
     }
 
 

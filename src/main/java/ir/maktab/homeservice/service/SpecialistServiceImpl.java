@@ -208,14 +208,13 @@ public class SpecialistServiceImpl
     }
 
 
+
     @Override
-    public List<SpecialistResponse> findAllByHomeServiceTitle(
-            String homeServiceTitle) {
-        return repository.findAllByHomeServices_title(homeServiceTitle).stream()
-                .map(specialistMapper::entityMapToResponse)
+    public List<SpecialistResponse> findAllByHomeServiceId(Long homeServiceId) {
+        return repository.findAllByHomeServices_id(homeServiceId)
+                .stream().map(specialistMapper:: entityMapToResponse)
                 .toList();
     }
-
 
     @Override
     public List<SpecialistResponse> findAllByScoreIsBetween(Double lower, Double higher) {
