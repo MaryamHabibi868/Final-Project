@@ -12,6 +12,8 @@ import ir.maktab.homeservice.mapper.SpecialistMapper;
 import ir.maktab.homeservice.mapper.TransactionMapper;
 import ir.maktab.homeservice.repository.SpecialistRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -200,27 +202,26 @@ public class SpecialistServiceImpl
 
 
     @Override
-    public List<HomeServiceResponse> findAllHomeServicesBySpecialistId(Long specialistId) {
-        return repository.findHomeServicesBySpecialistId(specialistId)
-                .stream()
-                .map(homeServiceMapper :: entityMapToResponse)
-                .toList();
+    public Page<HomeServiceResponse> findAllHomeServicesBySpecialistId(
+            Long specialistId, Pageable pageable) {
+        return repository.findHomeServicesBySpecialistId(specialistId, pageable)
+                .map(homeServiceMapper :: entityMapToResponse);
     }
 
 
 
     @Override
-    public List<SpecialistResponse> findAllByHomeServiceId(Long homeServiceId) {
-        return repository.findAllByHomeServices_id(homeServiceId)
-                .stream().map(specialistMapper:: entityMapToResponse)
-                .toList();
+    public Page<SpecialistResponse> findAllByHomeServiceId(
+            Long homeServiceId, Pageable pageable) {
+        return repository.findAllByHomeServices_id(homeServiceId , pageable)
+               .map(specialistMapper:: entityMapToResponse);
     }
 
     @Override
-    public List<SpecialistResponse> findAllByScoreIsBetween(Double lower, Double higher) {
-        return repository.findAllByScoreIsBetween(lower , higher)
-                .stream().map(specialistMapper :: entityMapToResponse)
-                .toList();
+    public Page<SpecialistResponse> findAllByScoreIsBetween(
+            Double lower, Double higher, Pageable pageable) {
+        return repository.findAllByScoreIsBetween(lower , higher, pageable)
+                .map(specialistMapper :: entityMapToResponse);
     }
 
 
@@ -234,16 +235,15 @@ public class SpecialistServiceImpl
 
 
     @Override
-    public List<TransactionResponse> findAllTransactionsBySpecialistId(
-            Long specialistId) {
+    public Page<TransactionResponse> findAllTransactionsBySpecialistId(
+            Long specialistId, Pageable pageable) {
         Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
                 () -> new NotFoundException("Specialist Not Found")
         );
 
         Long walletId = foundSpecialist.getWallet().getId();
-        return transactionService.findAllByWalletId(walletId)
-                .stream().map(transactionMapper :: entityMapToResponse)
-                .toList();
+        return transactionService.findAllByWalletId(walletId, pageable)
+              .map(transactionMapper :: entityMapToResponse);
     }
 
 

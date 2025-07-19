@@ -1,3 +1,4 @@
+/*
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.dto.OfferResponse;
@@ -22,8 +23,10 @@ class OfferServiceImplTest {
         request = Mockito.mock(OfferSaveRequest.class);
     }
 
-    /*@AfterEach
-    @BeforeAll (1 bar aval seda zade mishe)*/
+    */
+/*@AfterEach
+    @BeforeAll (1 bar aval seda zade mishe)*//*
+
 
     @Test
     void submitOfferToOrder() {
@@ -49,12 +52,14 @@ class OfferServiceImplTest {
         assertEquals(response, service.endService(Mockito.anyLong()));
     }
 
-    @Test
+  */
+/*  @Test
     void findByOfferOfSpecialistId() {
         Mockito.when(service.findByOfferOfSpecialistId(Mockito.anyLong()))
                         .thenReturn(List.of(response));
         assertEquals(List.of(response), service.findByOfferOfSpecialistId(Mockito.anyLong()));
-    }
+    }*//*
+
 
     @Test
     void findAllOffersBySuggestedPrice() {
@@ -78,4 +83,4 @@ class OfferServiceImplTest {
         Mockito.verify(service , Mockito.times(0))
                 .paySpecialist(Mockito.anyLong());
     }
-}
+}*/

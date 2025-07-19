@@ -3,6 +3,9 @@ package ir.maktab.homeservice.service;
 import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.base.BaseService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface SpecialistService extends BaseService<Specialist, Long> {
@@ -32,7 +35,8 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
             Long specialistId, Long homeServiceId);
 
 
-    List<SpecialistResponse> findAllByHomeServiceId(Long homeServiceId);
+    Page<SpecialistResponse> findAllByHomeServiceId(
+            Long homeServiceId, Pageable pageable);
 
 
     List<SpecialistResponse> findAllByFirstNameContainsIgnoreCaseOrderByIdAsc
@@ -44,17 +48,19 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
 
 
 
-    List<HomeServiceResponse> findAllHomeServicesBySpecialistId(Long specialistId);
+    Page<HomeServiceResponse> findAllHomeServicesBySpecialistId(
+            Long specialistId, Pageable pageable);
 
 
-    List<SpecialistResponse> findAllByScoreIsBetween(Double lower, Double higher);
+    Page<SpecialistResponse> findAllByScoreIsBetween(
+            Double lower, Double higher , Pageable pageable);
 
 
     Double findScoreBySpecialistId(Long specialistId);
 
 
-    List<TransactionResponse> findAllTransactionsBySpecialistId(
-            Long specialistId);
+    Page<TransactionResponse> findAllTransactionsBySpecialistId(
+            Long specialistId, Pageable pageable);
 
 
     void inActivateSpecialist();

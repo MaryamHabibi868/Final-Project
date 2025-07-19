@@ -3,6 +3,8 @@ package ir.maktab.homeservice.service;
 import ir.maktab.homeservice.domains.Transaction;
 import ir.maktab.homeservice.repository.TransactionRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class TransactionServiceImpl extends
 
 
     @Override
-    public List<Transaction> findAllByWalletId(Long walletId) {
-        return repository.findAllByWalletId(walletId);
+    public Page<Transaction> findAllByWalletId(Long walletId, Pageable pageable) {
+        return repository.findAllByWalletId(walletId, pageable);
     }
 }

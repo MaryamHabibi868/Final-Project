@@ -5,6 +5,9 @@ import ir.maktab.homeservice.dto.HomeServiceResponse;
 import ir.maktab.homeservice.dto.HomeServiceSaveRequest;
 import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
 import ir.maktab.homeservice.service.base.BaseService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface HomeServiceService extends BaseService<HomeService, Long> {
@@ -21,11 +24,12 @@ public interface HomeServiceService extends BaseService<HomeService, Long> {
     void deleteHomeService(Long id);
 
 
-    List<HomeServiceResponse> findAllHomeServices();
+    Page<HomeServiceResponse> findAllHomeServices(Pageable pageable);
 
 
     HomeServiceResponse findHomeServiceById(Long id);
 
 
-    List<HomeServiceResponse> findAllHomeServiceByParentServiceId(Long id);
+    Page<HomeServiceResponse> findAllHomeServiceByParentServiceId(
+            Long id, Pageable pageable);
 }

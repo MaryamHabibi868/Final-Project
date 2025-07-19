@@ -9,9 +9,10 @@ import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.HomeServiceMapper;
 import ir.maktab.homeservice.repository.HomeServiceRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -92,10 +93,9 @@ public class HomeServiceServiceImpl
 
 
     @Override
-    public List<HomeServiceResponse> findAllHomeServices() {
-        return repository.findAll().stream()
-                .map(homeServiceMapper::entityMapToResponse)
-                .toList();
+    public Page<HomeServiceResponse> findAllHomeServices(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(homeServiceMapper::entityMapToResponse);
     }
 
 
@@ -109,9 +109,9 @@ public class HomeServiceServiceImpl
 
 
     @Override
-    public List<HomeServiceResponse> findAllHomeServiceByParentServiceId(Long id) {
-       return repository.findAllByParentService_Id(id).stream()
-                .map(homeServiceMapper::entityMapToResponse)
-                .toList();
+    public Page<HomeServiceResponse> findAllHomeServiceByParentServiceId(
+            Long id, Pageable pageable) {
+       return repository.findAllByParentService_Id(id, pageable)
+               .map(homeServiceMapper::entityMapToResponse);
     }
 }

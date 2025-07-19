@@ -6,8 +6,13 @@ import ir.maktab.homeservice.dto.HomeServiceUpdateRequest;
 import ir.maktab.homeservice.service.HomeServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -43,8 +48,9 @@ public class HomeServiceController {
 
 
     @GetMapping
-    public ResponseEntity<List<HomeServiceResponse>> findAllHomeServices() {
-        return ResponseEntity.ok(homeServiceService.findAllHomeServices());
+    public ResponseEntity<Page<HomeServiceResponse>> findAllHomeServices(
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(homeServiceService.findAllHomeServices(pageable));
     }
 
 
@@ -56,9 +62,10 @@ public class HomeServiceController {
 
 
     @GetMapping("/find-all-by-parent-service-id/{parentServiceId}")
-    public ResponseEntity<List<HomeServiceResponse>> findAllHomeServiceByParentServiceId(
-            @PathVariable Long parentServiceId) {
+    public ResponseEntity<Page<HomeServiceResponse>> findAllHomeServiceByParentServiceId(
+            @PathVariable Long parentServiceId,
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(homeServiceService
-                .findAllHomeServiceByParentServiceId(parentServiceId));
+                .findAllHomeServiceByParentServiceId(parentServiceId, pageable));
     }
 }

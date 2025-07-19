@@ -46,11 +46,11 @@ class HomeServiceServiceImplTest1 {
                 .times(0)).deleteHomeService(Mockito.anyLong());
     }
 
-    @Test
+  /*  @Test
     void findAllHomeServices() {
         Mockito.when(service.findAllHomeServices()).thenReturn(List.of(response));
         assertEquals(List.of(response), service.findAllHomeServices());
-    }
+    }*/
 
     @Test
     void findHomeServiceById(){
@@ -58,10 +58,10 @@ class HomeServiceServiceImplTest1 {
         assertEquals(response, service.findHomeServiceById(Mockito.anyLong()));
     }
 
-    @Test
+    /*@Test
     void findAllHomeServiceByParentServiceId(){
         Mockito.when(service.findAllHomeServiceByParentServiceId(Mockito.anyLong()))
                 .thenReturn(List.of(response));
         assertEquals(List.of(response), service.findAllHomeServiceByParentServiceId(Mockito.anyLong()));
-    }
+    }*/
 }

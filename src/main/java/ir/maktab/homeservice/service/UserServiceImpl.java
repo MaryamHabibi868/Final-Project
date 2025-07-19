@@ -8,6 +8,8 @@ import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.UserMapper;
 import ir.maktab.homeservice.repository.UserRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class UserServiceImpl
     }
 
     @Override
-    public List<UserResponse> filterByRole(String role) {
+    public Page<UserResponse> filterByRole(String role, Pageable pageable) {
         Class<? extends User> roleClass;
         if ("Customer".equalsIgnoreCase(role)) {
             roleClass = Customer.class;
@@ -35,7 +37,17 @@ public class UserServiceImpl
             throw new NotFoundException("Role Not Found");
         }
 
-        List<User> users = repository.findByRole(roleClass);
-        return users.stream().map(userMapper:: entityMapToResponse).toList();
+        Page<User> users = repository.findByRole(roleClass, pageable);
+        return users.map(userMapper:: entityMapToResponse);
     }
+
+    @Override
+    public Page<UserResponse> findAllUsersFilterByName(
+            String firstName , String lastName, Pageable pageable) {
+        return repository.findByFirstNameOrLastNameContainsIgnoreCase(
+                firstName , lastName, pageable)
+                .map(userMapper :: entityMapToResponse);
+    }
+
+
 }

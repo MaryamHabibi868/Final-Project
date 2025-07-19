@@ -5,6 +5,9 @@ import ir.maktab.homeservice.dto.OfferSaveRequest;
 import ir.maktab.homeservice.dto.OfferResponse;
 import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.service.base.BaseService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface OfferService
@@ -26,18 +29,20 @@ public interface OfferService
     OfferResponse endService(Long offerId);
 
 
-    List<OfferResponse> findByOfferOfSpecialistId(
-            Long specialistId);
+    Page<OfferResponse> findByOfferOfSpecialistId(
+            Long specialistId, Pageable pageable);
 
 
     void paySpecialist(Long offerId);
 
 
-    List<OfferResponse> findAllOffersBySuggestedPrice(Long orderId);
+    Page<OfferResponse> findAllOffersBySuggestedPrice(
+            Long orderId, Pageable pageable);
 
 
-    List<OfferResponse> findAllOffersBySpecialistScore(Long orderId);
+    Page<OfferResponse> findAllOffersBySpecialistScore(
+            Long orderId, Pageable pageable);
 
 
-    List<OrderResponse> findOrdersBySpecialistId(Long specialistId);
+    Page<OrderResponse> findOrdersBySpecialistId(Long specialistId, Pageable pageable);
 }

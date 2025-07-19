@@ -6,9 +6,12 @@ import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.service.OfferService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,14 +26,14 @@ public class OfferController {
             @RequestBody @Valid
             OfferSaveRequest request) {
 
-                return ResponseEntity.ok(offerService.submitOfferToOrder(request));
+        return ResponseEntity.ok(offerService.submitOfferToOrder(request));
     }
 
 
     @PostMapping("/choose-offer/{offerId}")
     public ResponseEntity<OfferResponse> chooseOffer(
             @PathVariable Long offerId) {
-               return ResponseEntity.ok(offerService.chooseOfferOfSpecialist(offerId));
+        return ResponseEntity.ok(offerService.chooseOfferOfSpecialist(offerId));
     }
 
 
@@ -51,26 +54,30 @@ public class OfferController {
 
 
     @GetMapping("/specialist-id/{specialistId}")
-    public ResponseEntity<List<OfferResponse>> findByOffersBySpecialistId(
-            @PathVariable Long specialistId) {
+    public ResponseEntity<Page<OfferResponse>> findByOffersBySpecialistId(
+            @PathVariable Long specialistId,
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                offerService.findByOfferOfSpecialistId(specialistId));
+                offerService.findByOfferOfSpecialistId(specialistId, pageable));
     }
 
 
     @GetMapping("/sort-by-suggested-price/{orderId}")
-    public ResponseEntity<List<OfferResponse>> findAllOffersBySuggestedPrice(
-            @PathVariable Long orderId) {
+    public ResponseEntity<Page<OfferResponse>> findAllOffersBySuggestedPrice(
+            @PathVariable Long orderId,
+     @PageableDefault(size = 10, page = 0, sort = "suggestedPrice") Pageable pageable) {
         return ResponseEntity.ok(
-                offerService.findAllOffersBySuggestedPrice(orderId));
+                offerService.findAllOffersBySuggestedPrice(orderId, pageable));
     }
 
 
     @GetMapping("/sort-by-specialist-score/{orderId}")
-    public ResponseEntity<List<OfferResponse>> findAllOffersBySpecialistScore(
-            @PathVariable Long orderId) {
+    public ResponseEntity<Page<OfferResponse>> findAllOffersBySpecialistScore(
+            @PathVariable Long orderId,
+            @PageableDefault(size = 10, page = 0, sort = "specialistScore",
+                    direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(
-                offerService.findAllOffersBySpecialistScore(orderId));
+                offerService.findAllOffersBySpecialistScore(orderId, pageable));
     }
 
 
@@ -83,9 +90,10 @@ public class OfferController {
 
 
     @GetMapping("/find-all-orders-by-specialist-id/{specialistId}")
-    public ResponseEntity<List<OrderResponse>> findAllOrdersBySpecialistId(
-            @PathVariable Long specialistId) {
+    public ResponseEntity<Page<OrderResponse>> findAllOrdersBySpecialistId(
+            @PathVariable Long specialistId,
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                offerService.findOrdersBySpecialistId(specialistId));
+                offerService.findOrdersBySpecialistId(specialistId, pageable));
     }
 }

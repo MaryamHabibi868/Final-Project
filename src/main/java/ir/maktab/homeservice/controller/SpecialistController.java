@@ -4,8 +4,12 @@ import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.SpecialistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -49,7 +53,6 @@ public class SpecialistController {
     }
 
 
-
     @PostMapping("/add-specialists/{specialistId}/home-services")
     public ResponseEntity<String> addSpecialistToHomeService(
             @PathVariable Long specialistId,
@@ -66,8 +69,6 @@ public class SpecialistController {
         specialistService.removeSpecialistFromHomeService(specialistId, homeServiceId);
         return ResponseEntity.ok("Specialist removed from home service");
     }
-
-
 
 
     @GetMapping("/filter-by-first-name")
@@ -89,27 +90,30 @@ public class SpecialistController {
 
 
     @GetMapping("/find-all-by-home-service-id/{homeServiceId}")
-    public ResponseEntity<List<SpecialistResponse>> findAllByHomeServiceId(
-            @PathVariable Long homeServiceId) {
+    public ResponseEntity<Page<SpecialistResponse>> findAllByHomeServiceId(
+            @PathVariable Long homeServiceId,
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                specialistService.findAllByHomeServiceId(homeServiceId));
+                specialistService.findAllByHomeServiceId(homeServiceId, pageable));
     }
 
 
     @GetMapping("/find-all-home-services-by-specialist-id/{specialistId}")
-    public ResponseEntity<List<HomeServiceResponse>> findAllHomeServicesBySpecialistId(
-            @PathVariable Long specialistId) {
+    public ResponseEntity<Page<HomeServiceResponse>> findAllHomeServicesBySpecialistId(
+            @PathVariable Long specialistId,
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                specialistService.findAllHomeServicesBySpecialistId(specialistId));
+                specialistService.findAllHomeServicesBySpecialistId(specialistId, pageable));
     }
 
 
     @GetMapping("/score-between/{lower}/{higher}")
-    public ResponseEntity<List<SpecialistResponse>> findAllByScoreBetween(
+    public ResponseEntity<Page<SpecialistResponse>> findAllByScoreBetween(
             @PathVariable Double lower,
-            @PathVariable Double higher) {
+            @PathVariable Double higher,
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                specialistService.findAllByScoreIsBetween(lower, higher));
+                specialistService.findAllByScoreIsBetween(lower, higher, pageable));
     }
 
 
@@ -122,10 +126,12 @@ public class SpecialistController {
 
 
     @GetMapping("/find-all-transaction-by-specialist-id/{specialistId}")
-    public ResponseEntity<List<TransactionResponse>> findAllTransactionsBySpecialistId(
-            @PathVariable Long specialistId) {
+    public ResponseEntity<Page<TransactionResponse>> findAllTransactionsBySpecialistId(
+            @PathVariable Long specialistId,
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                specialistService.findAllTransactionsBySpecialistId(specialistId));
+                specialistService.findAllTransactionsBySpecialistId(
+                        specialistId, pageable));
     }
 
     @PostMapping("/in-activate-specialists")

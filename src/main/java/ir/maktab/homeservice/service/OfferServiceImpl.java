@@ -16,6 +16,8 @@ import ir.maktab.homeservice.mapper.OrderMapper;
 import ir.maktab.homeservice.repository.OfferRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
@@ -167,50 +169,45 @@ public class OfferServiceImpl
 
 
     @Override
-    public List<OfferResponse> findByOfferOfSpecialistId(
-            Long specialistId) {
+    public Page<OfferResponse> findByOfferOfSpecialistId(
+            Long specialistId, Pageable pageable) {
         Specialist specialist = specialistService.findById(specialistId);
 
-        return repository.findAllBySpecialistId(specialistId)
-                .stream()
-                .map(offerMapper::entityMapToResponse)
-                .toList();
+        return repository.findAllBySpecialistId(specialistId, pageable)
+                .map(offerMapper::entityMapToResponse);
     }
 
 
     @Override
-    public List<OrderResponse> findOrdersBySpecialistId(Long specialistId) {
-      return repository.findOrdersBySpecialistId(specialistId)
-                .stream().map(orderMapper :: entityMapToResponse)
-                .toList();
+    public Page<OrderResponse> findOrdersBySpecialistId(
+            Long specialistId, Pageable pageable) {
+      return repository.findOrdersBySpecialistId(specialistId, pageable)
+               .map(orderMapper :: entityMapToResponse);
     }
 
 
     @Override
-    public List<OfferResponse> findAllOffersBySuggestedPrice(Long orderId) {
+    public Page<OfferResponse> findAllOffersBySuggestedPrice(
+            Long orderId, Pageable pageable) {
+
         orderService.findById(orderId);
 
-        Sort sort = Sort.by(Sort.Direction.ASC, "suggestedPrice");
 
-        List<Offer> offers = repository.findAllByOrderInformation_Id(orderId, sort);
+        Page<Offer> offers = repository.findAllByOrderInformation_Id(orderId, pageable);
 
-        return offers.stream()
-                .map(offerMapper::entityMapToResponse)
-                .toList();
+        return offers.map(offerMapper::entityMapToResponse);
     }
 
 
     @Override
-    public List<OfferResponse> findAllOffersBySpecialistScore(Long orderId) {
+    public Page<OfferResponse> findAllOffersBySpecialistScore(
+            Long orderId, Pageable pageable) {
         orderService.findById(orderId);
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "specialist.score");
 
-        List<Offer> offers = repository.findAllByOrderInformation_Id(orderId, sort);
+        Page<Offer> offers = repository.findAllByOrderInformation_Id(orderId, pageable);
 
-        return offers.stream()
-                .map(offerMapper::entityMapToResponse)
-                .toList();
+        return offers.map(offerMapper::entityMapToResponse);
     }
 
 
