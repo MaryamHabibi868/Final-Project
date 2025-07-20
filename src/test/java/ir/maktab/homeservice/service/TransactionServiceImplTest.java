@@ -1,30 +1,50 @@
-/*
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Transaction;
+import ir.maktab.homeservice.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import java.util.List;
-
+import org.mockito.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class TransactionServiceImplTest {
 
-    private TransactionService service;
-    private Transaction response;
+    @Mock
+    private TransactionRepository transactionRepository;
+
+    @InjectMocks
+    private TransactionServiceImpl transactionService;
 
     @BeforeEach
     void setUp() {
-        service = Mockito.mock(TransactionService.class);
-        response = Mockito.mock(Transaction.class);
+        MockitoAnnotations.openMocks(this);
     }
-
 
     @Test
-    void findAllByWalletId() {
-    Mockito.when(service.findAllByWalletId(Mockito.anyLong()))
-            .thenReturn(List.of(response));
-    assertEquals(List.of(response), service.findAllByWalletId(Mockito.anyLong()));
+    void findAllByWalletId_returnsPageOfTransactions() {
+        Long walletId = 1L;
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Transaction transaction = new Transaction();
+        transaction.setId(1L);
+        // می‌توانید فیلدهای دیگر را هم تنظیم کنید
+
+        Page<Transaction> page = new PageImpl<>(Collections.singletonList(transaction));
+
+        when(transactionRepository.findAllByWalletId(walletId, pageable)).thenReturn(page);
+
+        Page<Transaction> result = transactionService.findAllByWalletId(walletId, pageable);
+
+        assertNotNull(result);
+        assertEquals(1, result.getTotalElements());
+        assertEquals(transaction, result.getContent().get(0));
+
+        verify(transactionRepository, times(1)).findAllByWalletId(walletId, pageable);
     }
-}*/
+}

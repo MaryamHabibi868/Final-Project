@@ -1,4 +1,3 @@
-/*
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
@@ -10,150 +9,125 @@ import ir.maktab.homeservice.mapper.CustomerMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CustomerServiceImplTest {
 
-    @Mock
     private CustomerRepository customerRepository;
-
-    @Mock
     private CustomerMapper customerMapper;
-
-    @InjectMocks
     private CustomerServiceImpl customerService;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        customerRepository = mock(CustomerRepository.class);
+        customerMapper = mock(CustomerMapper.class);
+        customerService = new CustomerServiceImpl(customerRepository, customerMapper);
     }
 
     @Test
-    void registerCustomer_shouldSaveNewCustomer() {
-        CustomerSaveRequest request = new CustomerSaveRequest("Niki", "Habibi", "niki@test.com", "123");
+    void registerCustomer_successful() {
+        CustomerSaveRequest request = new CustomerSaveRequest(
+                "John", "Doe", "john@example.com", "password"
+        );
+
+        when(customerRepository.existsByEmail(request.getEmail())).thenReturn(false);
+
+        ArgumentCaptor<Customer> captor = ArgumentCaptor.forClass(Customer.class);
         Customer savedCustomer = new Customer();
         savedCustomer.setId(1L);
-        savedCustomer.setFirstName("Niki");
-        savedCustomer.setLastName("Habibi");
-        savedCustomer.setEmail("niki@test.com");
-        savedCustomer.setPassword("123");
+        savedCustomer.setFirstName(request.getFirstName());
+        savedCustomer.setLastName(request.getLastName());
+        savedCustomer.setEmail(request.getEmail());
+        savedCustomer.setPassword(request.getPassword());
         Wallet wallet = new Wallet();
         wallet.setBalance(BigDecimal.ZERO);
+        wallet.setUserInformation(savedCustomer);
         savedCustomer.setWallet(wallet);
 
-        when(customerRepository.existsByEmail("niki@test.com")).thenReturn(false);
         when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
-        when(customerMapper.entityMapToResponse(savedCustomer)).thenReturn(new CustomerResponse(1L, "Niki", "Habibi", "niki@test.com"));
+        CustomerResponse expectedResponse = new CustomerResponse(1L, "John", "Doe", "john@example.com", null);
+        when(customerMapper.entityMapToResponse(savedCustomer)).thenReturn(expectedResponse);
 
-        CustomerResponse response = customerService.registerCustomer(request);
+        CustomerResponse result = customerService.registerCustomer(request);
 
-        assertEquals("Niki", response.getFirstName());
-        verify(customerRepository).save(any(Customer.class));
+        assertNotNull(result);
+        assertEquals(expectedResponse.getEmail(), result.getEmail());
     }
 
     @Test
-    void registerCustomer_shouldThrowException_whenEmailExists() {
-        CustomerSaveRequest request = new CustomerSaveRequest("Niki", "Habibi", "niki@test.com", "123");
-
-        when(customerRepository.existsByEmail("niki@test.com")).thenReturn(true);
+    void registerCustomer_emailExists_shouldThrowException() {
+        CustomerSaveRequest request = new CustomerSaveRequest(
+                "John", "Doe", "john@example.com", "password"
+        );
+        when(customerRepository.existsByEmail(request.getEmail())).thenReturn(true);
 
         assertThrows(DuplicatedException.class, () -> customerService.registerCustomer(request));
     }
 
     @Test
-    void loginCustomer_shouldReturnCustomerResponse_whenValidCredentials() {
-        Customer customer = new Customer();
-        customer.setId(2L);
-        customer.setFirstName("Ali");
-        customer.setEmail("ali@test.com");
-        customer.setPassword("123");
-
-        when(customerRepository.findByEmailAndPassword("ali@test.com", "123")).thenReturn(Optional.of(customer));
-        when(customerMapper.entityMapToResponse(customer)).thenReturn(new CustomerResponse(2L, "Ali", null, "ali@test.com"));
-
-        CustomerLoginRequest request = new CustomerLoginRequest("ali@test.com", "123");
-        CustomerResponse response = customerService.loginCustomer(request);
-
-        assertEquals("Ali", response.getFirstName());
-    }
-
-    @Test
-    void loginCustomer_shouldThrowException_whenNotFound() {
-        when(customerRepository.findByEmailAndPassword("none@test.com", "123")).thenReturn(Optional.empty());
-
-        CustomerLoginRequest request = new CustomerLoginRequest("none@test.com", "123");
-        assertThrows(NotFoundException.class, () -> customerService.loginCustomer(request));
-    }
-
-    @Test
-    void updateCustomer_shouldUpdateFields() {
-        Customer existing = new Customer();
-        existing.setId(5L);
-        existing.setFirstName("Sara");
-        existing.setEmail("sara@test.com");
-
-        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(5L, "SaraNew", null, "new@test.com", null);
-
-        when(customerRepository.findById(5L)).thenReturn(Optional.of(existing));
-        when(customerRepository.existsByEmail("new@test.com")).thenReturn(false);
-        when(customerRepository.save(any(Customer.class))).thenReturn(existing);
-        when(customerMapper.entityMapToResponse(existing)).thenReturn(new CustomerResponse(5L, "SaraNew", null, "new@test.com"));
-
-        CustomerResponse response = customerService.updateCustomer(updateRequest);
-
-        assertEquals("SaraNew", response.getFirstName());
-        assertEquals("new@test.com", response.getEmail());
-    }
-
-    @Test
-    void updateCustomer_shouldThrowException_whenEmailExists() {
-        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(10L, "Ali", "Mohammadi", "exist@test.com", "123");
+    void updateCustomer_successful() {
+        CustomerUpdateRequest request = new CustomerUpdateRequest(1L, "Maryam", "Habibi", "maryam@gmail.com", "1234");
 
         Customer existingCustomer = new Customer();
-        existingCustomer.setId(10L);
+        existingCustomer.setId(1L);
+        existingCustomer.setFirstName("Old");
+        existingCustomer.setLastName("Name");
+        existingCustomer.setEmail("old@mail.com");
+        existingCustomer.setPassword("old");
 
-        when(customerRepository.findById(10L)).thenReturn(Optional.of(existingCustomer));
-        when(customerRepository.existsByEmail("exist@test.com")).thenReturn(true);
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(existingCustomer));
+        when(customerRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(customerRepository.save(any())).thenReturn(existingCustomer);
 
-        assertThrows(DuplicatedException.class, () -> customerService.updateCustomer(updateRequest));
+        CustomerResponse expectedResponse = new CustomerResponse(1L, "Maryam", "Habibi", "maryam@gmail.com", null);
+        when(customerMapper.entityMapToResponse(existingCustomer)).thenReturn(expectedResponse);
+
+        CustomerResponse result = customerService.updateCustomer(request);
+
+        assertEquals("Maryam", result.getFirstName());
+        assertEquals("maryam@gmail.com", result.getEmail());
     }
 
     @Test
-    void findAllByFirstNameContainsIgnoreCaseOrderByIdAsc_shouldReturnList() {
-        Customer customer = new Customer();
-        customer.setId(1L);
-        customer.setFirstName("Ali");
+    void updateCustomer_notFound_shouldThrowException() {
+        CustomerUpdateRequest request = new CustomerUpdateRequest(1L, "Maryam", "Habibi", "maryam@gmail.com", "1234");
 
-        when(customerRepository.findAllByFirstNameContainsIgnoreCaseOrderByIdAsc("ali"))
-                .thenReturn(List.of(customer));
-        when(customerMapper.entityMapToResponse(customer))
-                .thenReturn(new CustomerResponse(1L, "Ali", null, null));
+        when(customerRepository.findById(1L)).thenReturn(Optional.empty());
 
-        List<CustomerResponse> result = customerService.findAllByFirstNameContainsIgnoreCaseOrderByIdAsc("ali");
-
-        assertEquals(1, result.size());
-        assertEquals("Ali", result.get(0).getFirstName());
+        assertThrows(NotFoundException.class, () -> customerService.updateCustomer(request));
     }
 
     @Test
-    void findAllByLastNameContainsIgnoreCaseOrderByIdAsc_shouldReturnList() {
+    void loginCustomer_successful() {
+        CustomerLoginRequest request = new CustomerLoginRequest("test@mail.com", "pass");
+
         Customer customer = new Customer();
         customer.setId(1L);
-        customer.setLastName("Rahimi");
+        customer.setEmail("test@mail.com");
+        customer.setPassword("pass");
 
-        when(customerRepository.findAllByLastNameContainsIgnoreCaseOrderByIdAsc("rahimi"))
-                .thenReturn(List.of(customer));
-        when(customerMapper.entityMapToResponse(customer))
-                .thenReturn(new CustomerResponse(1L, null, "Rahimi", null));
+        when(customerRepository.findByEmailAndPassword("test@mail.com", "pass"))
+                .thenReturn(Optional.of(customer));
 
-        List<CustomerResponse> result = customerService.findAllByLastNameContainsIgnoreCaseOrderByIdAsc("rahimi");
+        CustomerResponse expectedResponse = new CustomerResponse(1L, "Ali", "Rezaei", "test@mail.com", null);
+        when(customerMapper.entityMapToResponse(customer)).thenReturn(expectedResponse);
 
-        assertEquals(1, result.size());
-        assertEquals("Rahimi", result.get(0).getLastName());
+        CustomerResponse result = customerService.loginCustomer(request);
+
+        assertEquals("test@mail.com", result.getEmail());
+    }
+
+    @Test
+    void loginCustomer_notFound_shouldThrowException() {
+        CustomerLoginRequest request = new CustomerLoginRequest("notfound@mail.com", "wrong");
+
+        when(customerRepository.findByEmailAndPassword(request.getEmail(), request.getPassword()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> customerService.loginCustomer(request));
     }
 }
-*/
