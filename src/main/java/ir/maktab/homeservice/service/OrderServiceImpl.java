@@ -10,8 +10,12 @@ import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.exception.NotValidPriceException;
 import ir.maktab.homeservice.mapper.OrderMapper;
 import ir.maktab.homeservice.repository.OrderRepository;
+import ir.maktab.homeservice.repository.specification.OrderSpecification;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,13 +24,15 @@ public class OrderServiceImpl
         implements OrderService {
     private final OrderMapper orderMapper;
     private final HomeServiceService homeServiceService;
+    private final CustomerService customerService;
 
     public OrderServiceImpl(OrderRepository repository,
                             OrderMapper orderMapper,
-                            HomeServiceService homeServiceService) {
+                            HomeServiceService homeServiceService, CustomerService customerService) {
         super(repository);
         this.orderMapper = orderMapper;
         this.homeServiceService = homeServiceService;
+        this.customerService = customerService;
     }
 
 
@@ -52,5 +58,18 @@ public class OrderServiceImpl
         order.setStatus(OrderStatus.WAITING_FOR_SPECIALIST_OFFER);
         Order save = repository.save(order);
         return orderMapper.entityMapToResponse(save);
+    }
+
+    @Override
+    public Page<OrderResponse> findOrderHistory(
+            Long customerId, OrderStatus orderStatus, Pageable pageable) {
+        customerService.findById(customerId);
+
+        Specification<Order> spec = OrderSpecification.hasCustomerId(customerId)
+                .and(orderStatus != null
+                        ? OrderSpecification.hasStatus(orderStatus) : null);
+
+        return repository.findAll(spec, pageable)
+                        .map(orderMapper::entityMapToResponse);
     }
 }
