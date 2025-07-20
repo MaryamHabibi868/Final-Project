@@ -7,15 +7,12 @@ import ir.maktab.homeservice.dto.UserResponse;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.UserMapper;
 import ir.maktab.homeservice.repository.UserRepository;
-import ir.maktab.homeservice.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
-
 import java.util.Collections;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -105,14 +102,14 @@ class UserServiceImplTest {
         String lastName = "Ahmadi";
         Pageable pageable = PageRequest.of(0, 10);
 
-        User user = new User() {}; // می‌توان از کلاس User یا یک subclass ساخت
+        User user = new User() {};
         user.setId(1L);
         Page<User> userPage = new PageImpl<>(Collections.singletonList(user));
 
         UserResponse response = new UserResponse();
         response.setId(1L);
 
-        // چون Specification ساخته شده داخل متد، اینجا از ArgumentMatchers استفاده می‌کنیم
+
         when(userRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(userPage);
         when(userMapper.entityMapToResponse(user)).thenReturn(response);
 

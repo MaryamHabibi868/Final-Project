@@ -33,7 +33,7 @@ class TransactionServiceImplTest {
 
         Transaction transaction = new Transaction();
         transaction.setId(1L);
-        // می‌توانید فیلدهای دیگر را هم تنظیم کنید
+
 
         Page<Transaction> page = new PageImpl<>(Collections.singletonList(transaction));
 

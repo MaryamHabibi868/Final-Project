@@ -1,7 +1,6 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.*;
-import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import ir.maktab.homeservice.dto.OrderSaveRequest;
 import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.exception.NotValidPriceException;
@@ -12,11 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

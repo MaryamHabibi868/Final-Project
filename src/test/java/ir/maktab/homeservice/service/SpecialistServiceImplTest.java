@@ -11,10 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.data.domain.*;
-
-import java.math.BigDecimal;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -55,13 +52,10 @@ class SpecialistServiceImplTest {
         req.setPassword("pass");
         req.setProfileImagePath(null);
 
-        // شبیه‌سازی رفتار repository برای ایمیل موجود نبودن
+
         when(repository.existsByEmail(req.getEmail())).thenReturn(false);
 
-        // چون متد registerSpecialist داخلش یه Wallet جدید می‌سازه،
-        // نیازی نیست اینجا دستی Wallet ست کنیم.
 
-        // شبیه‌سازی رفتار ذخیره‌سازی و بازگشت Specialist ذخیره شده
         Specialist savedSpecialist = new Specialist();
         savedSpecialist.setId(1L);
         savedSpecialist.setEmail(req.getEmail());
@@ -69,14 +63,14 @@ class SpecialistServiceImplTest {
 
         when(repository.save(any(Specialist.class))).thenReturn(savedSpecialist);
 
-        // شبیه‌سازی مپ کردن موجودیت به پاسخ
+
         SpecialistResponse specialistResponse = new SpecialistResponse();
         when(specialistMapper.entityMapToResponse(savedSpecialist)).thenReturn(specialistResponse);
 
-        // اجرای متد تست شده
+
         SpecialistResponse response = specialistService.registerSpecialist(req);
 
-        // بررسی نتایج
+
         assertNotNull(response);
         verify(repository).existsByEmail(req.getEmail());
         verify(repository).save(any(Specialist.class));
@@ -392,23 +386,23 @@ class SpecialistServiceImplTest {
         specialist.setId(1L);
         specialist.setWallet(wallet);
 
-        // یک Transaction دامنه واقعی
+
         Transaction transaction = new Transaction();
         List<Transaction> transactionList = List.of(transaction);
         Page<Transaction> transactionPage = new PageImpl<>(transactionList);
 
-        // پاسخ DTO که باید mapper برگرداند
+
         TransactionResponse transactionResponse = new TransactionResponse();
 
-        // تنظیم mock ها
+
         when(repository.findById(1L)).thenReturn(Optional.of(specialist));
         when(transactionService.findAllByWalletId(5L, pageable)).thenReturn(transactionPage);
         when(transactionMapper.entityMapToResponse(transaction)).thenReturn(transactionResponse);
 
-        // فراخوانی متد تست شونده
+
         Page<TransactionResponse> result = specialistService.findAllTransactionsBySpecialistId(1L, pageable);
 
-        // اعتبارسنجی خروجی
+
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
         assertSame(transactionResponse, result.getContent().get(0));

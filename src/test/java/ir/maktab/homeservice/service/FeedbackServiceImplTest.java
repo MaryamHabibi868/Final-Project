@@ -38,7 +38,7 @@ class FeedbackServiceImplTest {
 
     @Test
     void submitFeedback_offerIsPaid_savesFeedbackAndUpdatesSpecialistScore() {
-        // Arrange
+
         FeedbackSaveRequest request = new FeedbackSaveRequest();
         request.setOfferId(1L);
         request.setRange(4);
@@ -67,15 +67,13 @@ class FeedbackServiceImplTest {
 
         when(feedbackRepository.findAverageRangeBySpecialistId(2L)).thenReturn(4.2);
 
-        // Act
         FeedbackResponse response = feedbackService.submitFeedback(request);
 
-        // Assert
         assertNotNull(response);
         assertEquals(4, response.getRange());
         assertEquals("Good job", response.getDescription());
 
-        // Verify specialist score update and save
+
         verify(specialistService, times(1)).save(specialist);
         assertEquals(4.2, specialist.getScore());
     }
@@ -87,7 +85,7 @@ class FeedbackServiceImplTest {
         request.setRange(3);
 
         Offer offer = new Offer();
-        offer.setStatus(OfferStatus.DONE); // not PAID
+        offer.setStatus(OfferStatus.DONE);
 
         when(offerService.findById(1L)).thenReturn(offer);
 
