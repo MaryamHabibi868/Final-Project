@@ -34,11 +34,11 @@ public class Specialist extends User {
     private String profileImagePath;
 
     @JoinTable(name = "specialist_homeService")
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<HomeService> homeServices = new HashSet<>();
 
-    @Column(name = Specialist.OFFER_ID)
-    @OneToMany(mappedBy = "specialist")
+
+    @OneToMany(mappedBy = "specialist" , fetch = FetchType.LAZY)
     private Set<Offer> offers = new HashSet<>();
 
 }

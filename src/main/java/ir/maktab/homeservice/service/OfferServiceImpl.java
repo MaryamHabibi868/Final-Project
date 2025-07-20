@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class OfferServiceImpl
@@ -185,9 +186,12 @@ public class OfferServiceImpl
 
         Specialist foundSpecialist = specialistService.findById(specialistId);
 
-        List<Long> allowedOrderIds = foundSpecialist.getOffers().stream()
+        Set<Offer> offers = foundSpecialist.getOffers();
+
+        List<Long> allowedOrderIds = offers.stream()
                 .filter(offer -> offer.getStatus() == OfferStatus.DONE
-                        || offer.getStatus() == OfferStatus.PAID)
+                        || offer.getStatus() == OfferStatus.PAID
+                        || offer.getStatus() == OfferStatus.ACCEPTED)
                 .map(offer -> offer.getOrderInformation().getId())
                 .distinct()
                 .toList();
