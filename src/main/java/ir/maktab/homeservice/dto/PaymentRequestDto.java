@@ -2,6 +2,8 @@ package ir.maktab.homeservice.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -10,6 +12,7 @@ import lombok.*;
 public class PaymentRequestDto {
 
     private Long offerId;
+    private BigDecimal amount;
     private String cardNumber;
     private String expiryDate;
     private String cvv2;

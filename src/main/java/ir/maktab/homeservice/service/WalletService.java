@@ -7,4 +7,6 @@ import java.math.BigDecimal;
 public interface WalletService extends BaseService<Wallet, Long> {
 
     BigDecimal walletBalance(Long walletId);
+
+    void chargeWallet(Long customerId, BigDecimal amount);
 }

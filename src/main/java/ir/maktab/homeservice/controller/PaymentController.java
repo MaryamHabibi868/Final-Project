@@ -26,20 +26,14 @@ public class PaymentController {
 
 
         if (!captchaService.verify(dto.getCaptchaToken(), dto.getCaptchaAnswer())) {
-            return ResponseEntity.badRequest().body("کپچا نادرست است.");
+            return ResponseEntity.badRequest().body("Wrong captcha");
         }
-
-
-        if (dto.getCardNumber() == null || dto.getCardNumber().length() != 16) {
-            return ResponseEntity.badRequest().body("شماره کارت نامعتبر است.");
-        }
-
 
         try {
             offerService.paySpecialist(dto.getOfferId());
-            return ResponseEntity.ok("پرداخت با موفقیت انجام شد.");
+            return ResponseEntity.ok("Success payment");
         } catch (Exception ex) {
-            return ResponseEntity.badRequest().body("خطا: " + ex.getMessage());
+            return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
         }
     }
 }
