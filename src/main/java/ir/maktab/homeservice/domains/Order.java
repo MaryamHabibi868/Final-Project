@@ -7,6 +7,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -51,4 +53,7 @@ public class Order extends BaseEntity<Long> {
     @JoinColumn(name = Order.CUSTOMER_ID, nullable = false)
     @ManyToOne
     private Customer customer;
+
+    @OneToMany
+    private Set<Offer> offers = new HashSet<>();
 }

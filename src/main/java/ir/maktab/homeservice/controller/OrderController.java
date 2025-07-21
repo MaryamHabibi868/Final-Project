@@ -1,8 +1,7 @@
 package ir.maktab.homeservice.controller;
 
 import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
-import ir.maktab.homeservice.dto.OrderSaveRequest;
-import ir.maktab.homeservice.dto.OrderResponse;
+import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +31,27 @@ public class OrderController {
     @GetMapping("/filter-by-customer-id/{customerId}")
     public ResponseEntity<Page<OrderResponse>> findOrderHistory(
             @PathVariable Long customerId,
-            @RequestParam (required = false) OrderStatus orderStatus,
+            @RequestParam(required = false) OrderStatus orderStatus,
             @PageableDefault(size = 10, sort = "createDate",
                     direction = Sort.Direction.DESC) Pageable pageable) {
 
         return ResponseEntity.ok(
                 orderService.findOrderHistory(customerId, orderStatus, pageable));
+    }
+
+
+    @GetMapping("/filter-order-history")
+    public ResponseEntity<Page<OrderSummaryResponse>> filterOrdersForManager(
+            @RequestBody OrderFilterRequestForManager request,
+            @PageableDefault(size = 10, sort = "createDate",
+                    direction = Sort.Direction.DESC) Pageable pageable) {
+
+        return ResponseEntity.ok(orderService.orderHistory(request, pageable));
+    }
+
+    @GetMapping("/filter-order-detail/{orderId}")
+    public ResponseEntity<OrderResponseForManager> getOrderDetails(
+            @PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.orderDetailsForManager(orderId));
     }
 }

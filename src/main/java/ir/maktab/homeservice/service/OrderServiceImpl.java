@@ -5,18 +5,21 @@ import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.HomeService;
 import ir.maktab.homeservice.domains.Order;
 import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
-import ir.maktab.homeservice.dto.OrderSaveRequest;
-import ir.maktab.homeservice.dto.OrderResponse;
+import ir.maktab.homeservice.dto.*;
+import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.exception.NotValidPriceException;
 import ir.maktab.homeservice.mapper.OrderMapper;
 import ir.maktab.homeservice.repository.OrderRepository;
 import ir.maktab.homeservice.repository.specification.OrderSpecification;
+import ir.maktab.homeservice.repository.specification.OrderSpecificationForManager;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class OrderServiceImpl
@@ -70,6 +73,23 @@ public class OrderServiceImpl
                         ? OrderSpecification.hasStatus(orderStatus) : null);
 
         return repository.findAll(spec, pageable)
-                        .map(orderMapper::entityMapToResponse);
+                .map(orderMapper::entityMapToResponse);
+    }
+
+    @Override
+    public Page<OrderSummaryResponse> orderHistory(
+            OrderFilterRequestForManager request, Pageable pageable) {
+        Page<Order> orders = repository.findAll(
+                OrderSpecificationForManager.withFilters(request), pageable);
+        return orders.map(orderMapper::entityMapToSummaryResponse);
+    }
+
+
+    @Override
+    public OrderResponseForManager orderDetailsForManager(Long orderId) {
+        Order order = repository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("Order not found"));
+
+        return orderMapper.entityMapToResponseForManager(order);
     }
 }
