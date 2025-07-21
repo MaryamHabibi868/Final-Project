@@ -1,16 +1,14 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
-import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
+import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.CustomerMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import java.math.BigDecimal;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -29,44 +27,136 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void registerCustomer_successful() {
-        CustomerSaveRequest request = new CustomerSaveRequest(
-                "John", "Doe", "john@example.com", "password"
-        );
+    void registerCustomer_EmailAlreadyExistsAndVerified_ThrowsDuplicatedException() {
+        Customer existingCustomer = new Customer();
+        existingCustomer.setIsEmailVerify(true);
 
-        when(customerRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(customerRepository.findByEmail("test@example.com"))
+                .thenReturn(Optional.of(existingCustomer));
 
-        ArgumentCaptor<Customer> captor = ArgumentCaptor.forClass(Customer.class);
-        Customer savedCustomer = new Customer();
-        savedCustomer.setId(1L);
-        savedCustomer.setFirstName(request.getFirstName());
-        savedCustomer.setLastName(request.getLastName());
-        savedCustomer.setEmail(request.getEmail());
-        savedCustomer.setPassword(request.getPassword());
-        Wallet wallet = new Wallet();
-        wallet.setBalance(BigDecimal.ZERO);
-        wallet.setUserInformation(savedCustomer);
-        savedCustomer.setWallet(wallet);
+        CustomerSaveRequest request = new CustomerSaveRequest();
+        request.setEmail("test@example.com");
 
-        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
-        CustomerResponse expectedResponse = new CustomerResponse(1L, "John", "Doe", "john@example.com", null);
-        when(customerMapper.entityMapToResponse(savedCustomer)).thenReturn(expectedResponse);
+        DuplicatedException exception = assertThrows(DuplicatedException.class, () ->
+                customerService.registerCustomer(request));
 
-        CustomerResponse result = customerService.registerCustomer(request);
-
-        assertNotNull(result);
-        assertEquals(expectedResponse.getEmail(), result.getEmail());
+        assertEquals("Email address already exist", exception.getMessage());
+        verify(customerRepository, never()).save(any());
     }
+
 
     @Test
-    void registerCustomer_emailExists_shouldThrowException() {
-        CustomerSaveRequest request = new CustomerSaveRequest(
-                "John", "Doe", "john@example.com", "password"
-        );
-        when(customerRepository.existsByEmail(request.getEmail())).thenReturn(true);
+    void registerCustomer_EmailExistsButNotVerified_SavesCustomer() {
+        Customer existingCustomer = new Customer();
+        existingCustomer.setIsEmailVerify(false);
 
-        assertThrows(DuplicatedException.class, () -> customerService.registerCustomer(request));
+        when(customerRepository.findByEmail("test@example.com"))
+                .thenReturn(Optional.of(existingCustomer));
+
+        CustomerSaveRequest request = new CustomerSaveRequest();
+        request.setEmail("test@example.com");
+        request.setFirstName("John");
+        request.setLastName("Doe");
+        request.setPassword("pass");
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setEmail("test@example.com");
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        when(customerMapper.entityMapToResponse(savedCustomer))
+                .thenReturn(new CustomerResponse());
+
+        CustomerResponse response = customerService.registerCustomer(request);
+
+        assertNotNull(response);
+        verify(customerRepository).save(any(Customer.class));
     }
+
+
+    @Test
+    void registerCustomer_NewEmail_SavesCustomer() {
+        when(customerRepository.findByEmail("new@example.com"))
+                .thenReturn(Optional.empty());
+
+        CustomerSaveRequest request = new CustomerSaveRequest();
+        request.setEmail("new@example.com");
+        request.setFirstName("Alice");
+        request.setLastName("Smith");
+        request.setPassword("secret");
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setEmail("new@example.com");
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        when(customerMapper.entityMapToResponse(savedCustomer))
+                .thenReturn(new CustomerResponse());
+
+        CustomerResponse response = customerService.registerCustomer(request);
+
+        assertNotNull(response);
+        verify(customerRepository).save(any(Customer.class));
+    }
+
+
+    @Test
+    void verifyCustomer_CustomerNotFound_ThrowsNotFoundException() {
+        Customer customer = new Customer();
+        customer.setEmail("notfound@example.com");
+
+        when(customerRepository.findByEmail(customer.getEmail()))
+                .thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(NotFoundException.class, () ->
+                customerService.verifyCustomer(customer));
+
+        assertEquals("Specialist not found", exception.getMessage());
+    }
+
+
+    @Test
+    void verifyCustomer_AlreadyVerified_ThrowsNotApprovedException() {
+        Customer customer = new Customer();
+        customer.setEmail("verified@example.com");
+
+        Customer existingCustomer = new Customer();
+        existingCustomer.setIsEmailVerify(true);
+
+        when(customerRepository.findByEmail(customer.getEmail()))
+                .thenReturn(Optional.of(existingCustomer));
+
+        NotApprovedException exception = assertThrows(NotApprovedException.class, () ->
+                customerService.verifyCustomer(customer));
+
+        assertEquals("This specialist is already verified ", exception.getMessage());
+    }
+
+
+    @Test
+    void verifyCustomer_SuccessfulVerification_ReturnsResponse() {
+        Customer customer = new Customer();
+        customer.setEmail("verifyme@example.com");
+
+        Customer existingCustomer = new Customer();
+        existingCustomer.setIsEmailVerify(false);
+
+        when(customerRepository.findByEmail(customer.getEmail()))
+                .thenReturn(Optional.of(existingCustomer));
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setEmail(customer.getEmail());
+        savedCustomer.setIsEmailVerify(true);
+        savedCustomer.setIsActive(true);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        when(customerMapper.entityMapToResponse(savedCustomer))
+                .thenReturn(new CustomerResponse());
+
+        CustomerResponse response = customerService.verifyCustomer(customer);
+
+        assertNotNull(response);
+        verify(customerRepository).save(any(Customer.class));
+    }
+
 
     @Test
     void updateCustomer_successful() {

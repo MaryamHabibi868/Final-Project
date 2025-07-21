@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -212,5 +213,34 @@ class OfferServiceImplTest {
         Page<OrderResponse> result = offerService.findOrdersBySpecialistId(specialist.getId(), Pageable.unpaged());
 
         assertEquals(1, result.getTotalElements());
+    }
+
+    @Test
+    void findAllOffersBySpecialistScore_ShouldReturnMappedPage() {
+        Long orderId = 1L;
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Order mockOrder = new Order();
+        when(orderService.findById(orderId)).thenReturn(mockOrder);
+
+        Offer offer = new Offer();
+        List<Offer> offers = List.of(offer);
+        Page<Offer> offerPage = new PageImpl<>(offers, pageable, offers.size());
+
+        when(offerRepository.findAllByOrderInformation_Id(orderId, pageable))
+                .thenReturn(offerPage);
+
+        when(offerMapper.entityMapToResponse(any(Offer.class)))
+                .thenReturn(new OfferResponse());
+
+        Page<OfferResponse> result = offerService
+                .findAllOffersBySpecialistScore(orderId, pageable);
+
+        assertNotNull(result);
+        assertEquals(1, result.getContent().size());
+
+        verify(orderService).findById(orderId);
+        verify(offerRepository).findAllByOrderInformation_Id(orderId, pageable);
+        verify(offerMapper).entityMapToResponse(any(Offer.class));
     }
 }

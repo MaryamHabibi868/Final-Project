@@ -44,50 +44,155 @@ class SpecialistServiceImplTest {
     }
 
     @Test
-    void registerSpecialist_success() {
-        SpecialistSaveRequest req = new SpecialistSaveRequest();
-        req.setEmail("test@example.com");
-        req.setFirstName("Ali");
-        req.setLastName("Ahmadi");
-        req.setPassword("pass");
-        req.setProfileImagePath(null);
+    void registerSpecialist_EmailAlreadyExistsAndVerified_ThrowsDuplicatedException() {
+        Specialist existing = new Specialist();
+        existing.setIsEmailVerify(true);
 
+        when(repository.findByEmail("test@example.com")).thenReturn(Optional.of(existing));
 
-        when(repository.existsByEmail(req.getEmail())).thenReturn(false);
+        SpecialistSaveRequest request = new SpecialistSaveRequest();
+        request.setEmail("test@example.com");
 
+        DuplicatedException ex = assertThrows(DuplicatedException.class, () -> {
+            specialistService.registerSpecialist(request);
+        });
 
-        Specialist savedSpecialist = new Specialist();
-        savedSpecialist.setId(1L);
-        savedSpecialist.setEmail(req.getEmail());
-        savedSpecialist.setStatus(AccountStatus.NEW);
-
-        when(repository.save(any(Specialist.class))).thenReturn(savedSpecialist);
-
-
-        SpecialistResponse specialistResponse = new SpecialistResponse();
-        when(specialistMapper.entityMapToResponse(savedSpecialist)).thenReturn(specialistResponse);
-
-
-        SpecialistResponse response = specialistService.registerSpecialist(req);
-
-
-        assertNotNull(response);
-        verify(repository).existsByEmail(req.getEmail());
-        verify(repository).save(any(Specialist.class));
-        verify(specialistMapper).entityMapToResponse(savedSpecialist);
+        assertEquals("Email already exists", ex.getMessage());
+        verify(repository, never()).save(any());
     }
 
     @Test
-    void registerSpecialist_throwsDuplicatedException() {
-        SpecialistSaveRequest req = new SpecialistSaveRequest();
-        req.setEmail("test@example.com");
+    void registerSpecialist_EmailExistsButNotVerified_SavesSpecialist() {
+        Specialist existing = new Specialist();
+        existing.setIsEmailVerify(false);
 
-        when(repository.existsByEmail(req.getEmail())).thenReturn(true);
+        when(repository.findByEmail("test@example.com")).thenReturn(Optional.of(existing));
 
-        assertThrows(DuplicatedException.class, () -> specialistService.registerSpecialist(req));
+        SpecialistSaveRequest request = new SpecialistSaveRequest();
+        request.setEmail("test@example.com");
+        request.setFirstName("Ali");
+        request.setLastName("Ahmadi");
+        request.setPassword("12345");
+        request.setProfileImagePath("profile.png");
 
-        verify(repository).existsByEmail(req.getEmail());
-        verify(repository, never()).save(any());
+        Specialist saved = new Specialist();
+        saved.setEmail("test@example.com");
+
+        when(repository.save(any(Specialist.class))).thenReturn(saved);
+        when(specialistMapper.entityMapToResponse(saved)).thenReturn(new SpecialistResponse());
+
+        SpecialistResponse response = specialistService.registerSpecialist(request);
+
+        assertNotNull(response);
+        verify(repository).save(any());
+    }
+
+    @Test
+    void registerSpecialist_NewEmail_SavesSpecialist() {
+        when(repository.findByEmail("new@example.com")).thenReturn(Optional.empty());
+
+        SpecialistSaveRequest request = new SpecialistSaveRequest();
+        request.setEmail("new@example.com");
+        request.setFirstName("Sara");
+        request.setLastName("Moradi");
+        request.setPassword("pass");
+        request.setProfileImagePath(null);
+
+        Specialist saved = new Specialist();
+        saved.setEmail("new@example.com");
+
+        when(repository.save(any(Specialist.class))).thenReturn(saved);
+        when(specialistMapper.entityMapToResponse(saved)).thenReturn(new SpecialistResponse());
+
+        SpecialistResponse response = specialistService.registerSpecialist(request);
+
+        assertNotNull(response);
+        verify(repository).save(any());
+    }
+
+
+    @Test
+    void verifySpecialist_NotFound_ThrowsNotFoundException() {
+        Specialist specialist = new Specialist();
+        specialist.setEmail("notfound@example.com");
+
+        when(repository.findByEmail(specialist.getEmail())).thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> {
+            specialistService.verifySpecialist(specialist);
+        });
+
+        assertEquals("Specialist not found", ex.getMessage());
+    }
+
+
+    @Test
+    void verifySpecialist_AlreadyVerified_ThrowsNotApprovedException() {
+        Specialist specialist = new Specialist();
+        specialist.setEmail("verified@example.com");
+
+        Specialist existing = new Specialist();
+        existing.setIsEmailVerify(true);
+
+        when(repository.findByEmail(specialist.getEmail())).thenReturn(Optional.of(existing));
+
+        NotApprovedException ex = assertThrows(NotApprovedException.class, () -> {
+            specialistService.verifySpecialist(specialist);
+        });
+
+        assertEquals("This specialist is already verified ", ex.getMessage());
+    }
+
+
+    @Test
+    void verifySpecialist_SuccessWithoutProfileImage() {
+        Specialist specialist = new Specialist();
+        specialist.setEmail("verify@example.com");
+        specialist.setProfileImagePath(null);
+
+        Specialist existing = new Specialist();
+        existing.setIsEmailVerify(false);
+
+        when(repository.findByEmail(specialist.getEmail())).thenReturn(Optional.of(existing));
+
+        Specialist saved = new Specialist();
+        saved.setIsEmailVerify(true);
+        saved.setIsActive(true);
+
+        when(repository.save(any(Specialist.class))).thenReturn(saved);
+        when(specialistMapper.entityMapToResponse(saved)).thenReturn(new SpecialistResponse());
+
+        SpecialistResponse response = specialistService.verifySpecialist(specialist);
+
+        assertNotNull(response);
+        verify(repository).save(any());
+    }
+
+
+    @Test
+    void verifySpecialist_SuccessWithProfileImage() {
+        Specialist specialist = new Specialist();
+        specialist.setEmail("verify@example.com");
+        specialist.setProfileImagePath("some/path.png");
+
+        Specialist existing = new Specialist();
+        existing.setIsEmailVerify(false);
+
+        when(repository.findByEmail(specialist.getEmail())).thenReturn(Optional.of(existing));
+
+
+        Specialist saved = new Specialist();
+        saved.setIsEmailVerify(true);
+        saved.setIsActive(true);
+        saved.setStatus(AccountStatus.PENDING);
+
+        when(repository.save(any(Specialist.class))).thenReturn(saved);
+        when(specialistMapper.entityMapToResponse(saved)).thenReturn(new SpecialistResponse());
+
+        SpecialistResponse response = specialistService.verifySpecialist(specialist);
+
+        assertNotNull(response);
+        verify(repository).save(any());
     }
 
     @Test

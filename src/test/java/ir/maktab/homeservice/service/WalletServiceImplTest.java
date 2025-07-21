@@ -1,5 +1,7 @@
 package ir.maktab.homeservice.service;
 
+import ir.maktab.homeservice.domains.Customer;
+import ir.maktab.homeservice.domains.Transaction;
 import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.repository.WalletRepository;
@@ -18,6 +20,12 @@ class WalletServiceImplTest {
 
     @InjectMocks
     private WalletServiceImpl walletService;
+
+    @Mock
+    private CustomerService customerService;
+
+    @Mock
+    private TransactionService transactionService;
 
     @BeforeEach
     void setUp() {
@@ -53,5 +61,30 @@ class WalletServiceImplTest {
 
         assertEquals("Wallet not found", exception.getMessage());
         verify(walletRepository).findById(walletId);
+    }
+
+    @Test
+    void chargeWallet_shouldIncreaseBalanceAndSaveTransaction() {
+        Long customerId = 1L;
+        BigDecimal amount = BigDecimal.valueOf(100);
+
+        Wallet wallet = new Wallet();
+        wallet.setBalance(BigDecimal.valueOf(200));
+
+        Customer customer = new Customer();
+        customer.setWallet(wallet);
+
+        when(customerService.findById(customerId)).thenReturn(customer);
+        when(walletRepository.save(any(Wallet.class)))
+                .thenAnswer(i -> i.getArgument(0));
+        when(transactionService.save(any(Transaction.class))).thenReturn(null);
+
+        walletService.chargeWallet(customerId, amount);
+
+        assertEquals(new BigDecimal("300"), wallet.getBalance());
+
+        verify(walletRepository, times(1)).save(wallet);
+        verify(transactionService, times(1))
+                .save(any(Transaction.class));
     }
 }
