@@ -20,7 +20,7 @@ public class PaymentController {
     private final CaptchaService captchaService;
 
 
-    @PostMapping("/payment")
+   /* @PostMapping("/payment")
     public ResponseEntity<String> processPayment(
             @RequestBody @Valid PaymentRequestDto dto) {
 
@@ -35,5 +35,5 @@ public class PaymentController {
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
         }
-    }
+    }*/
 }

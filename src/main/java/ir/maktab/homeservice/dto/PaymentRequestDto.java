@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @ToString
 public class PaymentRequestDto {
 
-    private Long offerId;
+    private Long walletId;
     private BigDecimal amount;
     private String cardNumber;
     private String expiryDate;

@@ -43,8 +43,13 @@
     </div>
 
     <div class="mb-3">
-        <label for="offerId" class="form-label">شناسهٔ پیشنهاد (Offer ID)</label>
-        <input type="number" class="form-control" id="offerId" placeholder="مثلاً 3" required />
+        <label for="walletId" class="form-label">شناسهٔ پیشنهاد (Wallet ID)</label>
+        <input type="number" class="form-control" id="walletId" placeholder="مثلاً 3" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="amount" class="form-label">شناسهٔ پیشنهاد (Amount)</label>
+        <input type="number" class="form-control" id="amount" placeholder="مثلاً 3000.00" required />
     </div>
 
     <div class="mb-3">
@@ -135,7 +140,7 @@
 
     async function refreshCaptcha() {
         try {
-            const res  = await fetch("/api/captcha");
+            const res  = await fetch("http://localhost:8080/api/captcha");
             if (!res.ok) throw new Error("خطا در دریافت کپچا");
             const data = await res.json();
 
@@ -148,7 +153,8 @@
 
     async function pay() {
         const body = {
-            offerId:        document.getElementById("offerId").value,
+            walletId:        document.getElementById("walletId").value,
+            amount:        document.getElementById("amount").value,
             cardNumber:     document.getElementById("cardNumber").value,
             expiryDate:     document.getElementById("expiryDate").value,
             cvv2:           document.getElementById("cvv2").value,
@@ -158,7 +164,7 @@
         };
 
         try {
-            const res  = await fetch("/api/payment", {
+            const res  = await fetch("http://localhost:8080/api/wallets/charge-wallet", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)

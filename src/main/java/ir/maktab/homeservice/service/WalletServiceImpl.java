@@ -4,6 +4,7 @@ import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.Transaction;
 import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.domains.enumClasses.TransactionType;
+import ir.maktab.homeservice.dto.PaymentRequestDto;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.repository.WalletRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
@@ -41,15 +42,14 @@ public class WalletServiceImpl
 
     @Override
     @Transactional
-    public void chargeWallet(Long customerId, BigDecimal amount) {
-        Customer customer = customerService.findById(customerId);
-        Wallet wallet = customer.getWallet();
-        wallet.setBalance(wallet.getBalance().add(amount));
+    public void chargeWallet(PaymentRequestDto request) {
+        Wallet wallet = findById(request.getWalletId());
+        wallet.setBalance(wallet.getBalance().add(request.getAmount()));
         save(wallet);
 
 
         Transaction transaction = new Transaction();
-        transaction.setAmount(amount);
+        transaction.setAmount(request.getAmount());
         transaction.setDate(ZonedDateTime.now());
         transaction.setType(TransactionType.DEPOSIT);
         transaction.setWallet(wallet);

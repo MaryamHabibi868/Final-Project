@@ -27,9 +27,9 @@ public class WalletController {
 
 
 
-    @PostMapping("/charge-wallet/{customerId}")
+    @CrossOrigin("http://localhost:63342")
+    @PostMapping("/charge-wallet")
     public ResponseEntity<String> chargeWallet(
-            @PathVariable Long customerId,
             @RequestBody @Valid PaymentRequestDto dto) {
 
         if (!captchaService.verify(dto.getCaptchaToken(), dto.getCaptchaAnswer())) {
@@ -41,7 +41,7 @@ public class WalletController {
         }
 
         try {
-            walletService.chargeWallet(customerId, dto.getAmount());
+            walletService.chargeWallet(dto);
             return ResponseEntity.ok("Wallet charged");
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Error: " + ex.getMessage());
