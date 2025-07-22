@@ -22,6 +22,10 @@ public class User extends BaseEntity<Long> {
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String WALLET_ID = "wallet_id";
+    public static final String IS_ACTIVE = "is_active";
+    public static final String IS_EMAIL_VERIFY = "is_email_verify";
+    public static final String ROLE = "role";
+
 
     @Column(name = User.FIRST_NAME, nullable = false)
     private String firstName;
@@ -38,4 +42,18 @@ public class User extends BaseEntity<Long> {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = User.WALLET_ID, nullable = false)
     private Wallet wallet;
+
+    @Column(name = User.IS_ACTIVE
+            /*, nullable = false*/)
+    private Boolean isActive = false;
+
+    @Column(name = User.IS_EMAIL_VERIFY
+          /*  , nullable = false*/)
+    private Boolean isEmailVerify = false;
+
+
+    @JoinColumn(name = User.ROLE
+            /*, nullable = false*/)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Role role;
 }

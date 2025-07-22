@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SpecialistServiceImpl
@@ -48,8 +48,15 @@ public class SpecialistServiceImpl
     @Transactional
     @Override
     public SpecialistResponse registerSpecialist(SpecialistSaveRequest request) {
-        if (repository.existsByEmail(request.getEmail())) {
-            throw new DuplicatedException("Email already exists");
+
+        Optional<Specialist> existingSpecialist =
+                repository.findByEmail(request.getEmail());
+
+        if (existingSpecialist.isPresent()) {
+            Specialist registeredSpecialist = existingSpecialist.get();
+            if (registeredSpecialist.getIsEmailVerify()) {
+                throw new DuplicatedException("Email already exists");
+            }
         }
 
         Wallet wallet = new Wallet();
@@ -61,23 +68,61 @@ public class SpecialistServiceImpl
         specialist.setEmail(request.getEmail());
         specialist.setPassword(request.getPassword());
 
+       /* Role role = roleService.findByName("SPECIALIST")
+                .orElseThrow(() -> new NotFoundException("Role not found"));
+        specialist.setRole(role);*/
+
+
         if (request.getProfileImagePath() != null) {
             specialist.setProfileImagePath(request.getProfileImagePath());
-            /*if ((request.getProfileImagePath()).getSize() > 300 * 1024 ){
+                /*if ((request.getProfileImagePath()).getSize() > 300 * 1024 ){
                 throw new NotApprovedException("Profile image is too large");
             }*/
-            specialist.setStatus(AccountStatus.PENDING);
-        } else {
-            specialist.setStatus(AccountStatus.NEW);
         }
+
+        specialist.setStatus(AccountStatus.NEW);
+
         specialist.setScore(0.0);
         specialist.setWallet(wallet);
         wallet.setUserInformation(specialist);
 
         Specialist save = repository.save(specialist);
+
+        sendVerificationEmail(save);
+
         return specialistMapper.entityMapToResponse(save);
+
+
     }
 
+
+    public void sendVerificationEmail(Specialist specialist) {
+        System.out.println("Please click on your email for verification " +
+                repository.findByEmail(specialist.getEmail()));
+    }
+
+    public SpecialistResponse verifySpecialist(Specialist specialist) {
+        Optional<Specialist> specialist1 = repository.findByEmail(specialist.getEmail());
+        if (specialist1.isEmpty()) {
+            throw new NotFoundException("Specialist not found");
+        }
+        if (specialist1.get().getIsEmailVerify()) {
+            throw new NotApprovedException("This specialist is already verified ");
+        }
+
+        Specialist specialist2 = specialist1.get();
+        specialist2.setIsEmailVerify(true);
+        specialist2.setIsActive(true);
+
+        if (specialist.getProfileImagePath() != null) {
+            specialist2.setStatus(AccountStatus.PENDING);
+        }
+
+
+        Specialist save = repository.save(specialist2);
+
+        return specialistMapper.entityMapToResponse(save);
+    }
 
     @Override
     public SpecialistResponse loginSpecialist(
@@ -181,32 +226,31 @@ public class SpecialistServiceImpl
     public Page<HomeServiceResponse> findAllHomeServicesBySpecialistId(
             Long specialistId, Pageable pageable) {
         return repository.findHomeServicesBySpecialistId(specialistId, pageable)
-                .map(homeServiceMapper :: entityMapToResponse);
+                .map(homeServiceMapper::entityMapToResponse);
     }
-
 
 
     @Override
     public Page<SpecialistResponse> findAllByHomeServiceId(
             Long homeServiceId, Pageable pageable) {
-        return repository.findAllByHomeServices_id(homeServiceId , pageable)
-               .map(specialistMapper:: entityMapToResponse);
+        return repository.findAllByHomeServices_id(homeServiceId, pageable)
+                .map(specialistMapper::entityMapToResponse);
     }
 
     @Override
     public Page<SpecialistResponse> findAllByScoreIsBetween(
             Double lower, Double higher, Pageable pageable) {
-        return repository.findAllByScoreIsBetween(lower , higher, pageable)
-                .map(specialistMapper :: entityMapToResponse);
+        return repository.findAllByScoreIsBetween(lower, higher, pageable)
+                .map(specialistMapper::entityMapToResponse);
     }
 
 
     @Override
     public Double findScoreBySpecialistId(Long specialistId) {
-       Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
+        Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
                 () -> new NotFoundException("Specialist Not Found"));
 
-       return foundSpecialist.getScore();
+        return foundSpecialist.getScore();
     }
 
 
@@ -219,13 +263,14 @@ public class SpecialistServiceImpl
 
         Long walletId = foundSpecialist.getWallet().getId();
         return transactionService.findAllByWalletId(walletId, pageable)
-              .map(transactionMapper :: entityMapToResponse);
+                .map(transactionMapper::entityMapToResponse);
     }
 
 
     @Override
     public void inActivateSpecialist() {
         repository.findAllByScoreIsLessThan(0.0).forEach(specialist -> {
-            specialist.setStatus(AccountStatus.INACTIVE);});
+            specialist.setStatus(AccountStatus.INACTIVE);
+        });
     }
 }
