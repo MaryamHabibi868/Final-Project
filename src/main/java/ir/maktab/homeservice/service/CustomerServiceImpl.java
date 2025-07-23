@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
+import ir.maktab.homeservice.domains.Role;
 import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
@@ -20,13 +21,16 @@ public class CustomerServiceImpl
         implements CustomerService {
 
     private final CustomerMapper customerMapper;
+    private final RoleService roleService;
 
 
     public CustomerServiceImpl(CustomerRepository repository,
-                               CustomerMapper customerMapper) {
+                               CustomerMapper customerMapper,
+                               RoleService roleService) {
         super(repository);
         this.customerMapper = customerMapper;
 
+        this.roleService = roleService;
     }
 
 
@@ -54,9 +58,8 @@ public class CustomerServiceImpl
         customer.setWallet(wallet);
         wallet.setUserInformation(customer);
 
-        /*Role role = roleService.findByName("CUSTOMER")
-                .orElseThrow(() -> new NotFoundException("Role not found"));
-        customer.setRole(role);*/
+        Role role = roleService.findByName("CUSTOMER");
+        customer.setRole(role);
 
         Customer save = repository.save(customer);
 

@@ -29,19 +29,22 @@ public class SpecialistServiceImpl
     private final HomeServiceMapper homeServiceMapper;
     private final TransactionService transactionService;
     private final TransactionMapper transactionMapper;
+    private final RoleService roleService;
 
     public SpecialistServiceImpl(SpecialistRepository repository,
                                  SpecialistMapper specialistMapper,
                                  HomeServiceService homeServiceService,
                                  HomeServiceMapper homeServiceMapper,
                                  TransactionService transactionService,
-                                 TransactionMapper transactionMapper) {
+                                 TransactionMapper transactionMapper,
+                                 RoleService roleService) {
         super(repository);
         this.specialistMapper = specialistMapper;
         this.homeServiceService = homeServiceService;
         this.homeServiceMapper = homeServiceMapper;
         this.transactionService = transactionService;
         this.transactionMapper = transactionMapper;
+        this.roleService = roleService;
     }
 
 
@@ -68,9 +71,8 @@ public class SpecialistServiceImpl
         specialist.setEmail(request.getEmail());
         specialist.setPassword(request.getPassword());
 
-       /* Role role = roleService.findByName("SPECIALIST")
-                .orElseThrow(() -> new NotFoundException("Role not found"));
-        specialist.setRole(role);*/
+        Role role = roleService.findByName("SPECIALIST");
+        specialist.setRole(role);
 
 
         if (request.getProfileImagePath() != null) {
