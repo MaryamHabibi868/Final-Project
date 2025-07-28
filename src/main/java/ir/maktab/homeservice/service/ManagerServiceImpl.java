@@ -74,12 +74,6 @@ public class ManagerServiceImpl
                         () -> new NotFoundException("Manager Not Found")
                 );
 
-
-        /*Manager foundManager = repository.findById(request.getId())
-                .orElseThrow(
-                        () -> new NotFoundException("Manager not found")
-                );*/
-
         if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicatedException("Email address already exist");
         }

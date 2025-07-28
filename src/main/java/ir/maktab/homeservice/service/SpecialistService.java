@@ -39,7 +39,6 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
 
 
 
-
     Page<HomeServiceResponse> findAllHomeServicesBySpecialistId(
             Long specialistId, Pageable pageable);
 
@@ -48,11 +47,11 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
             Double lower, Double higher , Pageable pageable);
 
 
-    ScoreResponse findScoreBySpecialistId(/*Long specialistId*/);
+    ScoreResponse findScoreBySpecialistId();
 
 
     Page<TransactionResponse> findAllTransactionsBySpecialistId(
-           /* Long specialistId,*/ Pageable pageable);
+            Pageable pageable);
 
 
     void inActivateSpecialist();

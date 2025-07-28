@@ -18,11 +18,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class OrderServiceImpl
@@ -54,7 +50,8 @@ public class OrderServiceImpl
         HomeService homeServiceFound = homeServiceService
                 .findById(request.getHomeServiceId());
 
-        if (request.getSuggestedPrice().compareTo(homeServiceFound.getBasePrice()) < 0) {
+        if (request.getSuggestedPrice()
+                .compareTo(homeServiceFound.getBasePrice()) < 0) {
             throw new NotValidPriceException(
                     "Suggested price is less than the base price of this home service");
         }
@@ -76,8 +73,8 @@ public class OrderServiceImpl
 
     @Override
     public Page<OrderResponse> findOrderHistory(
-           /* Long customerId,*/ OrderStatus orderStatus, Pageable pageable) {
-        /*customerService.findById(customerId);*/
+            OrderStatus orderStatus, Pageable pageable) {
+
 
         String email = securityUtil.getCurrentUsername();
         Customer customer = customerService.findByEmail(email);

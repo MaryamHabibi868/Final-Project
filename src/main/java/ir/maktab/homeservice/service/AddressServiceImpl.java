@@ -9,8 +9,6 @@ import ir.maktab.homeservice.mapper.AddressMapper;
 import ir.maktab.homeservice.repository.AddressRepository;
 import ir.maktab.homeservice.security.SecurityUtil;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,7 +40,6 @@ public class AddressServiceImpl
         String email = securityUtil.getCurrentUsername();
         Customer foundCustomer = customerService.findByEmail(email);
 
-        /*Customer foundCustomer = customerService.findById(request.getCustomerId());*/
         Address address = new Address();
         address.setProvince(request.getProvince());
         address.setCity(request.getCity());

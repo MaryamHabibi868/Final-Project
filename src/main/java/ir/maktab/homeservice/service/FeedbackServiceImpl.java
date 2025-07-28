@@ -66,9 +66,6 @@ public class FeedbackServiceImpl
     @Override
     public FeedbackResponseForSpecialist feedbackRangeForSpecialistToOffer(
             Long offerId) {
-      /*  Offer offer = offerService
-                .findById(offerId);*/
-
         Feedback feedback = repository.findByOfferId(offerId);
 
         return feedbackMapper.entityMapToResponseForSpecialist(feedback);

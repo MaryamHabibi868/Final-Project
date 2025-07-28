@@ -14,7 +14,6 @@ import ir.maktab.homeservice.security.SecurityUtil;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 @Service
@@ -46,7 +45,7 @@ public class WalletServiceImpl
 
     @Transactional
     @Override
-    public WalletResponse walletBalanceForSpecialist(/*Long walletId*/) {
+    public WalletResponse walletBalanceForSpecialist() {
 
         String email = securityUtil.getCurrentUsername();
         Specialist foundSpecialist = specialistService.findByEmail(email);

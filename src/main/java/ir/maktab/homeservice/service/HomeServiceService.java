@@ -8,7 +8,6 @@ import ir.maktab.homeservice.service.base.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface HomeServiceService extends BaseService<HomeService, Long> {
 

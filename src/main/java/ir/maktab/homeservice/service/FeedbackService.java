@@ -10,7 +10,8 @@ public interface FeedbackService
         extends BaseService<Feedback, Long> {
 
 
-    FeedbackResponse submitFeedback(FeedbackSaveRequest request);
+    FeedbackResponse submitFeedback(
+            FeedbackSaveRequest request);
 
 
     FeedbackResponseForSpecialist feedbackRangeForSpecialistToOffer(

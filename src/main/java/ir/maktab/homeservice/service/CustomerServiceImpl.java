@@ -6,7 +6,6 @@ import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.domains.enumClasses.Role;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
-import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.CustomerMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
@@ -51,7 +50,8 @@ public class CustomerServiceImpl
     @Override
     public CustomerResponse registerCustomer(CustomerSaveRequest request) {
 
-        Optional<Customer> existingCustomer = repository.findByEmail(request.getEmail());
+        Optional<Customer> existingCustomer =
+                repository.findByEmail(request.getEmail());
 
         if (existingCustomer.isPresent()) {
             Customer registeredCustomer = existingCustomer.get();
@@ -120,24 +120,6 @@ public class CustomerServiceImpl
         verificationTokenService.save(verificationToken);
 
         return customerMapper.entityMapToVerifiedUserResponse(customer);
-
-
-
-        /*Optional<Customer> customer1 = repository.findByEmail(customer.getEmail());
-        if (customer1.isEmpty()) {
-            throw new NotFoundException("Specialist not found");
-        }
-        if (customer1.get().getIsEmailVerify()) {
-            throw new NotApprovedException("This specialist is already verified ");
-        }
-
-        Customer customer2 = customer1.get();
-        customer2.setIsEmailVerify(true);
-        customer2.setIsActive(true);
-
-        Customer save = repository.save(customer2);
-
-        return customerMapper.entityMapToResponse(save);*/
     }
 
     @Transactional
@@ -148,12 +130,6 @@ public class CustomerServiceImpl
         Customer foundCustomer = repository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Customer not found")
         );
-
-
-       /* Customer foundCustomer = repository.findById(request.getId())
-                .orElseThrow(
-                        () -> new NotFoundException("Customer not found")
-                );*/
 
         if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicatedException("Email address already exist");
@@ -168,7 +144,8 @@ public class CustomerServiceImpl
             foundCustomer.setEmail(request.getEmail());
         }
         if (request.getPassword() != null) {
-            foundCustomer.setPassword(passwordEncoder.encode(request.getPassword()));
+            foundCustomer.setPassword(
+                    passwordEncoder.encode(request.getPassword()));
         }
         Customer save = repository.save(foundCustomer);
         return customerMapper.entityMapToResponse(save);
@@ -181,6 +158,7 @@ public class CustomerServiceImpl
                 findByEmailAndPassword(request.getEmail(), request.getPassword())
                 .orElseThrow(() -> new NotFoundException("Customer Not Found")));
     }
+
 
     @Override
     public Customer findByEmail(String email) {

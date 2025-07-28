@@ -13,15 +13,12 @@ import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.exception.NotValidPriceException;
 import ir.maktab.homeservice.mapper.OfferMapper;
-import ir.maktab.homeservice.mapper.OrderMapper;
 import ir.maktab.homeservice.repository.OfferRepository;
 import ir.maktab.homeservice.security.SecurityUtil;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -39,7 +36,6 @@ public class OfferServiceImpl
     private final SpecialistService specialistService;
     private final TransactionService transactionService;
     private final WalletService walletService;
-    private final OrderMapper orderMapper;
     private final SecurityUtil securityUtil;
 
     public OfferServiceImpl(OfferRepository repository,
@@ -48,7 +44,6 @@ public class OfferServiceImpl
                             SpecialistService specialistService,
                             TransactionService transactionService,
                             WalletService walletService,
-                            OrderMapper orderMapper,
                             SecurityUtil securityUtil) {
         super(repository);
         this.offerMapper = offerMapper;
@@ -56,7 +51,6 @@ public class OfferServiceImpl
         this.specialistService = specialistService;
         this.transactionService = transactionService;
         this.walletService = walletService;
-        this.orderMapper = orderMapper;
         this.securityUtil = securityUtil;
     }
 
@@ -71,9 +65,6 @@ public class OfferServiceImpl
         String email = securityUtil.getCurrentUsername();
 
         Specialist foundSpecialist = specialistService.findByEmail(email);
-
-        /*Specialist foundSpecialist = specialistService.
-                findById(request.getSpecialistId());*/
 
         if (foundSpecialist.getStatus() != AccountStatus.APPROVED) {
             throw new NotApprovedException("Specialist Not Approved");
@@ -113,10 +104,12 @@ public class OfferServiceImpl
                 () -> new NotFoundException("Offer of specialist not found")
         );
 
-        Order foundOrder = orderService.findById(foundOffer.getOrderInformation().getId());
+        Order foundOrder = orderService.findById(
+                foundOffer.getOrderInformation().getId());
         if (foundOrder.getStatus()
                 != OrderStatus.WAITING_FOR_CHOOSING_SPECIALIST) {
-            throw new NotApprovedException("Order is no longer waiting for special offer");
+            throw new NotApprovedException(
+                    "Order is no longer waiting for special offer");
         }
 
         foundOrder.setStatus(OrderStatus.WAITING_FOR_SPECIALIST_COMING);
@@ -126,7 +119,9 @@ public class OfferServiceImpl
                 .id(foundOffer.getSpecialist().getId()).build());
         foundOffer.setStatus(OfferStatus.ACCEPTED);
         Offer save = repository.save(foundOffer);
-        List<Offer> allByOrderId = repository.findAllByOrderInformation_Id(foundOffer.getOrderInformation().getId());
+        List<Offer> allByOrderId = repository
+                .findAllByOrderInformation_Id(
+                        foundOffer.getOrderInformation().getId());
         allByOrderId.forEach(offer -> offer.setStatus(OfferStatus.REJECTED));
         repository.saveAll(allByOrderId);
         return offerMapper.entityMapToResponse(save);
@@ -140,7 +135,8 @@ public class OfferServiceImpl
                         () -> new NotFoundException("Offer not found")
                 );
 
-        Order foundOrder = orderService.findById(foundOffer.getOrderInformation().getId());
+        Order foundOrder = orderService.findById(
+                foundOffer.getOrderInformation().getId());
 
         if (foundOrder.
                 getStatus() != OrderStatus.WAITING_FOR_SPECIALIST_COMING) {
@@ -181,14 +177,12 @@ public class OfferServiceImpl
 
     @Override
     public Page<OfferResponse> findByOfferOfSpecialistId(
-            /*Long specialistId,*/ Pageable pageable) {
+            Pageable pageable) {
 
         String email = securityUtil.getCurrentUsername();
         Specialist specialist = specialistService.findByEmail(email);
 
         Long specialistId = specialist.getId();
-
-        /*Specialist specialist = specialistService.findById(specialistId);*/
 
         return repository.findAllBySpecialistId(specialistId, pageable)
                 .map(offerMapper::entityMapToResponse);
@@ -197,35 +191,16 @@ public class OfferServiceImpl
 
     @Override
     public Page<OrderResponse> findOrdersBySpecialistId(
-            /*Long specialistId,*/ Pageable pageable) {
+            Pageable pageable) {
 
         String email = securityUtil.getCurrentUsername();
         Specialist foundSpecialist = specialistService.findByEmail(email);
-
-        /*Specialist foundSpecialist = specialistService.findById(specialistId);*/
 
         Long specialistId = foundSpecialist.getId();
 
         Set<Offer> offers = foundSpecialist.getOffers();
 
         return repository.findOrdersBySpecialistId(specialistId, pageable);
-
-        /*List<Long> allowedOrderIds = offers.stream()
-                .filter(offer -> offer.getStatus() == OfferStatus.DONE
-                        || offer.getStatus() == OfferStatus.PAID
-                        || offer.getStatus() == OfferStatus.ACCEPTED)
-                .map(offer -> offer.getOrderInformation().getId())
-                .distinct()
-                .toList();
-
-        return repository.findOrdersBySpecialistId(specialistId, pageable)
-                .map(order -> {
-                    if (allowedOrderIds.contains(order.getId())) {
-                        return orderMapper.entityMapToResponse(order);
-                    } else {
-                        return orderMapper.entityMapToResponseByFilter(order);
-                    }
-                });*/
     }
 
 
@@ -235,8 +210,8 @@ public class OfferServiceImpl
 
         orderService.findById(orderId);
 
-
-        Page<Offer> offers = repository.findAllByOrderInformation_Id(orderId, pageable);
+        Page<Offer> offers = repository
+                .findAllByOrderInformation_Id(orderId, pageable);
 
         return offers.map(offerMapper::entityMapToResponse);
     }
@@ -248,7 +223,8 @@ public class OfferServiceImpl
         orderService.findById(orderId);
 
 
-        Page<Offer> offers = repository.findAllByOrderInformation_Id(orderId, pageable);
+        Page<Offer> offers = repository
+                .findAllByOrderInformation_Id(orderId, pageable);
 
         return offers.map(offerMapper::entityMapToResponse);
     }
@@ -290,7 +266,8 @@ public class OfferServiceImpl
 
         if (customerWallet.getBalance()
                 .compareTo(foundOffer.getSuggestedPrice()) < 0) {
-            throw new NotValidPriceException("Balance in customer wallet is lower than suggested price");
+            throw new NotValidPriceException(
+                    "Balance in customer wallet is lower than suggested price");
         }
 
         Transaction transaction = new Transaction();
@@ -320,7 +297,8 @@ public class OfferServiceImpl
         repository.save(foundOffer);
 
         if (actualEndService.isAfter(timeToComplete)) {
-            long hoursLate = Duration.between(timeToComplete, actualEndService).toHours();
+            long hoursLate = Duration.between(timeToComplete,
+                    actualEndService).toHours();
             int penalty = (int) hoursLate * -1;
             Double score = foundSpecialist.getScore();
             double newScore = score + penalty;

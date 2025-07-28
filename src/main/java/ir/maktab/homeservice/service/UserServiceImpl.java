@@ -58,6 +58,4 @@ public class UserServiceImpl
         return repository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("User Not Found"));
     }
-
-
 }

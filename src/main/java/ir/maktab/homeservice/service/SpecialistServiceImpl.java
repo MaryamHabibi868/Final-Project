@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -153,27 +152,6 @@ public class SpecialistServiceImpl
         verificationTokenService.save(verificationToken);
 
         return specialistMapper.entityMapToVerifiedUserResponse(specialist);
-
-        /*Optional<Specialist> specialist1 = repository.findByEmail(specialist.getEmail());
-        if (specialist1.isEmpty()) {
-            throw new NotFoundException("Specialist not found");
-        }
-        if (specialist1.get().getIsEmailVerify()) {
-            throw new NotApprovedException("This specialist is already verified ");
-        }
-
-        Specialist specialist2 = specialist1.get();
-        specialist2.setIsEmailVerify(true);
-        specialist2.setIsActive(true);
-
-        if (specialist.getProfileImagePath() != null) {
-            specialist2.setStatus(AccountStatus.PENDING);
-        }
-
-
-        Specialist save = repository.save(specialist2);
-
-        return specialistMapper.entityMapToResponse(save);*/
     }
 
     @Override
@@ -193,11 +171,6 @@ public class SpecialistServiceImpl
         Specialist specialistFound = repository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Specialist not found"));
 
-        /*Specialist specialistFound = repository.findById(request.getId())
-                .orElseThrow(
-                        () -> new NotFoundException("Specialist Not Found")
-                );*/
-
         Long specialistId = specialistFound.getId();
 
         if (repository.existsByOffersStatusAndId(
@@ -216,7 +189,8 @@ public class SpecialistServiceImpl
             specialistFound.setEmail(request.getEmail());
         }
         if (request.getPassword() != null) {
-            specialistFound.setPassword(passwordEncoder.encode(request.getPassword()));
+            specialistFound.setPassword(
+                    passwordEncoder.encode(request.getPassword()));
         }
         if (request.getProfileImagePath() != null) {
             specialistFound.setProfileImagePath(request.getProfileImagePath());
@@ -316,16 +290,13 @@ public class SpecialistServiceImpl
 
 
     @Override
-    public ScoreResponse findScoreBySpecialistId(/*Long specialistId*/) {
+    public ScoreResponse findScoreBySpecialistId() {
 
         String email = securityUtil.getCurrentUsername();
         Specialist foundSpecialist = repository.findByEmail(email)
                 .orElseThrow(
                         () -> new NotFoundException("Specialist Not Found")
                 );
-
-        /*Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
-                () -> new NotFoundException("Specialist Not Found"));*/
 
         return specialistMapper.entityMapToScoreResponse(foundSpecialist);
     }
@@ -333,17 +304,13 @@ public class SpecialistServiceImpl
 
     @Override
     public Page<TransactionResponse> findAllTransactionsBySpecialistId(
-           /* Long specialistId,*/ Pageable pageable) {
+          Pageable pageable) {
 
         String email = securityUtil.getCurrentUsername();
         Specialist foundSpecialist = repository.findByEmail(email)
                 .orElseThrow(
                         () -> new NotFoundException("Specialist Not Found")
                 );
-
-        /*Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
-                () -> new NotFoundException("Specialist Not Found")
-        );*/
 
         Long walletId = foundSpecialist.getWallet().getId();
         return transactionService.findAllByWalletId(walletId, pageable)
@@ -353,7 +320,8 @@ public class SpecialistServiceImpl
 
     @Override
     public void inActivateSpecialist() {
-        repository.findAllByScoreIsLessThan(0.0).forEach(specialist -> {
+        repository.findAllByScoreIsLessThan(0.0)
+                .forEach(specialist -> {
             specialist.setStatus(AccountStatus.INACTIVE);
         });
     }
