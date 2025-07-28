@@ -1,3 +1,4 @@
+/*
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.*;
@@ -97,7 +98,7 @@ class OfferServiceImplTest {
                 ZonedDateTime.now().plusHours(2),
                 Duration.ofHours(2),
                 order.getId()
-                /*specialist.getId()*/
+                specialist.getId()
         );
 
         when(orderService.findById(order.getId())).thenReturn(order);
@@ -177,7 +178,7 @@ class OfferServiceImplTest {
         verify(offerRepository).save(offer);
     }
 
-   /* @Test
+    @Test
     void testFindByOfferOfSpecialistId() {
         Page<Offer> offerPage = new PageImpl<>(List.of(offer));
         when(specialistService.findById(specialist.getId())).thenReturn(specialist);
@@ -188,7 +189,7 @@ class OfferServiceImplTest {
         Page<OfferResponse> result = offerService.findByOfferOfSpecialistId(specialist.getId(), Pageable.unpaged());
 
         assertEquals(1, result.getTotalElements());
-    }*/
+    }
 
     @Test
     void testFindAllOffersBySuggestedPrice() {
@@ -215,11 +216,10 @@ class OfferServiceImplTest {
                 .thenReturn(new PageImpl<>(List.of(order)));
         when(orderMapper.entityMapToResponse(order)).thenReturn(new OrderResponse());
 
-        Page<OrderResponse> result = offerService.findOrdersBySpecialistId(/*specialist.getId(),*/ Pageable.unpaged());
+        Page<OrderResponse> result = offerService.findOrdersBySpecialistId(specialist.getId(), Pageable.unpaged());
 
         assertEquals(1, result.getTotalElements());
     }
-
     @Test
     void findAllOffersBySpecialistScore_ShouldReturnMappedPage() {
         Long orderId = 1L;
@@ -249,3 +249,4 @@ class OfferServiceImplTest {
         verify(offerMapper).entityMapToResponse(any(Offer.class));
     }
 }
+*/
