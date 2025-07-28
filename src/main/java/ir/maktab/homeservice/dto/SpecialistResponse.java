@@ -23,5 +23,4 @@ public class SpecialistResponse {
     private AccountStatus status;
 
     private Double score;
-
 }

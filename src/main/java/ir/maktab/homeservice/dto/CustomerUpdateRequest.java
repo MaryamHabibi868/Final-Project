@@ -9,9 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class CustomerUpdateRequest {
 
-    /*@NotNull
-    private Long id;*/
-
     private String firstName;
 
     private String lastName;
@@ -25,5 +22,4 @@ public class CustomerUpdateRequest {
             message = "Password should be combination of letters and numbers"
     )
     private String password;
-
 }

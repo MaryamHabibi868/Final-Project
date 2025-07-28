@@ -14,24 +14,10 @@ public class MyUserDetails implements UserDetails {
     @Getter
     private final User user;
 
-   /* private final Collection<GrantedAuthority> authorities = new ArrayList<>();*/
 
     public MyUserDetails(User user) {
         this.user = user;
     }
-
-   /* private void fillAuthorities() {
-        if (user.getRole() != null) {
-            authorities.add(
-                    new SimpleGrantedAuthority(user.getRole().name())
-            );
-
-            *//*if (user.getRole().getAuthorities() != null) {
-                user.getRole().getAuthorities().forEach(authority ->
-                        authorities.add(new SimpleGrantedAuthority(authority.getName()))
-                );*//*
-            }
-        }*/
 
 
     @Override

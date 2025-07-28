@@ -22,9 +22,6 @@ public class OfferSaveRequest {
     @NotNull(message = "Task duration of Offer should be entered.")
     private Duration taskDuration;
 
-   /* @NotNull
-    private Long specialistId;*/
-
     @NotNull
     private Long orderId;
 }

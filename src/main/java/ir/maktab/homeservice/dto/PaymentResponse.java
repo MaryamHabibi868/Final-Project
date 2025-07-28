@@ -1,6 +1,5 @@
 package ir.maktab.homeservice.dto;
 
-import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
@@ -28,9 +27,6 @@ public class OrderSaveRequest {
 
     @NotNull (message = "Address of Order should be entered.")
     private Long addressId;
-
-  /*  @NotNull
-    private Long customerId;*/
 
     @NotNull
     private Long homeServiceId;

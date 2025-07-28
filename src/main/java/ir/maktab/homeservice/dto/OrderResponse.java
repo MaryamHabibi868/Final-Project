@@ -5,8 +5,6 @@ import ir.maktab.homeservice.domains.Order;
 import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
 import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import lombok.*;
-import org.mapstruct.Mapping;
-
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 

@@ -2,7 +2,6 @@ package ir.maktab.homeservice.dto;
 
 import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 

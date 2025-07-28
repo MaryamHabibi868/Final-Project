@@ -1,6 +1,5 @@
 package ir.maktab.homeservice.dto;
 
-
 import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
 import lombok.*;
 

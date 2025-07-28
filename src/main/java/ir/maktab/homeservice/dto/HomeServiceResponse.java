@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class HomeServiceResponse {
 
-
     private Long id;
 
     private String title;

@@ -21,5 +21,4 @@ public class ScoreResponse {
     private AccountStatus status;
 
     private Double score;
-
 }

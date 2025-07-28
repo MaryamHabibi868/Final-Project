@@ -9,9 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class ManagerUpdateRequest {
 
-   /* @NotNull
-    private Long id;*/
-
     private String firstName;
 
     private String lastName;

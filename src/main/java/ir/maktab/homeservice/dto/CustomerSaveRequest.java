@@ -29,5 +29,4 @@ public class CustomerSaveRequest {
             message = "Password should be combination of letters and numbers"
     )
     private String password;
-
 }

@@ -9,10 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class SpecialistUpdateInfo {
 
-    /*@NotNull
-    private Long id;
-*/
-
     @Email
     private String email;
 
@@ -25,5 +21,4 @@ public class SpecialistUpdateInfo {
     private String password;
 
     private String profileImagePath;
-
 }
