@@ -25,7 +25,8 @@ public class JwtTokenUtil {
     public String generateToken(UserDetails userDetails) {
         return JWT.create()
                 .withSubject(userDetails.getUsername())
-                .withClaim("authorities", userDetails.getAuthorities()
+                .withClaim("authorities",
+                        userDetails.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)
                         .toList())
