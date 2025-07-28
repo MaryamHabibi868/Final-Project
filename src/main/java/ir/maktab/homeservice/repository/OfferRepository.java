@@ -2,6 +2,7 @@ package ir.maktab.homeservice.repository;
 
 import ir.maktab.homeservice.domains.Offer;
 import ir.maktab.homeservice.domains.Order;
+import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.repository.base.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,10 +32,10 @@ public interface OfferRepository
 
     @EntityGraph(attributePaths = {"orderInformation"})
     @Query("""
-       SELECT o.orderInformation
+       SELECT new ir.maktab.homeservice.dto.OrderResponse(o)
        FROM  Offer o
        WHERE o.specialist.id = :specialistId
        """)
-    Page<Order> findOrdersBySpecialistId(
+    Page<OrderResponse> findOrdersBySpecialistId(
             @Param("specialistId") Long specialistId, Pageable pageable);
 }

@@ -207,7 +207,9 @@ public class OfferServiceImpl
 
         Set<Offer> offers = foundSpecialist.getOffers();
 
-        List<Long> allowedOrderIds = offers.stream()
+        return repository.findOrdersBySpecialistId(specialistId, pageable);
+
+        /*List<Long> allowedOrderIds = offers.stream()
                 .filter(offer -> offer.getStatus() == OfferStatus.DONE
                         || offer.getStatus() == OfferStatus.PAID
                         || offer.getStatus() == OfferStatus.ACCEPTED)
@@ -222,7 +224,7 @@ public class OfferServiceImpl
                     } else {
                         return orderMapper.entityMapToResponseByFilter(order);
                     }
-                });
+                });*/
     }
 
 

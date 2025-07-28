@@ -39,5 +39,5 @@ public interface OrderMapper {
                 .homeServiceId(order.getHomeService().getId())
                 .customerId(order.getCustomer().getId())
                 .build();
-    };
+    }
 }
