@@ -53,7 +53,9 @@ public class SecurityConfig {
                                 "/api/specialist/login",
                                 "/api/customers/verify",
                                 "/api/specialist/verify",
-                                "/api/home-services")
+                                "/api/home-services",
+                                "/api/home-services/find-home-service-by-id/{homeServiceId}",
+                                "/api/home-services/find-all-by-parent-service-id/{parentServiceId}")
                         .permitAll()
                         .anyRequest().authenticated()
                 )
