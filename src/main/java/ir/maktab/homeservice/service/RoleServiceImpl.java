@@ -1,3 +1,4 @@
+/*
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Authority;
@@ -54,3 +55,4 @@ implements RoleService {
     }
 
 }
+*/

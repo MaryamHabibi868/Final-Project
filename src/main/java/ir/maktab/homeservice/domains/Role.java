@@ -1,3 +1,4 @@
+/*
 package ir.maktab.homeservice.domains;
 
 import ir.maktab.homeservice.domains.base.BaseEntity;
@@ -7,9 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 import java.util.HashSet;
 import java.util.Set;
+
 
 @Entity
 @Table(name = Role.TABLE_NAME)
@@ -31,7 +32,8 @@ public class Role extends BaseEntity<Long> {
     private Boolean isDefault;
 
     @JoinTable(name = "authorities-roles")
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Authority> authorities = new HashSet<>();
 
 }
+*/

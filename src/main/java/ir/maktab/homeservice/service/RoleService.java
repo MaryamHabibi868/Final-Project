@@ -1,3 +1,4 @@
+/*
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Role;
@@ -15,3 +16,4 @@ extends BaseService<Role, Long> {
 
     void save(String roleName, List<String> authorities);
 }
+*/

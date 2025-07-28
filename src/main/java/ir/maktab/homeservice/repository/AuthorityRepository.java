@@ -1,3 +1,4 @@
+/*
 package ir.maktab.homeservice.repository;
 
 import ir.maktab.homeservice.domains.Authority;
@@ -17,3 +18,4 @@ public interface AuthorityRepository
 
     Set<Authority> findAllByNameIsIn(Collection<String> authorityNames);
 }
+*/

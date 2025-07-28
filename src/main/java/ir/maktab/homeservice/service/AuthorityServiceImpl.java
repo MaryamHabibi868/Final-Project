@@ -1,3 +1,4 @@
+/*
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Authority;
@@ -40,3 +41,4 @@ public class AuthorityServiceImpl
         return repository.findAllByNameIsIn(authorityNames);
     }
 }
+*/

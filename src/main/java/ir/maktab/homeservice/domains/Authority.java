@@ -1,4 +1,4 @@
-package ir.maktab.homeservice.domains;
+/*package ir.maktab.homeservice.domains;
 
 import ir.maktab.homeservice.domains.base.BaseEntity;
 import jakarta.persistence.Column;
@@ -23,4 +23,4 @@ public class Authority extends BaseEntity<Long> {
 
     @Column(name = Authority.NAME)
     private String name;
-}
+}*/

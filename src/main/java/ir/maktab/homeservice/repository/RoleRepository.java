@@ -1,3 +1,4 @@
+/*
 package ir.maktab.homeservice.repository;
 
 import ir.maktab.homeservice.domains.Role;
@@ -16,3 +17,4 @@ extends BaseRepository<Role, Long> {
     @EntityGraph(attributePaths = "authorities")
     Optional<Role> findByName(String name);
 }
+*/
