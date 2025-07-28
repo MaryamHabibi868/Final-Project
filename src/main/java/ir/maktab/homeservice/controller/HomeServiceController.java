@@ -27,7 +27,8 @@ public class HomeServiceController {
     public ResponseEntity<HomeServiceResponse> createHomeService(
             @RequestBody @Valid
             HomeServiceSaveRequest request) {
-        return ResponseEntity.ok(homeServiceService.createHomeService(request));
+        return ResponseEntity.ok(
+                homeServiceService.createHomeService(request));
     }
 
 
@@ -37,7 +38,8 @@ public class HomeServiceController {
     public ResponseEntity<HomeServiceResponse> updateHomeService(
             @RequestBody @Valid
             HomeServiceUpdateRequest request) {
-        return ResponseEntity.ok(homeServiceService.updateHomeService(request));
+        return ResponseEntity.ok(
+                homeServiceService.updateHomeService(request));
     }
 
 
@@ -56,7 +58,8 @@ public class HomeServiceController {
     @GetMapping
     public ResponseEntity<Page<HomeServiceResponse>> findAllHomeServices(
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
-        return ResponseEntity.ok(homeServiceService.findAllHomeServices(pageable));
+        return ResponseEntity.ok(
+                homeServiceService.findAllHomeServices(pageable));
     }
 
 
@@ -64,16 +67,19 @@ public class HomeServiceController {
     @GetMapping("/find-home-service-by-id/{homeServiceId}")
     public ResponseEntity<HomeServiceResponse> findHomeServiceById(
             @PathVariable Long homeServiceId) {
-        return ResponseEntity.ok(homeServiceService.findHomeServiceById(homeServiceId));
+        return ResponseEntity.ok(
+                homeServiceService.findHomeServiceById(homeServiceId));
     }
 
 
     //✅
     @GetMapping("/find-all-by-parent-service-id/{parentServiceId}")
-    public ResponseEntity<Page<HomeServiceResponse>> findAllHomeServiceByParentServiceId(
+    public ResponseEntity<Page<HomeServiceResponse>>
+    findAllHomeServiceByParentServiceId(
             @PathVariable Long parentServiceId,
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
-        return ResponseEntity.ok(homeServiceService
+        return ResponseEntity.ok(
+                homeServiceService
                 .findAllHomeServiceByParentServiceId(parentServiceId, pageable));
     }
 }

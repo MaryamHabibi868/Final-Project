@@ -24,16 +24,19 @@ public class FeedbackController {
     public ResponseEntity<FeedbackResponse> submitFeedback(
             @RequestBody @Valid
             FeedbackSaveRequest request) {
-        return ResponseEntity.ok(feedbackService.submitFeedback(request));
+        return ResponseEntity.ok(
+                feedbackService.submitFeedback(request));
     }
 
 
     //✅
     @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
     @GetMapping("/offer-id/{offerId}")
-    public ResponseEntity<FeedbackResponseForSpecialist> feedbackRangeForSpecialistToOffer(
+    public ResponseEntity<FeedbackResponseForSpecialist>
+    feedbackRangeForSpecialistToOffer(
             @PathVariable Long offerId) {
-        return ResponseEntity.ok(feedbackService.feedbackRangeForSpecialistToOffer(
+        return ResponseEntity.ok(
+                feedbackService.feedbackRangeForSpecialistToOffer(
                 offerId));
     }
 }

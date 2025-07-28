@@ -21,7 +21,8 @@ public class ManagerController {
     public ResponseEntity<ManagerResponse> registerManager(
             @RequestBody @Valid
             ManagerSaveRequest request) {
-        return ResponseEntity.ok(managerService.registerManager(request));
+        return ResponseEntity.ok(
+                managerService.registerManager(request));
     }
 
 
@@ -29,7 +30,8 @@ public class ManagerController {
     public ResponseEntity<ManagerResponse> loginManager(
             @RequestBody @Valid
             ManagerLoginRequest request) {
-        return ResponseEntity.ok(managerService.loginManager(request));
+        return ResponseEntity.ok(
+                managerService.loginManager(request));
     }
 
 
@@ -39,6 +41,7 @@ public class ManagerController {
     public ResponseEntity<ManagerResponse> updateManager(
             @RequestBody @Valid
             ManagerUpdateRequest request) {
-        return ResponseEntity.ok(managerService.updateManager(request));
+        return ResponseEntity.ok(
+                managerService.updateManager(request));
     }
 }

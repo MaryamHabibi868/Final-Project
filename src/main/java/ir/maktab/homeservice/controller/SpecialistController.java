@@ -24,7 +24,8 @@ public class SpecialistController {
     public ResponseEntity<SpecialistResponse> registerSpecialist(
             @RequestBody @Valid
             SpecialistSaveRequest request) {
-        return ResponseEntity.ok(specialistService.registerSpecialist(request));
+        return ResponseEntity.ok(
+                specialistService.registerSpecialist(request));
     }
 
 
@@ -32,7 +33,8 @@ public class SpecialistController {
     public ResponseEntity<SpecialistResponse> loginSpecialist(
             @RequestBody @Valid
             SpecialistLoginRequest request) {
-        return ResponseEntity.ok(specialistService.loginSpecialist(request));
+        return ResponseEntity.ok(
+                specialistService.loginSpecialist(request));
     }
 
 
@@ -42,7 +44,8 @@ public class SpecialistController {
     public ResponseEntity<SpecialistResponse> updateSpecialist(
             @RequestBody @Valid
             SpecialistUpdateInfo request) {
-        return ResponseEntity.ok(specialistService.updateSpecialistInfo(request));
+        return ResponseEntity.ok(
+                specialistService.updateSpecialistInfo(request));
     }
 
 
@@ -63,7 +66,6 @@ public class SpecialistController {
     public ResponseEntity<AddRemoveSToHResponse> addSpecialistToHomeService(
             @PathVariable Long specialistId,
             @RequestParam Long homeServiceId) {
-
         return ResponseEntity.ok(
                 specialistService.addSpecialistToHomeService
                         (specialistId, homeServiceId));
@@ -89,18 +91,21 @@ public class SpecialistController {
             @PathVariable Long homeServiceId,
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                specialistService.findAllByHomeServiceId(homeServiceId, pageable));
+                specialistService
+                        .findAllByHomeServiceId(homeServiceId, pageable));
     }
 
 
     //✅
     @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @GetMapping("/find-all-home-services-by-specialist-id/{specialistId}")
-    public ResponseEntity<Page<HomeServiceResponse>> findAllHomeServicesBySpecialistId(
+    public ResponseEntity<Page<HomeServiceResponse>>
+    findAllHomeServicesBySpecialistId(
             @PathVariable Long specialistId,
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                specialistService.findAllHomeServicesBySpecialistId(specialistId, pageable));
+                specialistService
+                        .findAllHomeServicesBySpecialistId(specialistId, pageable));
     }
 
 
@@ -119,22 +124,20 @@ public class SpecialistController {
     //✅
     @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
     @GetMapping("/get-score-by-specialist-id")
-    public ResponseEntity<ScoreResponse> findScoreBySpecialistId(
-          /*  @PathVariable Long specialistId*/) {
+    public ResponseEntity<ScoreResponse> findScoreBySpecialistId() {
         return ResponseEntity.ok(
-                specialistService.findScoreBySpecialistId(/*specialistId*/));
+                specialistService.findScoreBySpecialistId());
     }
 
 
     //✅
     @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
     @GetMapping("/find-all-transaction-by-specialist-id")
-    public ResponseEntity<Page<TransactionResponse>> findAllTransactionsBySpecialistId(
-            /*@PathVariable Long specialistId,*/
+    public ResponseEntity<Page<TransactionResponse>>
+    findAllTransactionsBySpecialistId(
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                specialistService.findAllTransactionsBySpecialistId(
-                       /* specialistId,*/ pageable));
+                specialistService.findAllTransactionsBySpecialistId(pageable));
     }
 
 
@@ -151,7 +154,8 @@ public class SpecialistController {
     @GetMapping("/verify")
     public ResponseEntity<VerifiedUserResponse> verifySpecialistEmail(
             @RequestParam("token") String token) {
-        return ResponseEntity.ok(specialistService.verifySpecialistEmail(token));
+        return ResponseEntity.ok(
+                specialistService.verifySpecialistEmail(token));
     }
 
 }

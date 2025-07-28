@@ -29,8 +29,8 @@ public class OfferController {
     public ResponseEntity<OfferResponse> submitOfferToOrder(
             @RequestBody @Valid
             OfferSaveRequest request) {
-
-        return ResponseEntity.ok(offerService.submitOfferToOrder(request));
+        return ResponseEntity.ok(
+                offerService.submitOfferToOrder(request));
     }
 
     //✅
@@ -38,7 +38,8 @@ public class OfferController {
     @PostMapping("/choose-offer/{offerId}")
     public ResponseEntity<OfferResponse> chooseOffer(
             @PathVariable Long offerId) {
-        return ResponseEntity.ok(offerService.chooseOfferOfSpecialist(offerId));
+        return ResponseEntity.ok(
+                offerService.chooseOfferOfSpecialist(offerId));
     }
 
 
@@ -64,10 +65,9 @@ public class OfferController {
 
     @GetMapping("/specialist-id")
     public ResponseEntity<Page<OfferResponse>> findByOffersBySpecialistId(
-            /*@PathVariable Long specialistId,*/
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                offerService.findByOfferOfSpecialistId(/*specialistId,*/ pageable));
+                offerService.findByOfferOfSpecialistId(pageable));
     }
 
 
@@ -99,7 +99,8 @@ public class OfferController {
     @PostMapping("/pay-specialist/{offerId}")
     public ResponseEntity<PaymentResponse> paySpecialist(
             @PathVariable Long offerId) {
-        return ResponseEntity.ok( offerService.paySpecialist(offerId));
+        return ResponseEntity.ok(
+                offerService.paySpecialist(offerId));
     }
 
 
@@ -107,9 +108,8 @@ public class OfferController {
     @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
     @GetMapping("/find-all-orders-by-specialist-id")
     public ResponseEntity<Page<OrderResponse>> findAllOrdersBySpecialistId(
-            /*@PathVariable Long specialistId,*/
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                offerService.findOrdersBySpecialistId(/*specialistId,*/ pageable));
+                offerService.findOrdersBySpecialistId(pageable));
     }
 }

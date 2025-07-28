@@ -35,13 +35,11 @@ public class OrderController {
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @GetMapping("/filter-by-customer-id")
     public ResponseEntity<Page<OrderResponse>> findOrderHistory(
-           /* @PathVariable Long customerId,*/
             @RequestParam(required = false) OrderStatus orderStatus,
             @PageableDefault(size = 10, sort = "createDate",
                     direction = Sort.Direction.DESC) Pageable pageable) {
-
         return ResponseEntity.ok(
-                orderService.findOrderHistory(/*customerId,*/ orderStatus, pageable));
+                orderService.findOrderHistory( orderStatus, pageable));
     }
 
 
@@ -52,8 +50,8 @@ public class OrderController {
             @RequestBody OrderFilterRequestForManager request,
             @PageableDefault(size = 10, sort = "createDate",
                     direction = Sort.Direction.DESC) Pageable pageable) {
-
-        return ResponseEntity.ok(orderService.orderHistory(request, pageable));
+        return ResponseEntity.ok(
+                orderService.orderHistory(request, pageable));
     }
 
     //✅
@@ -61,6 +59,7 @@ public class OrderController {
     @GetMapping("/filter-order-detail/{orderId}")
     public ResponseEntity<OrderResponseForManager> getOrderDetails(
             @PathVariable Long orderId) {
-        return ResponseEntity.ok(orderService.orderDetailsForManager(orderId));
+        return ResponseEntity.ok(
+                orderService.orderDetailsForManager(orderId));
     }
 }

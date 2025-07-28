@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import java.math.BigDecimal;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,22 +22,18 @@ public class WalletController {
     //✅
     @PreAuthorize("hasAnyAuthority('ROLE_SPECIALIST')")
     @GetMapping("/get-balance-for-specialist")
-    public ResponseEntity<WalletResponse> walletBalanceForSpecialist(
-           /* @PathVariable Long walletId*/
-    ) {
+    public ResponseEntity<WalletResponse> walletBalanceForSpecialist() {
         return ResponseEntity.ok(
-                walletService.walletBalanceForSpecialist(/*walletId*/));
+                walletService.walletBalanceForSpecialist());
     }
 
 
     //✅
     @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER')")
     @GetMapping("/get-balance-for-customer")
-    public ResponseEntity<WalletResponse> walletBalanceForCustomer(
-            /* @PathVariable Long walletId*/
-    ) {
+    public ResponseEntity<WalletResponse> walletBalanceForCustomer() {
         return ResponseEntity.ok(
-                walletService.walletBalanceForCustomer(/*walletId*/));
+                walletService.walletBalanceForCustomer());
     }
 
 

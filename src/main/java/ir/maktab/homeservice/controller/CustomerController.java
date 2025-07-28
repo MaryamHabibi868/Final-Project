@@ -22,7 +22,8 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> registerCustomer(
             @RequestBody @Valid
             CustomerSaveRequest request) {
-        return ResponseEntity.ok(customerService.registerCustomer(request));
+        return ResponseEntity.ok(
+                customerService.registerCustomer(request));
     }
 
 
@@ -30,7 +31,8 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> loginCustomer(
             @RequestBody @Valid
             CustomerLoginRequest request) {
-        return ResponseEntity.ok(customerService.loginCustomer(request));
+        return ResponseEntity.ok(
+                customerService.loginCustomer(request));
     }
 
 
@@ -40,7 +42,8 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> updateCustomer(
             @RequestBody @Valid
             CustomerUpdateRequest request) {
-        return ResponseEntity.ok(customerService.updateCustomer(request));
+        return ResponseEntity.ok(
+                customerService.updateCustomer(request));
     }
 
 
@@ -48,6 +51,7 @@ public class CustomerController {
     @GetMapping("/verify")
     public ResponseEntity<VerifiedUserResponse> verifyCustomerEmail(
             @RequestParam("token") String token) {
-        return ResponseEntity.ok(customerService.verifyCustomerEmail(token));
+        return ResponseEntity.ok(
+                customerService.verifyCustomerEmail(token));
     }
 }
