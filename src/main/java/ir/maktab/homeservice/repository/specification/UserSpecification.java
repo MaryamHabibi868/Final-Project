@@ -10,7 +10,8 @@ public class UserSpecification {
             if (firstName == null || firstName.trim().isEmpty()) {
                 return cb.conjunction();
             }
-            return cb.like(cb.lower(root.get("firstName")), "%" + firstName.toLowerCase() + "%");
+            return cb.like(cb.lower(root.get("firstName")), "%" +
+                    firstName.toLowerCase() + "%");
         };
     }
 
@@ -19,7 +20,8 @@ public class UserSpecification {
             if (lastName == null || lastName.trim().isEmpty()) {
                 return cb.conjunction();
             }
-            return cb.like(cb.lower(root.get("lastName")), "%" + lastName.toLowerCase() + "%");
+            return cb.like(cb.lower(root.get("lastName")), "%" +
+                    lastName.toLowerCase() + "%");
         };
     }
 }

@@ -11,5 +11,4 @@ public interface BaseRepository<T extends BaseEntity<ID>,
         ID extends Serializable >
         extends JpaRepository<T, ID>,
         JpaSpecificationExecutor<T> {
-
 }

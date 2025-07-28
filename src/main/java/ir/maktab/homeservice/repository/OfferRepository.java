@@ -1,12 +1,10 @@
 package ir.maktab.homeservice.repository;
 
 import ir.maktab.homeservice.domains.Offer;
-import ir.maktab.homeservice.domains.Order;
 import ir.maktab.homeservice.dto.OrderResponse;
 import ir.maktab.homeservice.repository.base.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,8 +17,6 @@ public interface OfferRepository
 
 
     Page<Offer> findAllBySpecialistId(Long specialist_id, Pageable pageable);
-
-
 
 
     List<Offer> findAllByOrderInformation_Id(Long order_id);

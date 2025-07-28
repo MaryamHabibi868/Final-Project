@@ -16,7 +16,6 @@ public interface BaseUserRepository<T extends User>
 
 
     Optional<T> findByEmail(String email);
-
 }
 
 
