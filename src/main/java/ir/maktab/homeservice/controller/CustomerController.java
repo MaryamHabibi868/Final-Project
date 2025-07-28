@@ -5,6 +5,7 @@ import ir.maktab.homeservice.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
 
-
+    //✅
     @PostMapping("/register")
     public ResponseEntity<CustomerResponse> registerCustomer(
             @RequestBody @Valid
@@ -33,10 +34,21 @@ public class CustomerController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER','ROLE_MANAGER')")
     @PutMapping
     public ResponseEntity<CustomerResponse> updateCustomer(
             @RequestBody @Valid
             CustomerUpdateRequest request) {
         return ResponseEntity.ok(customerService.updateCustomer(request));
+    }
+
+
+    //✅
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyCustomerEmail(
+            @RequestParam("token") String token) {
+        customerService.verifyCustomerEmail(token);
+        return ResponseEntity.ok("Email verified successfully.");
     }
 }

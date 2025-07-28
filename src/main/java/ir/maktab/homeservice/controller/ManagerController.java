@@ -5,6 +5,7 @@ import ir.maktab.homeservice.service.ManagerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ public class ManagerController {
     private final ManagerService managerService;
 
 
-
+    //✅
     @PostMapping("/register")
     public ResponseEntity<ManagerResponse> registerManager(
             @RequestBody @Valid
@@ -32,6 +33,8 @@ public class ManagerController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @PutMapping
     public ResponseEntity<ManagerResponse> updateManager(
             @RequestBody @Valid

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -21,6 +22,8 @@ public class OfferController {
     private final OfferService offerService;
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
     @PostMapping
     public ResponseEntity<OfferResponse> submitOfferToOrder(
             @RequestBody @Valid
@@ -29,7 +32,8 @@ public class OfferController {
         return ResponseEntity.ok(offerService.submitOfferToOrder(request));
     }
 
-
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @PostMapping("/choose-offer/{offerId}")
     public ResponseEntity<OfferResponse> chooseOffer(
             @PathVariable Long offerId) {
@@ -37,6 +41,8 @@ public class OfferController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @PostMapping("/start-service/{offerId}")
     public ResponseEntity<OfferResponse> startService(
             @PathVariable Long offerId) {
@@ -45,6 +51,8 @@ public class OfferController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @PostMapping("/end-service/{offerId}")
     public ResponseEntity<OfferResponse> endService(
             @PathVariable Long offerId) {
@@ -53,15 +61,17 @@ public class OfferController {
     }
 
 
-    @GetMapping("/specialist-id/{specialistId}")
+    @GetMapping("/specialist-id")
     public ResponseEntity<Page<OfferResponse>> findByOffersBySpecialistId(
-            @PathVariable Long specialistId,
+            /*@PathVariable Long specialistId,*/
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                offerService.findByOfferOfSpecialistId(specialistId, pageable));
+                offerService.findByOfferOfSpecialistId(/*specialistId,*/ pageable));
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @GetMapping("/sort-by-suggested-price/{orderId}")
     public ResponseEntity<Page<OfferResponse>> findAllOffersBySuggestedPrice(
             @PathVariable Long orderId,
@@ -71,6 +81,8 @@ public class OfferController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @GetMapping("/sort-by-specialist-score/{orderId}")
     public ResponseEntity<Page<OfferResponse>> findAllOffersBySpecialistScore(
             @PathVariable Long orderId,
@@ -81,6 +93,8 @@ public class OfferController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @PostMapping("/pay-specialist/{offerId}")
     public ResponseEntity<String> paySpecialist(
             @PathVariable Long offerId) {
@@ -89,11 +103,12 @@ public class OfferController {
     }
 
 
-    @GetMapping("/find-all-orders-by-specialist-id/{specialistId}")
+    @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
+    @GetMapping("/find-all-orders-by-specialist-id")
     public ResponseEntity<Page<OrderResponse>> findAllOrdersBySpecialistId(
-            @PathVariable Long specialistId,
+            /*@PathVariable Long specialistId,*/
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
-                offerService.findOrdersBySpecialistId(specialistId, pageable));
+                offerService.findOrdersBySpecialistId(/*specialistId,*/ pageable));
     }
 }

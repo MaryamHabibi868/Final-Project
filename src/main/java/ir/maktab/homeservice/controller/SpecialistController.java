@@ -8,9 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,7 +19,7 @@ public class SpecialistController {
 
     private final SpecialistService specialistService;
 
-
+    //✅
     @PostMapping("/register")
     public ResponseEntity<SpecialistResponse> registerSpecialist(
             @RequestBody @Valid
@@ -36,6 +36,8 @@ public class SpecialistController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAnyAuthority('ROLE_SPECIALIST' , 'ROLE_MANAGER' )")
     @PutMapping
     public ResponseEntity<SpecialistResponse> updateSpecialist(
             @RequestBody @Valid
@@ -44,6 +46,8 @@ public class SpecialistController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @PutMapping("/specialists/{specialistId}/approve")
     public ResponseEntity<SpecialistResponse>
     approveSpecialistRegistration(
@@ -53,6 +57,8 @@ public class SpecialistController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @PostMapping("/add-specialists/{specialistId}/home-services")
     public ResponseEntity<String> addSpecialistToHomeService(
             @PathVariable Long specialistId,
@@ -62,6 +68,8 @@ public class SpecialistController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @DeleteMapping("/specialists/{specialistId}/home-services")
     public ResponseEntity<String> deleteSpecialistFromHomeService(
             @PathVariable Long specialistId,
@@ -71,6 +79,8 @@ public class SpecialistController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @GetMapping("/find-all-by-home-service-id/{homeServiceId}")
     public ResponseEntity<Page<SpecialistResponse>> findAllByHomeServiceId(
             @PathVariable Long homeServiceId,
@@ -89,6 +99,8 @@ public class SpecialistController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @GetMapping("/score-between/{lower}/{higher}")
     public ResponseEntity<Page<SpecialistResponse>> findAllByScoreBetween(
             @PathVariable Double lower,
@@ -99,21 +111,25 @@ public class SpecialistController {
     }
 
 
-    @GetMapping("/get-score-by-specialist-id/{specialistId}")
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
+    @GetMapping("/get-score-by-specialist-id")
     public ResponseEntity<Double> findScoreBySpecialistId(
-            @PathVariable Long specialistId) {
+          /*  @PathVariable Long specialistId*/) {
         return ResponseEntity.ok(
-                specialistService.findScoreBySpecialistId(specialistId));
+                specialistService.findScoreBySpecialistId(/*specialistId*/));
     }
 
 
-    @GetMapping("/find-all-transaction-by-specialist-id/{specialistId}")
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
+    @GetMapping("/find-all-transaction-by-specialist-id")
     public ResponseEntity<Page<TransactionResponse>> findAllTransactionsBySpecialistId(
-            @PathVariable Long specialistId,
+            /*@PathVariable Long specialistId,*/
             @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(
                 specialistService.findAllTransactionsBySpecialistId(
-                        specialistId, pageable));
+                       /* specialistId,*/ pageable));
     }
 
     @PostMapping("/in-activate-specialists")
@@ -121,6 +137,15 @@ public class SpecialistController {
         specialistService.inActivateSpecialist();
         return ResponseEntity.ok(
                 "Specialist by score less than ZERO In Activated");
+    }
+
+
+    //✅
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifySpecialistEmail(
+            @RequestParam("token") String token) {
+        specialistService.verifySpecialistEmail(token);
+        return ResponseEntity.ok("Email verified successfully.");
     }
 
 }

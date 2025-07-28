@@ -6,6 +6,7 @@ import ir.maktab.homeservice.service.FeedbackService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -16,6 +17,8 @@ public class FeedbackController {
     private final FeedbackService feedbackService;
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @PostMapping
     public ResponseEntity<FeedbackResponse> submitFeedback(
             @RequestBody @Valid
@@ -24,6 +27,8 @@ public class FeedbackController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
     @GetMapping("/offer-id/{offerId}")
     public ResponseEntity<Integer> feedbackRangeForSpecialistToOffer(
             @PathVariable Long offerId) {

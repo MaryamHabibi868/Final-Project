@@ -6,6 +6,7 @@ import ir.maktab.homeservice.service.WalletService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
@@ -18,15 +19,30 @@ public class WalletController {
     private final CaptchaService captchaService;
 
 
-    @GetMapping("/{walletId}")
-    public ResponseEntity<BigDecimal> walletBalance(
-            @PathVariable Long walletId) {
+    //✅
+    @PreAuthorize("hasAnyAuthority('ROLE_SPECIALIST')")
+    @GetMapping("/get-balance-for-specialist")
+    public ResponseEntity<BigDecimal> walletBalanceForSpecialist(
+           /* @PathVariable Long walletId*/
+    ) {
         return ResponseEntity.ok(
-                walletService.walletBalance(walletId));
+                walletService.walletBalanceForSpecialist(/*walletId*/));
+    }
+
+
+    //✅
+    @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER')")
+    @GetMapping("/get-balance-for-customer")
+    public ResponseEntity<BigDecimal> walletBalanceForCustomer(
+            /* @PathVariable Long walletId*/
+    ) {
+        return ResponseEntity.ok(
+                walletService.walletBalanceForCustomer(/*walletId*/));
     }
 
 
 
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @CrossOrigin("http://localhost:63342")
     @PostMapping("/charge-wallet")
     public ResponseEntity<String> chargeWallet(
