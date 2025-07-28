@@ -13,6 +13,8 @@ import org.mockito.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import java.util.Collections;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -121,6 +123,38 @@ class UserServiceImplTest {
 
         verify(userRepository).findAll(any(Specification.class), eq(pageable));
         verify(userMapper).entityMapToResponse(user);
+    }
+
+    @Test
+    void testFindByEmail_shouldReturnUser_whenUserExists() {
+        // Arrange
+        String email = "test@example.com";
+        User user = new User();
+        user.setEmail(email);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        // Act
+        User result = userService.findByEmail(email);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(email, result.getEmail());
+        verify(userRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    void testFindByEmail_shouldThrowNotFoundException_whenUserNotFound() {
+        // Arrange
+        String email = "notfound@example.com";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> userService.findByEmail(email)
+        );
+        assertEquals("User Not Found", exception.getMessage());
+        verify(userRepository, times(1)).findByEmail(email);
     }
 }
 

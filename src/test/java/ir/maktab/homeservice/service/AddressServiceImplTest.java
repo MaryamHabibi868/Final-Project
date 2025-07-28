@@ -7,87 +7,81 @@ import ir.maktab.homeservice.dto.AddressSaveRequest;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.mapper.AddressMapper;
 import ir.maktab.homeservice.repository.AddressRepository;
+import ir.maktab.homeservice.security.SecurityUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AddressServiceImplTest {
+class AddressServiceImplTest {
 
-    @InjectMocks
-    private AddressServiceImpl addressService;
-
-    @Mock
-    private AddressRepository addressRepository;
-
-    @Mock
+    private AddressRepository repository;
     private CustomerService customerService;
-
-    @Mock
     private AddressMapper addressMapper;
+    private SecurityUtil securityUtil;
+    private AddressServiceImpl addressService;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        repository = mock(AddressRepository.class);
+        customerService = mock(CustomerService.class);
+        addressMapper = mock(AddressMapper.class);
+        securityUtil = mock(SecurityUtil.class);
+
+        addressService = new AddressServiceImpl(repository, customerService, addressMapper, securityUtil);
     }
 
     @Test
-    void submitAddress_shouldSaveAddressSuccessfully() {
+    void testSubmitAddress_whenPostalCodeNotExists_shouldSaveAddress() {
+        // داده ورودی تست
         AddressSaveRequest request = new AddressSaveRequest();
         request.setProvince("Tehran");
         request.setCity("Tehran");
-        request.setPostalCode("12345");
-        request.setDescription("My house");
+        request.setPostalCode("1234567890");
+        request.setDescription("Test Description");
 
-        Customer mockCustomer = new Customer();
-        mockCustomer.setId(1L);
-
-        Address addressToSave = new Address();
-        addressToSave.setProvince("Tehran");
-        addressToSave.setCity("Tehran");
-        addressToSave.setPostalCode("12345");
-        addressToSave.setDescription("My house");
-        addressToSave.setCustomer(mockCustomer);
-
+        // داده بازگشتی مورد انتظار
+        Customer customer = new Customer();
         Address savedAddress = new Address();
-        savedAddress.setId(100L);
-        savedAddress.setProvince("Tehran");
-        savedAddress.setCity("Tehran");
-        savedAddress.setPostalCode("12345");
-        savedAddress.setDescription("My house");
-        savedAddress.setCustomer(mockCustomer);
+        AddressResponse expectedResponse = new AddressResponse();
 
-        AddressResponse mockResponse = new AddressResponse();
-        mockResponse.setId(100L);
-        mockResponse.setCity("Tehran");
+        // شبیه‌سازی رفتارها
+        when(repository.existsByPostalCode("1234567890")).thenReturn(false);
+        when(securityUtil.getCurrentUsername()).thenReturn("test@example.com");
+        when(customerService.findByEmail("test@example.com")).thenReturn(customer);
+        when(repository.save(any(Address.class))).thenReturn(savedAddress);
+        when(addressMapper.entityMapToResponse(savedAddress)).thenReturn(expectedResponse);
 
-        when(addressRepository.existsByPostalCode("12345")).thenReturn(false);
-        when(customerService.findById(1L)).thenReturn(mockCustomer);
-        when(addressRepository.save(any(Address.class))).thenReturn(savedAddress);
-        when(addressMapper.entityMapToResponse(savedAddress)).thenReturn(mockResponse);
+        // اجرای متد
+        AddressResponse actualResponse = addressService.submitAddress(request);
 
-        AddressResponse response = addressService.submitAddress(request);
+        // بررسی نتیجه
+        assertEquals(expectedResponse, actualResponse);
 
-        assertNotNull(response);
-        assertEquals(100L, response.getId());
-        assertEquals("Tehran", response.getCity());
-        verify(addressRepository).existsByPostalCode("12345");
-        verify(addressRepository).save(any(Address.class));
-        verify(addressMapper).entityMapToResponse(savedAddress);
+        // بررسی اینکه آدرس واقعاً ذخیره شده
+        ArgumentCaptor<Address> addressCaptor = ArgumentCaptor.forClass(Address.class);
+        verify(repository).save(addressCaptor.capture());
+        Address captured = addressCaptor.getValue();
+        assertEquals("Tehran", captured.getProvince());
+        assertEquals("Tehran", captured.getCity());
+        assertEquals("1234567890", captured.getPostalCode());
+        assertEquals("Test Description", captured.getDescription());
+        assertEquals(customer, captured.getCustomer());
     }
 
     @Test
-    void submitAddress_shouldThrowExceptionIfPostalCodeExists() {
+    void testSubmitAddress_whenPostalCodeExists_shouldThrowDuplicatedException() {
+        // داده ورودی تست
         AddressSaveRequest request = new AddressSaveRequest();
-        request.setPostalCode("12345");
+        request.setPostalCode("1234567890");
 
-        when(addressRepository.existsByPostalCode("12345")).thenReturn(true);
+        when(repository.existsByPostalCode("1234567890")).thenReturn(true);
 
-        assertThrows(DuplicatedException.class, () -> addressService.submitAddress(request));
-        verify(addressRepository).existsByPostalCode("12345");
-        verifyNoMoreInteractions(addressRepository);
-        verifyNoInteractions(customerService, addressMapper);
+        DuplicatedException exception = assertThrows(DuplicatedException.class,
+                () -> addressService.submitAddress(request));
+
+        assertEquals("Postal code already exists", exception.getMessage());
+        verify(repository, never()).save(any());
     }
 }
-

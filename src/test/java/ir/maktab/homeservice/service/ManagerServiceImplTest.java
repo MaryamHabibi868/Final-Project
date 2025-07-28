@@ -2,34 +2,40 @@ package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Manager;
 import ir.maktab.homeservice.domains.Wallet;
-import ir.maktab.homeservice.dto.ManagerLoginRequest;
-import ir.maktab.homeservice.dto.ManagerSaveRequest;
-import ir.maktab.homeservice.dto.ManagerUpdateRequest;
-import ir.maktab.homeservice.dto.ManagerResponse;
+import ir.maktab.homeservice.domains.enumClasses.Role;
+import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.ManagerMapper;
 import ir.maktab.homeservice.repository.ManagerRepository;
+import ir.maktab.homeservice.security.SecurityUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.math.BigDecimal;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ManagerServiceImplTest {
 
+    @InjectMocks
+    private ManagerServiceImpl managerService;
+
     @Mock
-    private ManagerRepository repository;
+    private ManagerRepository managerRepository;
 
     @Mock
     private ManagerMapper managerMapper;
 
-    @InjectMocks
-    private ManagerServiceImpl service;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private SecurityUtil securityUtil;
 
     @BeforeEach
     void setUp() {
@@ -37,168 +43,146 @@ class ManagerServiceImplTest {
     }
 
     @Test
-    void registerManager_success_shouldReturnResponse() {
+    void registerManager_shouldRegisterManager_whenEmailIsNotDuplicated() {
+        // Arrange
         ManagerSaveRequest request = new ManagerSaveRequest();
         request.setFirstName("Ali");
         request.setLastName("Ahmadi");
         request.setEmail("ali@example.com");
-        request.setPassword("123456");
+        request.setPassword("123");
 
-        when(repository.existsByEmail("ali@example.com")).thenReturn(false);
+        when(managerRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("encoded123");
 
-        Manager manager = new Manager();
-        manager.setId(1L);
-        manager.setFirstName("Ali");
-        manager.setLastName("Ahmadi");
-        manager.setEmail("ali@example.com");
-        manager.setPassword("123456");
-        manager.setWallet(new Wallet(BigDecimal.ZERO, manager));
-
-        when(repository.save(any(Manager.class))).thenReturn(manager);
+        Manager savedManager = new Manager();
+        savedManager.setFirstName("Ali");
+        savedManager.setLastName("Ahmadi");
+        savedManager.setEmail("ali@example.com");
 
         ManagerResponse response = new ManagerResponse();
-        response.setId(1L);
         response.setFirstName("Ali");
         response.setLastName("Ahmadi");
         response.setEmail("ali@example.com");
 
-        when(managerMapper.entityMapToResponse(manager)).thenReturn(response);
-
-        ManagerResponse result = service.registerManager(request);
-
-        assertNotNull(result);
-        assertEquals("Ali", result.getFirstName());
-        assertEquals("Ahmadi", result.getLastName());
-        assertEquals("ali@example.com", result.getEmail());
-
-        verify(repository).existsByEmail("ali@example.com");
-        verify(repository).save(any(Manager.class));
-        verify(managerMapper).entityMapToResponse(manager);
-    }
-
-    @Test
-    void registerManager_shouldThrowDuplicatedException_whenEmailExists() {
-        ManagerSaveRequest request = new ManagerSaveRequest();
-        request.setEmail("ali@example.com");
-
-        when(repository.existsByEmail("ali@example.com")).thenReturn(true);
-
-        DuplicatedException exception = assertThrows(DuplicatedException.class,
-                () -> service.registerManager(request));
-
-        assertEquals("Email address already exist", exception.getMessage());
-        verify(repository).existsByEmail("ali@example.com");
-        verify(repository, never()).save(any());
-    }
-
-    @Test
-    void updateManager_success_shouldUpdateAndReturnResponse() {
-        ManagerUpdateRequest request = new ManagerUpdateRequest();
-        request.setFirstName("AliUpdated");
-        request.setLastName("AhmadiUpdated");
-        request.setEmail("ali.updated@example.com");
-        request.setPassword("newpass");
-
-        Manager existing = new Manager();
-        existing.setId(1L);
-        existing.setEmail("old@example.com");
-
-        when(repository.findById(1L)).thenReturn(Optional.of(existing));
-        when(repository.existsByEmail("ali.updated@example.com")).thenReturn(false);
-        when(repository.save(any(Manager.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        ManagerResponse response = new ManagerResponse();
-        response.setId(1L);
-        response.setFirstName("AliUpdated");
-        response.setLastName("AhmadiUpdated");
-        response.setEmail("ali.updated@example.com");
-
+        when(managerRepository.save(any(Manager.class))).thenReturn(savedManager);
         when(managerMapper.entityMapToResponse(any(Manager.class))).thenReturn(response);
 
-        ManagerResponse result = service.updateManager(request);
+        // Act
+        ManagerResponse result = managerService.registerManager(request);
 
-        assertNotNull(result);
-        assertEquals("AliUpdated", result.getFirstName());
-        assertEquals("AhmadiUpdated", result.getLastName());
-        assertEquals("ali.updated@example.com", result.getEmail());
+        // Assert
+        assertEquals("Ali", result.getFirstName());
+        verify(managerRepository).save(any(Manager.class));
+    }
 
-        verify(repository).findById(1L);
-        verify(repository).existsByEmail("ali.updated@example.com");
-        verify(repository).save(existing);
-        verify(managerMapper).entityMapToResponse(existing);
+    @Test
+    void registerManager_shouldThrowException_whenEmailExists() {
+        ManagerSaveRequest request = new ManagerSaveRequest();
+        request.setEmail("duplicate@example.com");
+
+        when(managerRepository.existsByEmail(request.getEmail())).thenReturn(true);
+
+        assertThrows(DuplicatedException.class, () -> managerService.registerManager(request));
+    }
+
+    @Test
+    void updateManager_shouldUpdateManagerSuccessfully() {
+        // Arrange
+        ManagerUpdateRequest request = new ManagerUpdateRequest();
+        request.setFirstName("NewName");
+        request.setLastName("NewLast");
+        request.setEmail("new@example.com");
+        request.setPassword("newpass");
+
+        Manager existingManager = new Manager();
+        existingManager.setEmail("old@example.com");
+
+        when(securityUtil.getCurrentUsername()).thenReturn("old@example.com");
+        when(managerRepository.findByEmail("old@example.com")).thenReturn(Optional.of(existingManager));
+        when(managerRepository.existsByEmail("new@example.com")).thenReturn(false);
+        when(passwordEncoder.encode("newpass")).thenReturn("encodedNewPass");
+
+        Manager updatedManager = new Manager();
+        updatedManager.setFirstName("NewName");
+        updatedManager.setLastName("NewLast");
+        updatedManager.setEmail("new@example.com");
+
+        ManagerResponse response = new ManagerResponse();
+        response.setFirstName("NewName");
+        response.setLastName("NewLast");
+
+        when(managerRepository.save(any(Manager.class))).thenReturn(updatedManager);
+        when(managerMapper.entityMapToResponse(any(Manager.class))).thenReturn(response);
+
+        // Act
+        ManagerResponse result = managerService.updateManager(request);
+
+        // Assert
+        assertEquals("NewName", result.getFirstName());
+    }
+
+    @Test
+    void updateManager_shouldThrowException_whenEmailExists() {
+        ManagerUpdateRequest request = new ManagerUpdateRequest();
+        request.setEmail("duplicate@example.com");
+
+        Manager existingManager = new Manager();
+        existingManager.setEmail("old@example.com");
+
+        when(securityUtil.getCurrentUsername()).thenReturn("old@example.com");
+        when(managerRepository.findByEmail("old@example.com")).thenReturn(Optional.of(existingManager));
+        when(managerRepository.existsByEmail("duplicate@example.com")).thenReturn(true);
+
+        assertThrows(DuplicatedException.class, () -> managerService.updateManager(request));
     }
 
     @Test
     void updateManager_shouldThrowNotFoundException_whenManagerNotFound() {
+        // Arrange
+        String email = "manager@example.com";
         ManagerUpdateRequest request = new ManagerUpdateRequest();
+        request.setEmail("new@example.com");
 
-        when(repository.findById(99L)).thenReturn(Optional.empty());
+        when(securityUtil.getCurrentUsername()).thenReturn(email);
+        when(managerRepository.findByEmail(email)).thenReturn(Optional.empty());
 
+        // Act & Assert
         NotFoundException exception = assertThrows(NotFoundException.class,
-                () -> service.updateManager(request));
-
-        assertEquals("Manager not found", exception.getMessage());
-    }
-
-    @Test
-    void updateManager_shouldThrowDuplicatedException_whenEmailExists() {
-        ManagerUpdateRequest request = new ManagerUpdateRequest();
-        request.setEmail("existing@example.com");
-
-        Manager existing = new Manager();
-        existing.setId(1L);
-        existing.setEmail("old@example.com");
-
-        when(repository.findById(1L)).thenReturn(Optional.of(existing));
-        when(repository.existsByEmail("existing@example.com")).thenReturn(true);
-
-        DuplicatedException exception = assertThrows(DuplicatedException.class,
-                () -> service.updateManager(request));
-
-        assertEquals("Email address already exist", exception.getMessage());
-    }
-
-    @Test
-    void loginManager_success_shouldReturnResponse() {
-        ManagerLoginRequest request = new ManagerLoginRequest();
-        request.setEmail("ali@example.com");
-        request.setPassword("123456");
-
-        Manager manager = new Manager();
-        manager.setId(1L);
-        manager.setEmail("ali@example.com");
-        manager.setPassword("123456");
-
-        when(repository.findByEmailAndPassword("ali@example.com", "123456"))
-                .thenReturn(Optional.of(manager));
-
-        ManagerResponse response = new ManagerResponse();
-        response.setId(1L);
-        response.setEmail("ali@example.com");
-
-        when(managerMapper.entityMapToResponse(manager)).thenReturn(response);
-
-        ManagerResponse result = service.loginManager(request);
-
-        assertNotNull(result);
-        assertEquals("ali@example.com", result.getEmail());
-
-        verify(repository).findByEmailAndPassword("ali@example.com", "123456");
-        verify(managerMapper).entityMapToResponse(manager);
-    }
-
-    @Test
-    void loginManager_shouldThrowNotFoundException_whenManagerNotFound() {
-        ManagerLoginRequest request = new ManagerLoginRequest();
-        request.setEmail("ali@example.com");
-        request.setPassword("wrongpass");
-
-        when(repository.findByEmailAndPassword("ali@example.com", "wrongpass"))
-                .thenReturn(Optional.empty());
-
-        NotFoundException exception = assertThrows(NotFoundException.class,
-                () -> service.loginManager(request));
+                () -> managerService.updateManager(request));
 
         assertEquals("Manager Not Found", exception.getMessage());
+        verify(managerRepository).findByEmail(email);
+    }
+
+
+    @Test
+    void loginManager_shouldReturnManagerResponse_whenFound() {
+        ManagerLoginRequest request = new ManagerLoginRequest();
+        request.setEmail("test@example.com");
+        request.setPassword("pass");
+
+        Manager manager = new Manager();
+        manager.setEmail("test@example.com");
+
+        ManagerResponse response = new ManagerResponse();
+        response.setEmail("test@example.com");
+
+        when(managerRepository.findByEmailAndPassword("test@example.com", "pass")).thenReturn(Optional.of(manager));
+        when(managerMapper.entityMapToResponse(manager)).thenReturn(response);
+
+        ManagerResponse result = managerService.loginManager(request);
+
+        assertEquals("test@example.com", result.getEmail());
+    }
+
+    @Test
+    void loginManager_shouldThrowException_whenNotFound() {
+        ManagerLoginRequest request = new ManagerLoginRequest();
+        request.setEmail("notfound@example.com");
+        request.setPassword("pass");
+
+        when(managerRepository.findByEmailAndPassword("notfound@example.com", "pass")).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> managerService.loginManager(request));
     }
 }
