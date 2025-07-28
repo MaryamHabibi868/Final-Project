@@ -23,6 +23,7 @@ public class HomeServiceApplication {
 
     @Bean
     public DateTimeProvider dateTimeProvider() {
-        return () -> Optional.of(ZonedDateTime.now());
+        return
+                () -> Optional.of(ZonedDateTime.now());
     }
 }
