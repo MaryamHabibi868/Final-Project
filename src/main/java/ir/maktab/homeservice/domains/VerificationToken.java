@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -39,5 +38,4 @@ public class VerificationToken extends BaseEntity<Long> {
     @JoinColumn(name = VerificationToken.USERID)
     @OneToOne
     private User user;
-
 }

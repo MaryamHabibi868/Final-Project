@@ -25,5 +25,4 @@ public class Wallet extends BaseEntity<Long> {
 
     @OneToOne(mappedBy = "wallet")
     private User userInformation;
-
 }

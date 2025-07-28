@@ -45,6 +45,4 @@ public class Offer extends BaseEntity<Long> {
     @JoinColumn(name = Offer.ORDER_ID, nullable = false)
     @ManyToOne
     private Order orderInformation;
-
-
 }

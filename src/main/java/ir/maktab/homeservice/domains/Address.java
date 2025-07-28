@@ -1,4 +1,5 @@
 package ir.maktab.homeservice.domains;
+
 import ir.maktab.homeservice.domains.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
