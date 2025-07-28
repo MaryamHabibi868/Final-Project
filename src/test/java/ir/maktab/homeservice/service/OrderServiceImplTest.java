@@ -52,7 +52,7 @@ public class OrderServiceImplTest {
         request.setSuggestedPrice(BigDecimal.valueOf(200));
         request.setStartDate(ZonedDateTime.now());
         request.setAddressId(1L);
-        request.setCustomerId(2L);
+        /*request.setCustomerId(2L);*/
         request.setHomeServiceId(3L);
 
         HomeService homeService = new HomeService();
@@ -110,7 +110,7 @@ public class OrderServiceImplTest {
                 .thenReturn(new OrderResponse());
 
         Page<OrderResponse> result = orderService
-                .findOrderHistory(customerId, orderStatus, pageable);
+                .findOrderHistory(/*customerId,*/ orderStatus, pageable);
 
         assertNotNull(result);
         assertEquals(1, result.getContent().size());

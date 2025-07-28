@@ -5,7 +5,6 @@ import lombok.*;
 
 @Setter
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressSaveRequest {
@@ -23,6 +22,6 @@ public class AddressSaveRequest {
     @NotNull (message = "The description of your address should be entered.")
     private String description;
 
-    @NotNull (message = "The customer id should be entered.")
-    private Long customerId;
+    /*@NotNull (message = "The customer id should be entered.")
+    private Long customerId;*/
 }

@@ -3,6 +3,7 @@ package ir.maktab.homeservice.service;
 import ir.maktab.homeservice.domains.*;
 import ir.maktab.homeservice.domains.enumClasses.AccountStatus;
 import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
+import ir.maktab.homeservice.domains.enumClasses.Role;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotApprovedException;
@@ -11,13 +12,18 @@ import ir.maktab.homeservice.mapper.HomeServiceMapper;
 import ir.maktab.homeservice.mapper.SpecialistMapper;
 import ir.maktab.homeservice.mapper.TransactionMapper;
 import ir.maktab.homeservice.repository.SpecialistRepository;
+import ir.maktab.homeservice.security.SecurityUtil;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SpecialistServiceImpl
@@ -29,7 +35,9 @@ public class SpecialistServiceImpl
     private final HomeServiceMapper homeServiceMapper;
     private final TransactionService transactionService;
     private final TransactionMapper transactionMapper;
-    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
+    private final SecurityUtil securityUtil;
+    private final VerificationTokenService verificationTokenService;
 
     public SpecialistServiceImpl(SpecialistRepository repository,
                                  SpecialistMapper specialistMapper,
@@ -37,14 +45,18 @@ public class SpecialistServiceImpl
                                  HomeServiceMapper homeServiceMapper,
                                  TransactionService transactionService,
                                  TransactionMapper transactionMapper,
-                                 RoleService roleService) {
+                                 PasswordEncoder passwordEncoder,
+                                 SecurityUtil securityUtil,
+                                 VerificationTokenService verificationTokenService) {
         super(repository);
         this.specialistMapper = specialistMapper;
         this.homeServiceService = homeServiceService;
         this.homeServiceMapper = homeServiceMapper;
         this.transactionService = transactionService;
         this.transactionMapper = transactionMapper;
-        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
+        this.securityUtil = securityUtil;
+        this.verificationTokenService = verificationTokenService;
     }
 
 
@@ -69,10 +81,9 @@ public class SpecialistServiceImpl
         specialist.setFirstName(request.getFirstName());
         specialist.setLastName(request.getLastName());
         specialist.setEmail(request.getEmail());
-        specialist.setPassword(request.getPassword());
+        specialist.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        Role role = roleService.findByName("SPECIALIST");
-        specialist.setRole(role);
+        specialist.setRole(Role.ROLE_SPECIALIST);
 
 
         if (request.getProfileImagePath() != null) {
@@ -97,14 +108,50 @@ public class SpecialistServiceImpl
 
     }
 
-
+    @Override
     public void sendVerificationEmail(Specialist specialist) {
-        System.out.println("Please click on your email for verification " +
-                repository.findByEmail(specialist.getEmail()));
+        String token = UUID.randomUUID().toString();
+
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setToken(token);
+        verificationToken.setUser(specialist);
+        verificationToken.setExpiryDate(LocalDateTime.now().plusHours(24));
+        verificationTokenService.save(verificationToken);
+
+        String link = "http://localhost:8080/api/v1/customers/verify?token=" + token;
+
+        System.out.println("Click to verify your email: " + link);
     }
 
-    public SpecialistResponse verifySpecialist(Specialist specialist) {
-        Optional<Specialist> specialist1 = repository.findByEmail(specialist.getEmail());
+    @Override
+    public void verifySpecialistEmail(String token) {
+
+        VerificationToken verificationToken =
+                verificationTokenService.findByToken(token)
+                        .orElseThrow(
+                                () -> new NotFoundException(
+                                        "Invalid verification token"));
+
+        if (verificationToken.isUsed()) {
+            throw new IllegalStateException("This link has already been used.");
+        }
+
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("This link is expired.");
+        }
+
+        Specialist specialist = (Specialist) verificationToken.getUser();
+        specialist.setIsEmailVerify(true);
+        specialist.setIsActive(true);
+        if (specialist.getProfileImagePath() != null) {
+            specialist.setStatus(AccountStatus.PENDING);
+        }
+        repository.save(specialist);
+
+        verificationToken.setUsed(true);
+        verificationTokenService.save(verificationToken);
+
+        /*Optional<Specialist> specialist1 = repository.findByEmail(specialist.getEmail());
         if (specialist1.isEmpty()) {
             throw new NotFoundException("Specialist not found");
         }
@@ -123,7 +170,7 @@ public class SpecialistServiceImpl
 
         Specialist save = repository.save(specialist2);
 
-        return specialistMapper.entityMapToResponse(save);
+        return specialistMapper.entityMapToResponse(save);*/
     }
 
     @Override
@@ -138,12 +185,18 @@ public class SpecialistServiceImpl
     @Transactional
     @Override
     public SpecialistResponse updateSpecialistInfo(SpecialistUpdateInfo request) {
-        Specialist specialistFound = repository.findById(request.getId())
+
+        String email = securityUtil.getCurrentUsername();
+        Specialist specialistFound = repository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Specialist not found"));
+
+        /*Specialist specialistFound = repository.findById(request.getId())
                 .orElseThrow(
                         () -> new NotFoundException("Specialist Not Found")
-                );
+                );*/
 
         Long specialistId = specialistFound.getId();
+
         if (repository.existsByOffersStatusAndId(
                 OfferStatus.ACCEPTED, specialistId)) {
             throw new NotApprovedException("Specialist has active offers");
@@ -160,7 +213,7 @@ public class SpecialistServiceImpl
             specialistFound.setEmail(request.getEmail());
         }
         if (request.getPassword() != null) {
-            specialistFound.setPassword(request.getPassword());
+            specialistFound.setPassword(passwordEncoder.encode(request.getPassword()));
         }
         if (request.getProfileImagePath() != null) {
             specialistFound.setProfileImagePath(request.getProfileImagePath());
@@ -177,7 +230,16 @@ public class SpecialistServiceImpl
         Specialist foundSpecialist = repository.findById(id).orElseThrow(
                 () -> new NotFoundException("Specialist Not Found")
         );
-        if (foundSpecialist.getStatus() != AccountStatus.APPROVED) {
+
+        if (foundSpecialist.getStatus() == AccountStatus.APPROVED) {
+            throw new NotApprovedException("Specialist has already been approved");
+        }
+
+        if (!foundSpecialist.getIsEmailVerify()) {
+            throw new NotApprovedException("Specialist has not been verified");
+        }
+
+        if (foundSpecialist.getStatus() == AccountStatus.PENDING) {
             foundSpecialist.setStatus(AccountStatus.APPROVED);
             repository.save(foundSpecialist);
         }
@@ -248,9 +310,16 @@ public class SpecialistServiceImpl
 
 
     @Override
-    public Double findScoreBySpecialistId(Long specialistId) {
-        Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
-                () -> new NotFoundException("Specialist Not Found"));
+    public Double findScoreBySpecialistId(/*Long specialistId*/) {
+
+        String email = securityUtil.getCurrentUsername();
+        Specialist foundSpecialist = repository.findByEmail(email)
+                .orElseThrow(
+                        () -> new NotFoundException("Specialist Not Found")
+                );
+
+        /*Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
+                () -> new NotFoundException("Specialist Not Found"));*/
 
         return foundSpecialist.getScore();
     }
@@ -258,10 +327,17 @@ public class SpecialistServiceImpl
 
     @Override
     public Page<TransactionResponse> findAllTransactionsBySpecialistId(
-            Long specialistId, Pageable pageable) {
-        Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
+           /* Long specialistId,*/ Pageable pageable) {
+
+        String email = securityUtil.getCurrentUsername();
+        Specialist foundSpecialist = repository.findByEmail(email)
+                .orElseThrow(
+                        () -> new NotFoundException("Specialist Not Found")
+                );
+
+        /*Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
                 () -> new NotFoundException("Specialist Not Found")
-        );
+        );*/
 
         Long walletId = foundSpecialist.getWallet().getId();
         return transactionService.findAllByWalletId(walletId, pageable)
@@ -274,5 +350,12 @@ public class SpecialistServiceImpl
         repository.findAllByScoreIsLessThan(0.0).forEach(specialist -> {
             specialist.setStatus(AccountStatus.INACTIVE);
         });
+    }
+
+    @Override
+    public Specialist findByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("Specialist Not Found")
+        );
     }
 }

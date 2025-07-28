@@ -39,7 +39,6 @@ public class AddressServiceImplTest {
         request.setCity("Tehran");
         request.setPostalCode("12345");
         request.setDescription("My house");
-        request.setCustomerId(1L);
 
         Customer mockCustomer = new Customer();
         mockCustomer.setId(1L);

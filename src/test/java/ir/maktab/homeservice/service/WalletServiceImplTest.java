@@ -30,7 +30,7 @@ class WalletServiceImplTest {
     }
 
     @Test
-    void walletBalance_walletExists_returnsBalance() {
+    void walletBalance_walletExists_returnsBalanceForSpecialist() {
         Long walletId = 1L;
         BigDecimal balance = BigDecimal.valueOf(1000);
 
@@ -40,20 +40,20 @@ class WalletServiceImplTest {
 
         when(walletRepository.findById(walletId)).thenReturn(Optional.of(wallet));
 
-        BigDecimal result = walletService.walletBalance(walletId);
+        BigDecimal result = walletService.walletBalanceForSpecialist(/*walletId*/);
 
         assertEquals(balance, result);
         verify(walletRepository).findById(walletId);
     }
 
     @Test
-    void walletBalance_walletNotFound_throwsNotFoundException() {
+    void walletBalance_walletNotFound_throwsNotFoundExceptionForSpecialist() {
         Long walletId = 2L;
 
         when(walletRepository.findById(walletId)).thenReturn(Optional.empty());
 
         NotFoundException exception = assertThrows(NotFoundException.class, () -> {
-            walletService.walletBalance(walletId);
+            walletService.walletBalanceForSpecialist(/*walletId*/);
         });
 
         assertEquals("Wallet not found", exception.getMessage());

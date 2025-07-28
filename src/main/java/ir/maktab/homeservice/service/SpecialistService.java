@@ -6,7 +6,6 @@ import ir.maktab.homeservice.service.base.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface SpecialistService extends BaseService<Specialist, Long> {
 
@@ -49,13 +48,19 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
             Double lower, Double higher , Pageable pageable);
 
 
-    Double findScoreBySpecialistId(Long specialistId);
+    Double findScoreBySpecialistId(/*Long specialistId*/);
 
 
     Page<TransactionResponse> findAllTransactionsBySpecialistId(
-            Long specialistId, Pageable pageable);
+           /* Long specialistId,*/ Pageable pageable);
 
 
     void inActivateSpecialist();
+
+    Specialist findByEmail(String email);
+
+    void sendVerificationEmail(Specialist specialist);
+
+    void verifySpecialistEmail(String token);
 }
 

@@ -14,7 +14,7 @@ public interface OrderService
     OrderResponse submitOrderForHomeService(OrderSaveRequest request);
 
     Page<OrderResponse> findOrderHistory(
-            Long customerId, OrderStatus orderStatus, Pageable pageable);
+            /*Long customerId,*/ OrderStatus orderStatus, Pageable pageable);
 
     Page<OrderSummaryResponse> orderHistory(
             OrderFilterRequestForManager request , Pageable pageable);

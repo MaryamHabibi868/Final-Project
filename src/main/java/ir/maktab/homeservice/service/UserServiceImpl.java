@@ -53,4 +53,11 @@ public class UserServiceImpl
     }
 
 
+    @Override
+    public User findByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("User Not Found"));
+    }
+
+
 }

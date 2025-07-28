@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends BaseUserRepository<User> {
@@ -18,5 +19,7 @@ public interface UserRepository extends BaseUserRepository<User> {
     Page<User> findByRole(
             @Param("role") Class<? extends User> role, Pageable pageable);
 
-  Page<User> findAll(Specification<User> spec, Pageable pageable);
+    Page<User> findAll(Specification<User> spec, Pageable pageable);
+
+    Optional<User> findByEmail(String email);
 }

@@ -5,13 +5,12 @@ import lombok.*;
 
 @Setter
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class ManagerUpdateRequest {
 
-    @NotNull
-    private Long id;
+   /* @NotNull
+    private Long id;*/
 
     private String firstName;
 

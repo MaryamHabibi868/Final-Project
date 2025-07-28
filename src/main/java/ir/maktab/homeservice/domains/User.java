@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.domains;
 
 import ir.maktab.homeservice.domains.base.BaseEntity;
+import ir.maktab.homeservice.domains.enumClasses.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -8,12 +9,11 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Getter
 @Setter
-@Table (name = User.TABLE_NAME)
-@ToString (callSuper = true)
+@Table(name = User.TABLE_NAME)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Inheritance (strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "users";
@@ -36,24 +36,19 @@ public class User extends BaseEntity<Long> {
     @Column(name = User.EMAIL, nullable = false, unique = true)
     private String email;
 
-    @Column(name = User.PASSWORD, nullable = false, unique = true)
+    @Column(name = User.PASSWORD, nullable = false)
     private String password;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = User.WALLET_ID, nullable = false)
     private Wallet wallet;
 
-    @Column(name = User.IS_ACTIVE
-            /*, nullable = false*/)
+    @Column(name = User.IS_ACTIVE, nullable = false)
     private Boolean isActive = false;
 
-    @Column(name = User.IS_EMAIL_VERIFY
-          /*  , nullable = false*/)
+    @Column(name = User.IS_EMAIL_VERIFY, nullable = false)
     private Boolean isEmailVerify = false;
 
-
-    @JoinColumn(name = User.ROLE
-            /*, nullable = false*/)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
     private Role role;
 }

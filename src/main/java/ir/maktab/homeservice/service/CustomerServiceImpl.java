@@ -1,19 +1,24 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Customer;
-import ir.maktab.homeservice.domains.Role;
+import ir.maktab.homeservice.domains.VerificationToken;
 import ir.maktab.homeservice.domains.Wallet;
+import ir.maktab.homeservice.domains.enumClasses.Role;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.CustomerMapper;
 import ir.maktab.homeservice.repository.CustomerRepository;
+import ir.maktab.homeservice.security.SecurityUtil;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerServiceImpl
@@ -21,16 +26,21 @@ public class CustomerServiceImpl
         implements CustomerService {
 
     private final CustomerMapper customerMapper;
-    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
+    private final SecurityUtil securityUtil;
+    private final VerificationTokenService verificationTokenService;
 
 
     public CustomerServiceImpl(CustomerRepository repository,
                                CustomerMapper customerMapper,
-                               RoleService roleService) {
+                               PasswordEncoder passwordEncoder,
+                               SecurityUtil securityUtil,
+                               VerificationTokenService verificationTokenService) {
         super(repository);
         this.customerMapper = customerMapper;
-
-        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
+        this.securityUtil = securityUtil;
+        this.verificationTokenService = verificationTokenService;
     }
 
 
@@ -54,12 +64,11 @@ public class CustomerServiceImpl
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         customer.setEmail(request.getEmail());
-        customer.setPassword(request.getPassword());
+        customer.setPassword(passwordEncoder.encode(request.getPassword()));
         customer.setWallet(wallet);
         wallet.setUserInformation(customer);
 
-        Role role = roleService.findByName("CUSTOMER");
-        customer.setRole(role);
+        customer.setRole(Role.ROLE_CUSTOMER);
 
         Customer save = repository.save(customer);
 
@@ -69,14 +78,47 @@ public class CustomerServiceImpl
     }
 
 
+    @Override
     public void sendVerificationEmail(Customer customer) {
-        System.out.println("Please click on your email for verification " +
-                repository.findByEmail(customer.getEmail()));
+        String token = UUID.randomUUID().toString();
+
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setToken(token);
+        verificationToken.setUser(customer);
+        verificationToken.setExpiryDate(LocalDateTime.now().plusHours(24));
+        verificationTokenService.save(verificationToken);
+
+        String link = "http://localhost:8080/api/v1/customers/verify?token=" + token;
+
+        System.out.println("Click to verify your email: " + link);
     }
 
 
-    public CustomerResponse verifyCustomer(Customer customer) {
-        Optional<Customer> customer1 = repository.findByEmail(customer.getEmail());
+    @Override
+    public void verifyCustomerEmail(String token) {
+
+        VerificationToken verificationToken =
+                verificationTokenService.findByToken(token)
+                .orElseThrow(
+                        () -> new NotFoundException("Invalid verification token"));
+
+        if (verificationToken.isUsed()) {
+            throw new IllegalStateException("This link has already been used.");
+        }
+
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("This link is expired.");
+        }
+
+        Customer customer = (Customer) verificationToken.getUser();
+        customer.setIsEmailVerify(true);
+        customer.setIsActive(true);
+        repository.save(customer);
+
+        verificationToken.setUsed(true);
+        verificationTokenService.save(verificationToken);
+
+        /*Optional<Customer> customer1 = repository.findByEmail(customer.getEmail());
         if (customer1.isEmpty()) {
             throw new NotFoundException("Specialist not found");
         }
@@ -90,16 +132,24 @@ public class CustomerServiceImpl
 
         Customer save = repository.save(customer2);
 
-        return customerMapper.entityMapToResponse(save);
+        return customerMapper.entityMapToResponse(save);*/
     }
 
     @Transactional
     @Override
     public CustomerResponse updateCustomer(CustomerUpdateRequest request) {
-        Customer foundCustomer = repository.findById(request.getId())
+
+        String email = securityUtil.getCurrentUsername();
+        Customer foundCustomer = repository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("Customer not found")
+        );
+
+
+       /* Customer foundCustomer = repository.findById(request.getId())
                 .orElseThrow(
                         () -> new NotFoundException("Customer not found")
-                );
+                );*/
+
         if (repository.existsByEmail(request.getEmail())) {
             throw new DuplicatedException("Email address already exist");
         }
@@ -113,7 +163,7 @@ public class CustomerServiceImpl
             foundCustomer.setEmail(request.getEmail());
         }
         if (request.getPassword() != null) {
-            foundCustomer.setPassword(request.getPassword());
+            foundCustomer.setPassword(passwordEncoder.encode(request.getPassword()));
         }
         Customer save = repository.save(foundCustomer);
         return customerMapper.entityMapToResponse(save);
@@ -125,6 +175,12 @@ public class CustomerServiceImpl
         return customerMapper.entityMapToResponse(repository.
                 findByEmailAndPassword(request.getEmail(), request.getPassword())
                 .orElseThrow(() -> new NotFoundException("Customer Not Found")));
+    }
+
+    @Override
+    public Customer findByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("Customer Not Found"));
     }
 
 }

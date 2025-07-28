@@ -9,7 +9,6 @@ import java.time.ZonedDateTime;
 
 @Setter
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderSaveRequest {
@@ -27,8 +26,8 @@ public class OrderSaveRequest {
     @NotNull (message = "Address of Order should be entered.")
     private Long addressId;
 
-    @NotNull
-    private Long customerId;
+  /*  @NotNull
+    private Long customerId;*/
 
     @NotNull
     private Long homeServiceId;

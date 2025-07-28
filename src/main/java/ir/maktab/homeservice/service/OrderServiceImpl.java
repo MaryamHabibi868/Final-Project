@@ -12,11 +12,14 @@ import ir.maktab.homeservice.mapper.OrderMapper;
 import ir.maktab.homeservice.repository.OrderRepository;
 import ir.maktab.homeservice.repository.specification.OrderSpecification;
 import ir.maktab.homeservice.repository.specification.OrderSpecificationForManager;
+import ir.maktab.homeservice.security.SecurityUtil;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,14 +31,18 @@ public class OrderServiceImpl
     private final OrderMapper orderMapper;
     private final HomeServiceService homeServiceService;
     private final CustomerService customerService;
+    private final SecurityUtil securityUtil;
 
     public OrderServiceImpl(OrderRepository repository,
                             OrderMapper orderMapper,
-                            HomeServiceService homeServiceService, CustomerService customerService) {
+                            HomeServiceService homeServiceService,
+                            CustomerService customerService,
+                            SecurityUtil securityUtil) {
         super(repository);
         this.orderMapper = orderMapper;
         this.homeServiceService = homeServiceService;
         this.customerService = customerService;
+        this.securityUtil = securityUtil;
     }
 
 
@@ -52,11 +59,15 @@ public class OrderServiceImpl
                     "Suggested price is less than the base price of this home service");
         }
         Order order = new Order();
+
+        String email = securityUtil.getCurrentUsername();
+        Customer byEmail = customerService.findByEmail(email);
+
         order.setDescription(request.getDescription());
         order.setSuggestedPrice(request.getSuggestedPrice());
         order.setStartDate(request.getStartDate());
         order.setAddress(Address.builder().id(request.getAddressId()).build());
-        order.setCustomer(Customer.builder().id(request.getCustomerId()).build());
+        order.setCustomer(byEmail);
         order.setHomeService(homeServiceFound);
         order.setStatus(OrderStatus.WAITING_FOR_SPECIALIST_OFFER);
         Order save = repository.save(order);
@@ -65,8 +76,13 @@ public class OrderServiceImpl
 
     @Override
     public Page<OrderResponse> findOrderHistory(
-            Long customerId, OrderStatus orderStatus, Pageable pageable) {
-        customerService.findById(customerId);
+           /* Long customerId,*/ OrderStatus orderStatus, Pageable pageable) {
+        /*customerService.findById(customerId);*/
+
+        String email = securityUtil.getCurrentUsername();
+        Customer customer = customerService.findByEmail(email);
+
+        Long customerId = customer.getId();
 
         Specification<Order> spec = OrderSpecification.hasCustomerId(customerId)
                 .and(orderStatus != null

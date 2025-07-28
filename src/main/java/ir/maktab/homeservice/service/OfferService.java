@@ -30,7 +30,7 @@ public interface OfferService
 
 
     Page<OfferResponse> findByOfferOfSpecialistId(
-            Long specialistId, Pageable pageable);
+            /*Long specialistId,*/ Pageable pageable);
 
 
     void paySpecialist(Long offerId);
@@ -45,5 +45,5 @@ public interface OfferService
 
 
     Page<OrderResponse> findOrdersBySpecialistId(
-            Long specialistId, Pageable pageable);
+            /*Long specialistId,*/ Pageable pageable);
 }

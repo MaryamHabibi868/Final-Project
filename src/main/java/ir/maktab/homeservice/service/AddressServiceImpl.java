@@ -7,7 +7,10 @@ import ir.maktab.homeservice.dto.AddressSaveRequest;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.mapper.AddressMapper;
 import ir.maktab.homeservice.repository.AddressRepository;
+import ir.maktab.homeservice.security.SecurityUtil;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,13 +20,16 @@ public class AddressServiceImpl
 
     private final CustomerService customerService;
     private final AddressMapper addressMapper;
+    private final SecurityUtil securityUtil;
 
     public AddressServiceImpl(AddressRepository repository,
                               CustomerService customerService,
-                              AddressMapper addressMapper) {
+                              AddressMapper addressMapper,
+                              SecurityUtil securityUtil) {
         super(repository);
         this.customerService = customerService;
         this.addressMapper = addressMapper;
+        this.securityUtil = securityUtil;
     }
 
 
@@ -32,7 +38,11 @@ public class AddressServiceImpl
         if (repository.existsByPostalCode(request.getPostalCode())) {
             throw new DuplicatedException("Postal code already exists");
         }
-        Customer foundCustomer = customerService.findById(request.getCustomerId());
+
+        String email = securityUtil.getCurrentUsername();
+        Customer foundCustomer = customerService.findByEmail(email);
+
+        /*Customer foundCustomer = customerService.findById(request.getCustomerId());*/
         Address address = new Address();
         address.setProvince(request.getProvince());
         address.setCity(request.getCity());

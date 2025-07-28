@@ -94,7 +94,6 @@ class ManagerServiceImplTest {
     @Test
     void updateManager_success_shouldUpdateAndReturnResponse() {
         ManagerUpdateRequest request = new ManagerUpdateRequest();
-        request.setId(1L);
         request.setFirstName("AliUpdated");
         request.setLastName("AhmadiUpdated");
         request.setEmail("ali.updated@example.com");
@@ -132,7 +131,6 @@ class ManagerServiceImplTest {
     @Test
     void updateManager_shouldThrowNotFoundException_whenManagerNotFound() {
         ManagerUpdateRequest request = new ManagerUpdateRequest();
-        request.setId(99L);
 
         when(repository.findById(99L)).thenReturn(Optional.empty());
 
@@ -145,7 +143,6 @@ class ManagerServiceImplTest {
     @Test
     void updateManager_shouldThrowDuplicatedException_whenEmailExists() {
         ManagerUpdateRequest request = new ManagerUpdateRequest();
-        request.setId(1L);
         request.setEmail("existing@example.com");
 
         Manager existing = new Manager();

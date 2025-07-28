@@ -14,10 +14,13 @@ import ir.maktab.homeservice.exception.NotValidPriceException;
 import ir.maktab.homeservice.mapper.OfferMapper;
 import ir.maktab.homeservice.mapper.OrderMapper;
 import ir.maktab.homeservice.repository.OfferRepository;
+import ir.maktab.homeservice.security.SecurityUtil;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -36,6 +39,7 @@ public class OfferServiceImpl
     private final TransactionService transactionService;
     private final WalletService walletService;
     private final OrderMapper orderMapper;
+    private final SecurityUtil securityUtil;
 
     public OfferServiceImpl(OfferRepository repository,
                             OfferMapper offerMapper,
@@ -43,7 +47,8 @@ public class OfferServiceImpl
                             SpecialistService specialistService,
                             TransactionService transactionService,
                             WalletService walletService,
-                            OrderMapper orderMapper) {
+                            OrderMapper orderMapper,
+                            SecurityUtil securityUtil) {
         super(repository);
         this.offerMapper = offerMapper;
         this.orderService = orderService;
@@ -51,6 +56,7 @@ public class OfferServiceImpl
         this.transactionService = transactionService;
         this.walletService = walletService;
         this.orderMapper = orderMapper;
+        this.securityUtil = securityUtil;
     }
 
 
@@ -61,8 +67,12 @@ public class OfferServiceImpl
         Order foundOrder = orderService.
                 findById(request.getOrderId());
 
-        Specialist foundSpecialist = specialistService.
-                findById(request.getSpecialistId());
+        String email = securityUtil.getCurrentUsername();
+
+        Specialist foundSpecialist = specialistService.findByEmail(email);
+
+        /*Specialist foundSpecialist = specialistService.
+                findById(request.getSpecialistId());*/
 
         if (foundSpecialist.getStatus() != AccountStatus.APPROVED) {
             throw new NotApprovedException("Specialist Not Approved");
@@ -170,8 +180,14 @@ public class OfferServiceImpl
 
     @Override
     public Page<OfferResponse> findByOfferOfSpecialistId(
-            Long specialistId, Pageable pageable) {
-        Specialist specialist = specialistService.findById(specialistId);
+            /*Long specialistId,*/ Pageable pageable) {
+
+        String email = securityUtil.getCurrentUsername();
+        Specialist specialist = specialistService.findByEmail(email);
+
+        Long specialistId = specialist.getId();
+
+        /*Specialist specialist = specialistService.findById(specialistId);*/
 
         return repository.findAllBySpecialistId(specialistId, pageable)
                 .map(offerMapper::entityMapToResponse);
@@ -180,9 +196,14 @@ public class OfferServiceImpl
 
     @Override
     public Page<OrderResponse> findOrdersBySpecialistId(
-            Long specialistId, Pageable pageable) {
+            /*Long specialistId,*/ Pageable pageable) {
 
-        Specialist foundSpecialist = specialistService.findById(specialistId);
+        String email = securityUtil.getCurrentUsername();
+        Specialist foundSpecialist = specialistService.findByEmail(email);
+
+        /*Specialist foundSpecialist = specialistService.findById(specialistId);*/
+
+        Long specialistId = foundSpecialist.getId();
 
         Set<Offer> offers = foundSpecialist.getOffers();
 

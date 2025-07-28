@@ -5,14 +5,13 @@ import lombok.*;
 
 @Setter
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class SpecialistUpdateInfo {
 
-    @NotNull
+    /*@NotNull
     private Long id;
-
+*/
 
     @Email
     private String email;
