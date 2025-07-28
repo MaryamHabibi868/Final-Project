@@ -26,7 +26,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthorizationFilter authorizationFilter;
 
-    public SecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
+    public SecurityConfig(
+            @Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
                           AuthorizationFilter authorizationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.authorizationFilter = authorizationFilter;
@@ -42,7 +43,8 @@ public class SecurityConfig {
                         session ->
                                 session.sessionCreationPolicy
                                         (SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests(auth ->
+                        auth
                         .requestMatchers("/api/v1/users/login",
                                 "/api/customers/register",
                                 "/api/managers/register",
@@ -76,9 +78,11 @@ public class SecurityConfig {
             UserDetailsService userDetailsService) {
 
         JwtAuthenticationProvider authenticationProvider =
-                new JwtAuthenticationProvider(userDetailsService, passwordEncoder());
+                new JwtAuthenticationProvider(userDetailsService,
+                        passwordEncoder());
 
-        ProviderManager providerManager = new ProviderManager(authenticationProvider);
+        ProviderManager providerManager = new ProviderManager(
+                authenticationProvider);
 
         providerManager.setEraseCredentialsAfterAuthentication(true);
 

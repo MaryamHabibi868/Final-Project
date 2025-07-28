@@ -18,7 +18,9 @@ import org.springframework.security.core.AuthenticationException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // ------------------ Custom Exceptions ------------------
+    // My Custom Exceptions
+
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handleNotFound(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -39,7 +41,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
-    // ------------------ Security Exceptions ------------------
+    // Security Exceptions
+
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDenied(AccessDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied.");
@@ -50,13 +54,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed.");
     }
 
-    // ------------------ JPA Exceptions ------------------
+    // JPA Exceptions
+
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFound(EntityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Entity not found.");
     }
 
-    // ------------------ Validation Errors ------------------
+    // Validation Errors
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -66,7 +74,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    // ------------------ Fallback (All Other Exceptions) ------------------
+    // Fallback (All Other Exceptions)
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleAll(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
