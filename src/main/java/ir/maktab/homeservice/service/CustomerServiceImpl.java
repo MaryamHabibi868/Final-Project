@@ -29,18 +29,21 @@ public class CustomerServiceImpl
     private final PasswordEncoder passwordEncoder;
     private final SecurityUtil securityUtil;
     private final VerificationTokenService verificationTokenService;
+    private final EmailService emailService;
 
 
     public CustomerServiceImpl(CustomerRepository repository,
                                CustomerMapper customerMapper,
                                PasswordEncoder passwordEncoder,
                                SecurityUtil securityUtil,
-                               VerificationTokenService verificationTokenService) {
+                               VerificationTokenService verificationTokenService,
+                               EmailService emailService) {
         super(repository);
         this.customerMapper = customerMapper;
         this.passwordEncoder = passwordEncoder;
         this.securityUtil = securityUtil;
         this.verificationTokenService = verificationTokenService;
+        this.emailService = emailService;
     }
 
 
@@ -88,9 +91,7 @@ public class CustomerServiceImpl
         verificationToken.setExpiryDate(LocalDateTime.now().plusHours(24));
         verificationTokenService.save(verificationToken);
 
-        String link = "http://localhost:8080/api/v1/customers/verify?token=" + token;
-
-        System.out.println("Click to verify your email: " + link);
+        emailService.sendVerificationEmail(customer.getEmail(), token);
     }
 
 

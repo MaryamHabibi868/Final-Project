@@ -38,6 +38,7 @@ public class SpecialistServiceImpl
     private final PasswordEncoder passwordEncoder;
     private final SecurityUtil securityUtil;
     private final VerificationTokenService verificationTokenService;
+    private final EmailService emailService;
 
     public SpecialistServiceImpl(SpecialistRepository repository,
                                  SpecialistMapper specialistMapper,
@@ -47,7 +48,8 @@ public class SpecialistServiceImpl
                                  TransactionMapper transactionMapper,
                                  PasswordEncoder passwordEncoder,
                                  SecurityUtil securityUtil,
-                                 VerificationTokenService verificationTokenService) {
+                                 VerificationTokenService verificationTokenService,
+                                 EmailService emailService) {
         super(repository);
         this.specialistMapper = specialistMapper;
         this.homeServiceService = homeServiceService;
@@ -57,6 +59,7 @@ public class SpecialistServiceImpl
         this.passwordEncoder = passwordEncoder;
         this.securityUtil = securityUtil;
         this.verificationTokenService = verificationTokenService;
+        this.emailService = emailService;
     }
 
 
@@ -118,9 +121,7 @@ public class SpecialistServiceImpl
         verificationToken.setExpiryDate(LocalDateTime.now().plusHours(24));
         verificationTokenService.save(verificationToken);
 
-        String link = "http://localhost:8080/api/v1/customers/verify?token=" + token;
-
-        System.out.println("Click to verify your email: " + link);
+        emailService.sendVerificationEmail(specialist.getEmail(), token);
     }
 
     @Override
