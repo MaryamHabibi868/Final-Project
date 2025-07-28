@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.controller;
 
 import ir.maktab.homeservice.dto.PaymentRequestDto;
+import ir.maktab.homeservice.dto.WalletResponse;
 import ir.maktab.homeservice.service.CaptchaService;
 import ir.maktab.homeservice.service.WalletService;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ public class WalletController {
     //✅
     @PreAuthorize("hasAnyAuthority('ROLE_SPECIALIST')")
     @GetMapping("/get-balance-for-specialist")
-    public ResponseEntity<BigDecimal> walletBalanceForSpecialist(
+    public ResponseEntity<WalletResponse> walletBalanceForSpecialist(
            /* @PathVariable Long walletId*/
     ) {
         return ResponseEntity.ok(
@@ -33,7 +34,7 @@ public class WalletController {
     //✅
     @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER')")
     @GetMapping("/get-balance-for-customer")
-    public ResponseEntity<BigDecimal> walletBalanceForCustomer(
+    public ResponseEntity<WalletResponse> walletBalanceForCustomer(
             /* @PathVariable Long walletId*/
     ) {
         return ResponseEntity.ok(

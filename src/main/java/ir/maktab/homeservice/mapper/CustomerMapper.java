@@ -11,4 +11,6 @@ public interface CustomerMapper {
 
     @Mapping(source = "wallet.id", target = "walletId")
     CustomerResponse entityMapToResponse(Customer customer);
+
+    VerifiedUserResponse entityMapToVerifiedUserResponse(Customer customer);
 }

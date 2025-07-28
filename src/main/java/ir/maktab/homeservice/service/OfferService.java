@@ -4,6 +4,7 @@ import ir.maktab.homeservice.domains.Offer;
 import ir.maktab.homeservice.dto.OfferSaveRequest;
 import ir.maktab.homeservice.dto.OfferResponse;
 import ir.maktab.homeservice.dto.OrderResponse;
+import ir.maktab.homeservice.dto.PaymentResponse;
 import ir.maktab.homeservice.service.base.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +34,7 @@ public interface OfferService
             /*Long specialistId,*/ Pageable pageable);
 
 
-    void paySpecialist(Long offerId);
+    PaymentResponse paySpecialist(Long offerId);
 
 
     Page<OfferResponse> findAllOffersBySuggestedPrice(

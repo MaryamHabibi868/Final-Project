@@ -1,6 +1,7 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Feedback;
+import ir.maktab.homeservice.dto.FeedbackResponseForSpecialist;
 import ir.maktab.homeservice.dto.FeedbackSaveRequest;
 import ir.maktab.homeservice.dto.FeedbackResponse;
 import ir.maktab.homeservice.service.base.BaseService;
@@ -12,6 +13,6 @@ public interface FeedbackService
     FeedbackResponse submitFeedback(FeedbackSaveRequest request);
 
 
-    Integer feedbackRangeForSpecialistToOffer(
+    FeedbackResponseForSpecialist feedbackRangeForSpecialistToOffer(
             Long offerId);
 }

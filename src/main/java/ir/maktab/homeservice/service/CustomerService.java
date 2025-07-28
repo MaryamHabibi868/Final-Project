@@ -20,5 +20,5 @@ public interface CustomerService extends BaseService<Customer, Long> {
 
     void sendVerificationEmail(Customer customer);
 
-    void verifyCustomerEmail(String token);
+    VerifiedUserResponse verifyCustomerEmail(String token);
 }

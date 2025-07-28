@@ -8,6 +8,7 @@ import ir.maktab.homeservice.domains.enumClasses.TransactionType;
 import ir.maktab.homeservice.dto.OfferSaveRequest;
 import ir.maktab.homeservice.dto.OfferResponse;
 import ir.maktab.homeservice.dto.OrderResponse;
+import ir.maktab.homeservice.dto.PaymentResponse;
 import ir.maktab.homeservice.exception.NotApprovedException;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.exception.NotValidPriceException;
@@ -255,7 +256,7 @@ public class OfferServiceImpl
 
     @Transactional
     @Override
-    public void paySpecialist(Long offerId) {
+    public PaymentResponse paySpecialist(Long offerId) {
         ZonedDateTime actualEndService = ZonedDateTime.now();
 
         Offer foundOffer = repository.findById(offerId).orElseThrow(
@@ -329,5 +330,7 @@ public class OfferServiceImpl
             }
             specialistService.save(foundSpecialist);
         }
+
+        return offerMapper.entityMapToPaymentResponse(foundOffer);
     }
 }

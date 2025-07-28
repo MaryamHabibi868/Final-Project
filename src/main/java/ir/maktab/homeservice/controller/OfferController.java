@@ -3,6 +3,7 @@ package ir.maktab.homeservice.controller;
 import ir.maktab.homeservice.dto.OfferSaveRequest;
 import ir.maktab.homeservice.dto.OfferResponse;
 import ir.maktab.homeservice.dto.OrderResponse;
+import ir.maktab.homeservice.dto.PaymentResponse;
 import ir.maktab.homeservice.service.OfferService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -96,13 +97,13 @@ public class OfferController {
     //✅
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @PostMapping("/pay-specialist/{offerId}")
-    public ResponseEntity<String> paySpecialist(
+    public ResponseEntity<PaymentResponse> paySpecialist(
             @PathVariable Long offerId) {
-        offerService.paySpecialist(offerId);
-        return ResponseEntity.ok("Transaction Successful");
+        return ResponseEntity.ok( offerService.paySpecialist(offerId));
     }
 
 
+    //✅
     @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
     @GetMapping("/find-all-orders-by-specialist-id")
     public ResponseEntity<Page<OrderResponse>> findAllOrdersBySpecialistId(

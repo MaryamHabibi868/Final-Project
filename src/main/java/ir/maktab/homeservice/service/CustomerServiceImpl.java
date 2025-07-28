@@ -96,7 +96,7 @@ public class CustomerServiceImpl
 
 
     @Override
-    public void verifyCustomerEmail(String token) {
+    public VerifiedUserResponse verifyCustomerEmail(String token) {
 
         VerificationToken verificationToken =
                 verificationTokenService.findByToken(token)
@@ -118,6 +118,10 @@ public class CustomerServiceImpl
 
         verificationToken.setUsed(true);
         verificationTokenService.save(verificationToken);
+
+        return customerMapper.entityMapToVerifiedUserResponse(customer);
+
+
 
         /*Optional<Customer> customer1 = repository.findByEmail(customer.getEmail());
         if (customer1.isEmpty()) {

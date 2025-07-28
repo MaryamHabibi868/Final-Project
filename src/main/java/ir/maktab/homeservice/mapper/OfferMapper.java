@@ -2,6 +2,7 @@ package ir.maktab.homeservice.mapper;
 
 import ir.maktab.homeservice.domains.Offer;
 import ir.maktab.homeservice.dto.OfferResponse;
+import ir.maktab.homeservice.dto.PaymentResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -12,5 +13,10 @@ public interface OfferMapper {
     @Mapping(target = "specialistId", source = "specialist.id")
     @Mapping(target = "orderId", source = "orderInformation.id")
     OfferResponse entityMapToResponse(Offer offer);
+
+
+    @Mapping(target = "specialistId", source = "specialist.id")
+    @Mapping(target = "orderId", source = "orderInformation.id")
+    PaymentResponse entityMapToPaymentResponse(Offer offer);
 }
 

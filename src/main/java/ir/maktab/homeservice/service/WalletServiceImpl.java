@@ -6,7 +6,9 @@ import ir.maktab.homeservice.domains.Transaction;
 import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.domains.enumClasses.TransactionType;
 import ir.maktab.homeservice.dto.PaymentRequestDto;
+import ir.maktab.homeservice.dto.WalletResponse;
 import ir.maktab.homeservice.exception.NotFoundException;
+import ir.maktab.homeservice.mapper.WalletMapper;
 import ir.maktab.homeservice.repository.WalletRepository;
 import ir.maktab.homeservice.security.SecurityUtil;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
@@ -24,24 +26,27 @@ public class WalletServiceImpl
     private final SecurityUtil securityUtil;
     private final SpecialistService specialistService;
     private final CustomerService customerService;
+    private final WalletMapper walletMapper;
 
 
     public WalletServiceImpl(WalletRepository repository,
                              TransactionService transactionService,
                              SecurityUtil securityUtil,
                              SpecialistService specialistService,
-                             CustomerService customerService) {
+                             CustomerService customerService,
+                             WalletMapper walletMapper) {
         super(repository);
         this.transactionService = transactionService;
         this.securityUtil = securityUtil;
         this.specialistService = specialistService;
         this.customerService = customerService;
+        this.walletMapper = walletMapper;
     }
 
 
     @Transactional
     @Override
-    public BigDecimal walletBalanceForSpecialist(/*Long walletId*/) {
+    public WalletResponse walletBalanceForSpecialist(/*Long walletId*/) {
 
         String email = securityUtil.getCurrentUsername();
         Specialist foundSpecialist = specialistService.findByEmail(email);
@@ -49,7 +54,7 @@ public class WalletServiceImpl
 
         Wallet foundWallet = repository.findById(walletId).orElseThrow(
                 () -> new NotFoundException("Wallet not found"));
-        return foundWallet.getBalance();
+        return walletMapper.entityMapToWalletResponse(foundWallet);
     }
 
     @Override
@@ -69,13 +74,13 @@ public class WalletServiceImpl
     }
 
     @Override
-    public BigDecimal walletBalanceForCustomer() {
+    public WalletResponse walletBalanceForCustomer() {
         String email = securityUtil.getCurrentUsername();
         Customer foundCustomer = customerService.findByEmail(email);
         Long walletId = foundCustomer.getWallet().getId();
 
         Wallet foundWallet = repository.findById(walletId).orElseThrow(
                 () -> new NotFoundException("Wallet not found"));
-        return foundWallet.getBalance();
+        return walletMapper.entityMapToWalletResponse(foundWallet);
     }
 }

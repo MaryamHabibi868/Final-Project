@@ -60,22 +60,25 @@ public class SpecialistController {
     //✅
     @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @PostMapping("/add-specialists/{specialistId}/home-services")
-    public ResponseEntity<String> addSpecialistToHomeService(
+    public ResponseEntity<AddRemoveSToHResponse> addSpecialistToHomeService(
             @PathVariable Long specialistId,
             @RequestParam Long homeServiceId) {
-        specialistService.addSpecialistToHomeService(specialistId, homeServiceId);
-        return ResponseEntity.ok("Specialist added to home service");
+
+        return ResponseEntity.ok(
+                specialistService.addSpecialistToHomeService
+                        (specialistId, homeServiceId));
     }
 
 
     //✅
     @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @DeleteMapping("/specialists/{specialistId}/home-services")
-    public ResponseEntity<String> deleteSpecialistFromHomeService(
+    public ResponseEntity<AddRemoveSToHResponse> deleteSpecialistFromHomeService(
             @PathVariable Long specialistId,
             @RequestParam Long homeServiceId) {
-        specialistService.removeSpecialistFromHomeService(specialistId, homeServiceId);
-        return ResponseEntity.ok("Specialist removed from home service");
+        return ResponseEntity.ok(
+                specialistService.removeSpecialistFromHomeService(
+                        specialistId, homeServiceId));
     }
 
 
@@ -90,6 +93,8 @@ public class SpecialistController {
     }
 
 
+    //✅
+    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @GetMapping("/find-all-home-services-by-specialist-id/{specialistId}")
     public ResponseEntity<Page<HomeServiceResponse>> findAllHomeServicesBySpecialistId(
             @PathVariable Long specialistId,
@@ -114,7 +119,7 @@ public class SpecialistController {
     //✅
     @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
     @GetMapping("/get-score-by-specialist-id")
-    public ResponseEntity<Double> findScoreBySpecialistId(
+    public ResponseEntity<ScoreResponse> findScoreBySpecialistId(
           /*  @PathVariable Long specialistId*/) {
         return ResponseEntity.ok(
                 specialistService.findScoreBySpecialistId(/*specialistId*/));
@@ -132,6 +137,8 @@ public class SpecialistController {
                        /* specialistId,*/ pageable));
     }
 
+
+    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @PostMapping("/in-activate-specialists")
     public ResponseEntity<String> inActivateSpecialists() {
         specialistService.inActivateSpecialist();
@@ -142,10 +149,9 @@ public class SpecialistController {
 
     //✅
     @GetMapping("/verify")
-    public ResponseEntity<String> verifySpecialistEmail(
+    public ResponseEntity<VerifiedUserResponse> verifySpecialistEmail(
             @RequestParam("token") String token) {
-        specialistService.verifySpecialistEmail(token);
-        return ResponseEntity.ok("Email verified successfully.");
+        return ResponseEntity.ok(specialistService.verifySpecialistEmail(token));
     }
 
 }

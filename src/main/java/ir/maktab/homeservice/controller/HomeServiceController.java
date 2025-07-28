@@ -60,6 +60,7 @@ public class HomeServiceController {
     }
 
 
+    //✅
     @GetMapping("/find-home-service-by-id/{homeServiceId}")
     public ResponseEntity<HomeServiceResponse> findHomeServiceById(
             @PathVariable Long homeServiceId) {
@@ -67,6 +68,7 @@ public class HomeServiceController {
     }
 
 
+    //✅
     @GetMapping("/find-all-by-parent-service-id/{parentServiceId}")
     public ResponseEntity<Page<HomeServiceResponse>> findAllHomeServiceByParentServiceId(
             @PathVariable Long parentServiceId,

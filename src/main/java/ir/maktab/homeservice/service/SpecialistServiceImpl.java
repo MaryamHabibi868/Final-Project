@@ -125,7 +125,7 @@ public class SpecialistServiceImpl
     }
 
     @Override
-    public void verifySpecialistEmail(String token) {
+    public VerifiedUserResponse verifySpecialistEmail(String token) {
 
         VerificationToken verificationToken =
                 verificationTokenService.findByToken(token)
@@ -151,6 +151,8 @@ public class SpecialistServiceImpl
 
         verificationToken.setUsed(true);
         verificationTokenService.save(verificationToken);
+
+        return specialistMapper.entityMapToVerifiedUserResponse(specialist);
 
         /*Optional<Specialist> specialist1 = repository.findByEmail(specialist.getEmail());
         if (specialist1.isEmpty()) {
@@ -250,7 +252,7 @@ public class SpecialistServiceImpl
 
     @Transactional
     @Override
-    public void addSpecialistToHomeService(
+    public AddRemoveSToHResponse addSpecialistToHomeService(
             Long specialistId, Long homeServiceId) {
 
         Specialist foundSpecialist = repository.findById(specialistId)
@@ -266,12 +268,14 @@ public class SpecialistServiceImpl
         foundSpecialist.getHomeServices().add(foundHomeService);
         repository.save(foundSpecialist);
         homeServiceService.save(foundHomeService);
+
+        return specialistMapper.entityMapToAddRemoveSToHResponse(foundSpecialist);
     }
 
 
     @Override
     @Transactional
-    public void removeSpecialistFromHomeService(
+    public AddRemoveSToHResponse removeSpecialistFromHomeService(
             Long specialistId, Long homeServiceId) {
         Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
                 () -> new NotFoundException("Specialist Not Found")
@@ -284,6 +288,7 @@ public class SpecialistServiceImpl
         foundSpecialist.getHomeServices().remove(foundHomeService);
         repository.save(foundSpecialist);
         homeServiceService.save(foundHomeService);
+        return specialistMapper.entityMapToAddRemoveSToHResponse(foundSpecialist);
     }
 
 
@@ -311,7 +316,7 @@ public class SpecialistServiceImpl
 
 
     @Override
-    public Double findScoreBySpecialistId(/*Long specialistId*/) {
+    public ScoreResponse findScoreBySpecialistId(/*Long specialistId*/) {
 
         String email = securityUtil.getCurrentUsername();
         Specialist foundSpecialist = repository.findByEmail(email)
@@ -322,7 +327,7 @@ public class SpecialistServiceImpl
         /*Specialist foundSpecialist = repository.findById(specialistId).orElseThrow(
                 () -> new NotFoundException("Specialist Not Found"));*/
 
-        return foundSpecialist.getScore();
+        return specialistMapper.entityMapToScoreResponse(foundSpecialist);
     }
 
 

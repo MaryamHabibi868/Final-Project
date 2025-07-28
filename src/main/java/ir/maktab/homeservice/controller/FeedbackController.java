@@ -1,5 +1,6 @@
 package ir.maktab.homeservice.controller;
 
+import ir.maktab.homeservice.dto.FeedbackResponseForSpecialist;
 import ir.maktab.homeservice.dto.FeedbackSaveRequest;
 import ir.maktab.homeservice.dto.FeedbackResponse;
 import ir.maktab.homeservice.service.FeedbackService;
@@ -30,7 +31,7 @@ public class FeedbackController {
     //✅
     @PreAuthorize("hasAuthority('ROLE_SPECIALIST')")
     @GetMapping("/offer-id/{offerId}")
-    public ResponseEntity<Integer> feedbackRangeForSpecialistToOffer(
+    public ResponseEntity<FeedbackResponseForSpecialist> feedbackRangeForSpecialistToOffer(
             @PathVariable Long offerId) {
         return ResponseEntity.ok(feedbackService.feedbackRangeForSpecialistToOffer(
                 offerId));

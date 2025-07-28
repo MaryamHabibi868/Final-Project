@@ -8,8 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 public class FeedbackResponseForSpecialist {
 
-    private Long id;
-
     private Integer range;
 
     private Long offerId;

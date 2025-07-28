@@ -26,11 +26,11 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
             Long id);
 
 
-    void addSpecialistToHomeService(
+    AddRemoveSToHResponse addSpecialistToHomeService(
             Long specialistId, Long homeServiceId);
 
 
-    void removeSpecialistFromHomeService(
+    AddRemoveSToHResponse removeSpecialistFromHomeService(
             Long specialistId, Long homeServiceId);
 
 
@@ -48,7 +48,7 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
             Double lower, Double higher , Pageable pageable);
 
 
-    Double findScoreBySpecialistId(/*Long specialistId*/);
+    ScoreResponse findScoreBySpecialistId(/*Long specialistId*/);
 
 
     Page<TransactionResponse> findAllTransactionsBySpecialistId(
@@ -61,6 +61,6 @@ public interface SpecialistService extends BaseService<Specialist, Long> {
 
     void sendVerificationEmail(Specialist specialist);
 
-    void verifySpecialistEmail(String token);
+    VerifiedUserResponse verifySpecialistEmail(String token);
 }
 

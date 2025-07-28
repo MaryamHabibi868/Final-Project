@@ -4,6 +4,7 @@ import ir.maktab.homeservice.domains.Feedback;
 import ir.maktab.homeservice.domains.Offer;
 import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.domains.enumClasses.OfferStatus;
+import ir.maktab.homeservice.dto.FeedbackResponseForSpecialist;
 import ir.maktab.homeservice.dto.FeedbackSaveRequest;
 import ir.maktab.homeservice.dto.FeedbackResponse;
 import ir.maktab.homeservice.exception.NotApprovedException;
@@ -63,12 +64,13 @@ public class FeedbackServiceImpl
 
 
     @Override
-    public Integer feedbackRangeForSpecialistToOffer(
+    public FeedbackResponseForSpecialist feedbackRangeForSpecialistToOffer(
             Long offerId) {
-        Offer offer = offerService
-                .findById(offerId);
+      /*  Offer offer = offerService
+                .findById(offerId);*/
 
-        Feedback foundOffer = repository.findByOfferId(offerId);
-       return foundOffer.getRange();
+        Feedback feedback = repository.findByOfferId(offerId);
+
+        return feedbackMapper.entityMapToResponseForSpecialist(feedback);
     }
 }
