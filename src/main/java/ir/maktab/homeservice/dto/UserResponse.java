@@ -6,7 +6,6 @@ import lombok.*;
 
 @Setter
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponse {

@@ -11,7 +11,6 @@ import java.time.ZonedDateTime;
 
 @Getter
 @Setter
-@ToString
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

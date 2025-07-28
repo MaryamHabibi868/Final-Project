@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class PaymentRequestDto {
 
     private Long walletId;

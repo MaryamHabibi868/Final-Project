@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Getter
 @Setter
-@ToString(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
 @DiscriminatorValue(value = "Manager")

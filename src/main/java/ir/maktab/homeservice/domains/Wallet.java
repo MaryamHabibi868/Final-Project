@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
-@ToString(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

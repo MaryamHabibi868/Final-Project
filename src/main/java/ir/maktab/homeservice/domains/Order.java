@@ -5,6 +5,7 @@ import ir.maktab.homeservice.domains.enumClasses.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -13,8 +14,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table (name = Order.TABLE_NAME)
-@ToString(callSuper = true)
+@Table(name = Order.TABLE_NAME)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -54,6 +54,6 @@ public class Order extends BaseEntity<Long> {
     @ManyToOne
     private Customer customer;
 
-    @OneToMany
+    @OneToMany (mappedBy = "orderInformation")
     private Set<Offer> offers = new HashSet<>();
 }

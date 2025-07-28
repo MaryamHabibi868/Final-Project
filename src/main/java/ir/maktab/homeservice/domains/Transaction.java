@@ -11,7 +11,6 @@ import java.time.ZonedDateTime;
 @Entity
 @Getter
 @Setter
-@ToString(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

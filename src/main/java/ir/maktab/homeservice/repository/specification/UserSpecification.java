@@ -2,7 +2,6 @@ package ir.maktab.homeservice.repository.specification;
 
 import ir.maktab.homeservice.domains.User;
 import org.springframework.data.jpa.domain.Specification;
-import jakarta.persistence.criteria.Predicate;
 
 public class UserSpecification {
 

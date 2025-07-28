@@ -10,7 +10,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
