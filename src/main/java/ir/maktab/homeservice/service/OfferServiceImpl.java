@@ -122,7 +122,12 @@ public class OfferServiceImpl
         List<Offer> allByOrderId = repository
                 .findAllByOrderInformation_Id(
                         foundOffer.getOrderInformation().getId());
-        allByOrderId.forEach(offer -> offer.setStatus(OfferStatus.REJECTED));
+
+        allByOrderId
+                .stream()
+                .filter(o -> !o.getId().equals(foundOffer.getId()))
+                .forEach(offer -> offer.setStatus(OfferStatus.REJECTED));
+
         repository.saveAll(allByOrderId);
         return offerMapper.entityMapToResponse(save);
     }
