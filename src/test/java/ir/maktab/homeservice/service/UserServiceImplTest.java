@@ -14,7 +14,6 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import java.util.Collections;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -47,7 +46,8 @@ class UserServiceImplTest {
         UserResponse response = new UserResponse();
         response.setId(1L);
 
-        when(userRepository.findByRole(Customer.class, pageable)).thenReturn(userPage);
+        when(userRepository.findByRole(Customer.class, pageable))
+                .thenReturn(userPage);
         when(userMapper.entityMapToResponse(user)).thenReturn(response);
 
         Page<UserResponse> result = userService.filterByRole(role, pageable);
@@ -72,7 +72,8 @@ class UserServiceImplTest {
         UserResponse response = new UserResponse();
         response.setId(2L);
 
-        when(userRepository.findByRole(Specialist.class, pageable)).thenReturn(userPage);
+        when(userRepository.findByRole(Specialist.class, pageable))
+                .thenReturn(userPage);
         when(userMapper.entityMapToResponse(user)).thenReturn(response);
 
         Page<UserResponse> result = userService.filterByRole(role, pageable);
@@ -112,10 +113,12 @@ class UserServiceImplTest {
         response.setId(1L);
 
 
-        when(userRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(userPage);
+        when(userRepository.findAll(any(Specification.class),
+                eq(pageable))).thenReturn(userPage);
         when(userMapper.entityMapToResponse(user)).thenReturn(response);
 
-        Page<UserResponse> result = userService.findAllByNameFilter(firstName, lastName, pageable);
+        Page<UserResponse> result = userService.findAllByNameFilter(
+                firstName, lastName, pageable);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
@@ -127,16 +130,13 @@ class UserServiceImplTest {
 
     @Test
     void testFindByEmail_shouldReturnUser_whenUserExists() {
-        // Arrange
         String email = "test@example.com";
         User user = new User();
         user.setEmail(email);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
-        // Act
         User result = userService.findByEmail(email);
 
-        // Assert
         assertNotNull(result);
         assertEquals(email, result.getEmail());
         verify(userRepository, times(1)).findByEmail(email);
@@ -144,11 +144,9 @@ class UserServiceImplTest {
 
     @Test
     void testFindByEmail_shouldThrowNotFoundException_whenUserNotFound() {
-        // Arrange
         String email = "notfound@example.com";
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        // Act & Assert
         NotFoundException exception = assertThrows(
                 NotFoundException.class,
                 () -> userService.findByEmail(email)

@@ -35,16 +35,20 @@ class TransactionServiceImplTest {
         transaction.setId(1L);
 
 
-        Page<Transaction> page = new PageImpl<>(Collections.singletonList(transaction));
+        Page<Transaction> page = new PageImpl<>(
+                Collections.singletonList(transaction));
 
-        when(transactionRepository.findAllByWalletId(walletId, pageable)).thenReturn(page);
+        when(transactionRepository.findAllByWalletId(walletId,
+                pageable)).thenReturn(page);
 
-        Page<Transaction> result = transactionService.findAllByWalletId(walletId, pageable);
+        Page<Transaction> result = transactionService
+                .findAllByWalletId(walletId, pageable);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         assertEquals(transaction, result.getContent().get(0));
 
-        verify(transactionRepository, times(1)).findAllByWalletId(walletId, pageable);
+        verify(transactionRepository, times(1))
+                .findAllByWalletId(walletId, pageable);
     }
 }

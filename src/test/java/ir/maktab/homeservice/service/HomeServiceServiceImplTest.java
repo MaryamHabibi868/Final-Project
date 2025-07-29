@@ -126,7 +126,9 @@ class HomeServiceServiceImplTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(existing));
         when(repository.findById(2L)).thenReturn(Optional.of(parentService));
-        when(repository.save(any(HomeService.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(repository.save(any(HomeService.class)))
+                .thenAnswer(invocation ->
+                        invocation.getArgument(0));
 
         HomeServiceResponse response = new HomeServiceResponse();
         response.setId(1L);
@@ -134,7 +136,8 @@ class HomeServiceServiceImplTest {
         response.setBasePrice(BigDecimal.valueOf(200));
         response.setDescription("Updated description");
 
-        when(mapper.entityMapToResponse(any(HomeService.class))).thenReturn(response);
+        when(mapper.entityMapToResponse(any(HomeService.class)))
+                .thenReturn(response);
 
         HomeServiceResponse result = service.updateHomeService(request);
 
@@ -176,7 +179,8 @@ class HomeServiceServiceImplTest {
         NotFoundException exception = assertThrows(NotFoundException.class,
                 () -> service.updateHomeService(request));
 
-        assertEquals("Parent Home Service Not Found", exception.getMessage());
+        assertEquals("Parent Home Service Not Found",
+                exception.getMessage());
     }
 
     @Test
@@ -214,11 +218,13 @@ class HomeServiceServiceImplTest {
 
         when(repository.findAll(pageable)).thenReturn(page);
 
-        when(mapper.entityMapToResponse(hs1)).thenReturn(new HomeServiceResponse() {{
+        when(mapper.entityMapToResponse(hs1)).thenReturn(
+                new HomeServiceResponse() {{
             setId(1L);
             setTitle("Service 1");
         }});
-        when(mapper.entityMapToResponse(hs2)).thenReturn(new HomeServiceResponse() {{
+        when(mapper.entityMapToResponse(hs2)).thenReturn(
+                new HomeServiceResponse() {{
             setId(2L);
             setTitle("Service 2");
         }});
@@ -228,7 +234,8 @@ class HomeServiceServiceImplTest {
         assertNotNull(result);
         assertEquals(2, result.getContent().size());
         verify(repository).findAll(pageable);
-        verify(mapper, times(2)).entityMapToResponse(any(HomeService.class));
+        verify(mapper, times(2))
+                .entityMapToResponse(any(HomeService.class));
     }
 
     @Test
@@ -287,22 +294,27 @@ class HomeServiceServiceImplTest {
 
         Page<HomeService> page = new PageImpl<>(list, pageable, list.size());
 
-        when(repository.findAllByParentService_Id(parentId, pageable)).thenReturn(page);
+        when(repository.findAllByParentService_Id(
+                parentId, pageable)).thenReturn(page);
 
-        when(mapper.entityMapToResponse(child1)).thenReturn(new HomeServiceResponse() {{
+        when(mapper.entityMapToResponse(child1)).thenReturn(
+                new HomeServiceResponse() {{
             setId(11L);
             setTitle("Child 1");
         }});
-        when(mapper.entityMapToResponse(child2)).thenReturn(new HomeServiceResponse() {{
+        when(mapper.entityMapToResponse(child2)).thenReturn(
+                new HomeServiceResponse() {{
             setId(12L);
             setTitle("Child 2");
         }});
 
-        Page<HomeServiceResponse> result = service.findAllHomeServiceByParentServiceId(parentId, pageable);
+        Page<HomeServiceResponse> result = service
+                .findAllHomeServiceByParentServiceId(parentId, pageable);
 
         assertNotNull(result);
         assertEquals(2, result.getContent().size());
         verify(repository).findAllByParentService_Id(parentId, pageable);
-        verify(mapper, times(2)).entityMapToResponse(any(HomeService.class));
+        verify(mapper, times(2))
+                .entityMapToResponse(any(HomeService.class));
     }
 }

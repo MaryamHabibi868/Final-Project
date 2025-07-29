@@ -1,8 +1,6 @@
 package ir.maktab.homeservice.service;
 
 import ir.maktab.homeservice.domains.Manager;
-import ir.maktab.homeservice.domains.Wallet;
-import ir.maktab.homeservice.domains.enumClasses.Role;
 import ir.maktab.homeservice.dto.*;
 import ir.maktab.homeservice.exception.DuplicatedException;
 import ir.maktab.homeservice.exception.NotFoundException;
@@ -13,10 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.math.BigDecimal;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -44,15 +39,16 @@ class ManagerServiceImplTest {
 
     @Test
     void registerManager_shouldRegisterManager_whenEmailIsNotDuplicated() {
-        // Arrange
         ManagerSaveRequest request = new ManagerSaveRequest();
         request.setFirstName("Ali");
         request.setLastName("Ahmadi");
         request.setEmail("ali@example.com");
         request.setPassword("123");
 
-        when(managerRepository.existsByEmail(request.getEmail())).thenReturn(false);
-        when(passwordEncoder.encode(request.getPassword())).thenReturn("encoded123");
+        when(managerRepository.existsByEmail(request.getEmail()))
+                .thenReturn(false);
+        when(passwordEncoder.encode(request.getPassword()))
+                .thenReturn("encoded123");
 
         Manager savedManager = new Manager();
         savedManager.setFirstName("Ali");
@@ -64,13 +60,13 @@ class ManagerServiceImplTest {
         response.setLastName("Ahmadi");
         response.setEmail("ali@example.com");
 
-        when(managerRepository.save(any(Manager.class))).thenReturn(savedManager);
-        when(managerMapper.entityMapToResponse(any(Manager.class))).thenReturn(response);
+        when(managerRepository.save(any(Manager.class)))
+                .thenReturn(savedManager);
+        when(managerMapper.entityMapToResponse(any(Manager.class)))
+                .thenReturn(response);
 
-        // Act
         ManagerResponse result = managerService.registerManager(request);
 
-        // Assert
         assertEquals("Ali", result.getFirstName());
         verify(managerRepository).save(any(Manager.class));
     }
@@ -80,14 +76,15 @@ class ManagerServiceImplTest {
         ManagerSaveRequest request = new ManagerSaveRequest();
         request.setEmail("duplicate@example.com");
 
-        when(managerRepository.existsByEmail(request.getEmail())).thenReturn(true);
+        when(managerRepository.existsByEmail(request.getEmail()))
+                .thenReturn(true);
 
-        assertThrows(DuplicatedException.class, () -> managerService.registerManager(request));
+        assertThrows(DuplicatedException.class,
+                () -> managerService.registerManager(request));
     }
 
     @Test
     void updateManager_shouldUpdateManagerSuccessfully() {
-        // Arrange
         ManagerUpdateRequest request = new ManagerUpdateRequest();
         request.setFirstName("NewName");
         request.setLastName("NewLast");
@@ -98,9 +95,12 @@ class ManagerServiceImplTest {
         existingManager.setEmail("old@example.com");
 
         when(securityUtil.getCurrentUsername()).thenReturn("old@example.com");
-        when(managerRepository.findByEmail("old@example.com")).thenReturn(Optional.of(existingManager));
-        when(managerRepository.existsByEmail("new@example.com")).thenReturn(false);
-        when(passwordEncoder.encode("newpass")).thenReturn("encodedNewPass");
+        when(managerRepository.findByEmail("old@example.com"))
+                .thenReturn(Optional.of(existingManager));
+        when(managerRepository.existsByEmail("new@example.com"))
+                .thenReturn(false);
+        when(passwordEncoder.encode("newpass"))
+                .thenReturn("encodedNewPass");
 
         Manager updatedManager = new Manager();
         updatedManager.setFirstName("NewName");
@@ -111,13 +111,13 @@ class ManagerServiceImplTest {
         response.setFirstName("NewName");
         response.setLastName("NewLast");
 
-        when(managerRepository.save(any(Manager.class))).thenReturn(updatedManager);
-        when(managerMapper.entityMapToResponse(any(Manager.class))).thenReturn(response);
+        when(managerRepository.save(any(Manager.class)))
+                .thenReturn(updatedManager);
+        when(managerMapper.entityMapToResponse(any(Manager.class)))
+                .thenReturn(response);
 
-        // Act
         ManagerResponse result = managerService.updateManager(request);
 
-        // Assert
         assertEquals("NewName", result.getFirstName());
     }
 
@@ -129,16 +129,19 @@ class ManagerServiceImplTest {
         Manager existingManager = new Manager();
         existingManager.setEmail("old@example.com");
 
-        when(securityUtil.getCurrentUsername()).thenReturn("old@example.com");
-        when(managerRepository.findByEmail("old@example.com")).thenReturn(Optional.of(existingManager));
-        when(managerRepository.existsByEmail("duplicate@example.com")).thenReturn(true);
+        when(securityUtil.getCurrentUsername())
+                .thenReturn("old@example.com");
+        when(managerRepository.findByEmail("old@example.com"))
+                .thenReturn(Optional.of(existingManager));
+        when(managerRepository.existsByEmail("duplicate@example.com"))
+                .thenReturn(true);
 
-        assertThrows(DuplicatedException.class, () -> managerService.updateManager(request));
+        assertThrows(DuplicatedException.class,
+                () -> managerService.updateManager(request));
     }
 
     @Test
     void updateManager_shouldThrowNotFoundException_whenManagerNotFound() {
-        // Arrange
         String email = "manager@example.com";
         ManagerUpdateRequest request = new ManagerUpdateRequest();
         request.setEmail("new@example.com");
@@ -146,7 +149,6 @@ class ManagerServiceImplTest {
         when(securityUtil.getCurrentUsername()).thenReturn(email);
         when(managerRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        // Act & Assert
         NotFoundException exception = assertThrows(NotFoundException.class,
                 () -> managerService.updateManager(request));
 
@@ -167,7 +169,9 @@ class ManagerServiceImplTest {
         ManagerResponse response = new ManagerResponse();
         response.setEmail("test@example.com");
 
-        when(managerRepository.findByEmailAndPassword("test@example.com", "pass")).thenReturn(Optional.of(manager));
+        when(managerRepository.findByEmailAndPassword(
+                "test@example.com", "pass"))
+                .thenReturn(Optional.of(manager));
         when(managerMapper.entityMapToResponse(manager)).thenReturn(response);
 
         ManagerResponse result = managerService.loginManager(request);
@@ -181,8 +185,11 @@ class ManagerServiceImplTest {
         request.setEmail("notfound@example.com");
         request.setPassword("pass");
 
-        when(managerRepository.findByEmailAndPassword("notfound@example.com", "pass")).thenReturn(Optional.empty());
+        when(managerRepository.findByEmailAndPassword(
+                "notfound@example.com", "pass"))
+                .thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> managerService.loginManager(request));
+        assertThrows(NotFoundException.class,
+                () -> managerService.loginManager(request));
     }
 }

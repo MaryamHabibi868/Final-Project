@@ -6,7 +6,6 @@ import ir.maktab.homeservice.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -23,17 +22,14 @@ class MyUserDetailServiceTest {
 
     @Test
     void testLoadUserByUsername_shouldReturnMyUserDetails_whenUserExists() {
-        // Arrange
         String email = "test@example.com";
         User user = new User();
         user.setEmail(email);
         user.setPassword("12345");
         when(userService.findByEmail(email)).thenReturn(user);
 
-        // Act
         UserDetails result = myUserDetailService.loadUserByUsername(email);
 
-        // Assert
         assertNotNull(result);
         assertTrue(result instanceof MyUserDetails);
         assertEquals(email, result.getUsername());
@@ -44,11 +40,10 @@ class MyUserDetailServiceTest {
 
     @Test
     void testLoadUserByUsername_shouldThrowException_whenUserNotFound() {
-        // Arrange
         String email = "notfound@example.com";
-        when(userService.findByEmail(email)).thenThrow(new NotFoundException("User Not Found"));
+        when(userService.findByEmail(email))
+                .thenThrow(new NotFoundException("User Not Found"));
 
-        // Act & Assert
         NotFoundException exception = assertThrows(
                 NotFoundException.class,
                 () -> myUserDetailService.loadUserByUsername(email)

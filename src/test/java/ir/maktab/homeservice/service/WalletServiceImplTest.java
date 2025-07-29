@@ -1,25 +1,32 @@
 package ir.maktab.homeservice.service;
 
-import ir.maktab.homeservice.domains.*;
-import ir.maktab.homeservice.domains.enumClasses.TransactionType;
+import ir.maktab.homeservice.domains.Customer;
+import ir.maktab.homeservice.domains.Specialist;
+import ir.maktab.homeservice.domains.Transaction;
+import ir.maktab.homeservice.domains.Wallet;
 import ir.maktab.homeservice.dto.PaymentRequestDto;
+import ir.maktab.homeservice.dto.WalletResponse;
 import ir.maktab.homeservice.exception.NotFoundException;
+import ir.maktab.homeservice.mapper.WalletMapper;
 import ir.maktab.homeservice.repository.WalletRepository;
 import ir.maktab.homeservice.security.SecurityUtil;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class WalletServiceImplTest {
 
     @Mock
-    private WalletRepository walletRepository;
+    private WalletRepository repository;
 
     @Mock
     private TransactionService transactionService;
@@ -33,107 +40,145 @@ class WalletServiceImplTest {
     @Mock
     private CustomerService customerService;
 
+    @Mock
+    private WalletMapper walletMapper;
+
     @InjectMocks
     private WalletServiceImpl walletService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    @Test
+    void testWalletBalanceForSpecialist_Success() {
+        String email = "specialist@example.com";
+
+        Wallet wallet = new Wallet();
+        wallet.setId(1L);
+        wallet.setBalance(BigDecimal.valueOf(500));
+
+        Specialist specialist = new Specialist();
+        specialist.setWallet(wallet);
+
+        WalletResponse walletResponse = new WalletResponse();
+        walletResponse.setBalance(wallet.getBalance());
+
+        when(securityUtil.getCurrentUsername()).thenReturn(email);
+        when(specialistService.findByEmail(email))
+                .thenReturn(specialist);
+        when(repository.findById(wallet.getId()))
+                .thenReturn(Optional.of(wallet));
+        when(walletMapper.entityMapToWalletResponse(wallet))
+                .thenReturn(walletResponse);
+
+        WalletResponse response = walletService.walletBalanceForSpecialist();
+
+        assertNotNull(response);
+        assertEquals(wallet.getBalance(), response.getBalance());
+
+        verify(securityUtil).getCurrentUsername();
+        verify(specialistService).findByEmail(email);
+        verify(repository).findById(wallet.getId());
+        verify(walletMapper).entityMapToWalletResponse(wallet);
     }
 
     @Test
-    void test_walletBalanceForSpecialist_success() {
+    void testWalletBalanceForSpecialist_WalletNotFound() {
         String email = "specialist@example.com";
+
         Wallet wallet = new Wallet();
         wallet.setId(1L);
-        wallet.setBalance(BigDecimal.valueOf(150.0));
+
         Specialist specialist = new Specialist();
         specialist.setWallet(wallet);
 
         when(securityUtil.getCurrentUsername()).thenReturn(email);
         when(specialistService.findByEmail(email)).thenReturn(specialist);
-        when(walletRepository.findById(1L)).thenReturn(Optional.of(wallet));
+        when(repository.findById(wallet.getId()))
+                .thenReturn(Optional.empty());
 
-        /*BigDecimal result = walletService.walletBalanceForSpecialist();*/
-        /*assertEquals(BigDecimal.valueOf(150.0), result);*/
+        assertThrows(NotFoundException.class,
+                () -> walletService.walletBalanceForSpecialist());
+
+        verify(repository).findById(wallet.getId());
     }
 
     @Test
-    void test_walletBalanceForSpecialist_walletNotFound() {
-        String email = "specialist@example.com";
-        Wallet wallet = new Wallet();
-        wallet.setId(1L);
-        Specialist specialist = new Specialist();
-        specialist.setWallet(wallet);
-
-        when(securityUtil.getCurrentUsername()).thenReturn(email);
-        when(specialistService.findByEmail(email)).thenReturn(specialist);
-        when(walletRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(NotFoundException.class, () -> walletService.walletBalanceForSpecialist());
-    }
-
-    @Test
-    void test_walletBalanceForCustomer_success() {
-        String email = "customer@example.com";
-        Wallet wallet = new Wallet();
-        wallet.setId(2L);
-        wallet.setBalance(BigDecimal.valueOf(300.0));
-        Customer customer = new Customer();
-        customer.setWallet(wallet);
-
-        when(securityUtil.getCurrentUsername()).thenReturn(email);
-        when(customerService.findByEmail(email)).thenReturn(customer);
-        when(walletRepository.findById(2L)).thenReturn(Optional.of(wallet));
-
-        /*BigDecimal result = walletService.walletBalanceForCustomer();
-        assertEquals(BigDecimal.valueOf(300.0), result);*/
-    }
-
-    @Test
-    void testWalletBalanceForCustomer_shouldThrowExceptionWhenWalletNotFound() {
-        // Arrange
-        String email = "customer@example.com";
-        Long walletId = 1L;
-
-        Wallet wallet = new Wallet();
-        wallet.setId(walletId);
-
-        Customer customer = new Customer();
-        customer.setEmail(email);
-        customer.setWallet(wallet);
-
-        // Mock behavior
-        Mockito.when(securityUtil.getCurrentUsername()).thenReturn(email);
-        Mockito.when(customerService.findByEmail(email)).thenReturn(customer);
-        Mockito.when(walletRepository.findById(walletId)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        NotFoundException thrown = Assertions.assertThrows(
-                NotFoundException.class,
-                () -> walletService.walletBalanceForCustomer()
-        );
-
-        Assertions.assertEquals("Wallet not found", thrown.getMessage());
-    }
-
-
-    @Test
-    void test_chargeWallet_success() {
-        Wallet wallet = new Wallet();
-        wallet.setId(3L);
-        wallet.setBalance(BigDecimal.valueOf(100.0));
-
+    void testChargeWallet_Success() {
         PaymentRequestDto request = new PaymentRequestDto();
-        request.setWalletId(3L);
-        request.setAmount(BigDecimal.valueOf(50.0));
+        request.setWalletId(1L);
+        request.setAmount(BigDecimal.valueOf(100));
 
-        when(walletRepository.findById(3L)).thenReturn(Optional.of(wallet));
-        when(walletRepository.save(any(Wallet.class))).thenReturn(wallet);
+        Wallet wallet = new Wallet();
+        wallet.setId(1L);
+        wallet.setBalance(BigDecimal.valueOf(200));
+
+        when(repository.findById(request.getWalletId()))
+                .thenReturn(Optional.of(wallet));
+        when(repository.save(any(Wallet.class)))
+                .thenAnswer(invocation ->
+                        invocation.getArgument(0));
 
         walletService.chargeWallet(request);
 
-        assertEquals(BigDecimal.valueOf(150.0), wallet.getBalance());
-        verify(transactionService, times(1)).save(any(Transaction.class));
+        assertEquals(BigDecimal.valueOf(300), wallet.getBalance());
+
+        verify(repository).save(wallet);
+
+        verify(transactionService).save(any(Transaction.class));
+    }
+
+    @Test
+    void testWalletBalanceForCustomer_Success() {
+        String email = "customer@example.com";
+
+        Wallet wallet = new Wallet();
+        wallet.setId(2L);
+        wallet.setBalance(BigDecimal.valueOf(700));
+
+        Customer customer = new Customer();
+        customer.setWallet(wallet);
+
+        WalletResponse walletResponse = new WalletResponse();
+        walletResponse.setBalance(wallet.getBalance());
+
+        when(securityUtil.getCurrentUsername())
+                .thenReturn(email);
+        when(customerService.findByEmail(email))
+                .thenReturn(customer);
+        when(repository.findById(wallet.getId()))
+                .thenReturn(Optional.of(wallet));
+        when(walletMapper.entityMapToWalletResponse(wallet))
+                .thenReturn(walletResponse);
+
+        WalletResponse response = walletService.walletBalanceForCustomer();
+
+        assertNotNull(response);
+        assertEquals(wallet.getBalance(), response.getBalance());
+
+        verify(securityUtil).getCurrentUsername();
+        verify(customerService).findByEmail(email);
+        verify(repository).findById(wallet.getId());
+        verify(walletMapper).entityMapToWalletResponse(wallet);
+    }
+
+    @Test
+    void testWalletBalanceForCustomer_WalletNotFound() {
+        String email = "customer@example.com";
+
+        Wallet wallet = new Wallet();
+        wallet.setId(2L);
+
+        Customer customer = new Customer();
+        customer.setWallet(wallet);
+
+        when(securityUtil.getCurrentUsername())
+                .thenReturn(email);
+        when(customerService.findByEmail(email))
+                .thenReturn(customer);
+        when(repository.findById(wallet.getId()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class,
+                () -> walletService.walletBalanceForCustomer());
+
+        verify(repository).findById(wallet.getId());
     }
 }

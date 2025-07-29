@@ -29,37 +29,33 @@ class AddressServiceImplTest {
         addressMapper = mock(AddressMapper.class);
         securityUtil = mock(SecurityUtil.class);
 
-        addressService = new AddressServiceImpl(repository, customerService, addressMapper, securityUtil);
+        addressService = new AddressServiceImpl(
+                repository, customerService, addressMapper, securityUtil);
     }
 
     @Test
     void testSubmitAddress_whenPostalCodeNotExists_shouldSaveAddress() {
-        // داده ورودی تست
         AddressSaveRequest request = new AddressSaveRequest();
         request.setProvince("Tehran");
         request.setCity("Tehran");
         request.setPostalCode("1234567890");
         request.setDescription("Test Description");
 
-        // داده بازگشتی مورد انتظار
         Customer customer = new Customer();
         Address savedAddress = new Address();
         AddressResponse expectedResponse = new AddressResponse();
 
-        // شبیه‌سازی رفتارها
         when(repository.existsByPostalCode("1234567890")).thenReturn(false);
         when(securityUtil.getCurrentUsername()).thenReturn("test@example.com");
         when(customerService.findByEmail("test@example.com")).thenReturn(customer);
         when(repository.save(any(Address.class))).thenReturn(savedAddress);
-        when(addressMapper.entityMapToResponse(savedAddress)).thenReturn(expectedResponse);
+        when(addressMapper.entityMapToResponse(savedAddress))
+                .thenReturn(expectedResponse);
 
-        // اجرای متد
         AddressResponse actualResponse = addressService.submitAddress(request);
 
-        // بررسی نتیجه
         assertEquals(expectedResponse, actualResponse);
 
-        // بررسی اینکه آدرس واقعاً ذخیره شده
         ArgumentCaptor<Address> addressCaptor = ArgumentCaptor.forClass(Address.class);
         verify(repository).save(addressCaptor.capture());
         Address captured = addressCaptor.getValue();
@@ -72,7 +68,6 @@ class AddressServiceImplTest {
 
     @Test
     void testSubmitAddress_whenPostalCodeExists_shouldThrowDuplicatedException() {
-        // داده ورودی تست
         AddressSaveRequest request = new AddressSaveRequest();
         request.setPostalCode("1234567890");
 
