@@ -3,6 +3,7 @@ package ir.maktab.homeservice.service;
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.domains.User;
+import ir.maktab.homeservice.dto.UserFilterRequest;
 import ir.maktab.homeservice.dto.UserResponse;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.UserMapper;
@@ -10,7 +11,6 @@ import ir.maktab.homeservice.repository.UserRepository;
 import ir.maktab.homeservice.service.base.BaseServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ir.maktab.homeservice.repository.specification.UserSpecification;
 
@@ -43,12 +43,9 @@ public class UserServiceImpl
     }
 
     @Override
-    public Page<UserResponse> findAllByNameFilter(
-            String firstName , String lastName, Pageable pageable) {
-        Specification<User> spec =  UserSpecification.firstNameContains(firstName)
-                .and(UserSpecification.lastNameContains(lastName));
-
-        return repository.findAll(spec, pageable)
+    public Page<UserResponse> filterUsers(
+            UserFilterRequest request, Pageable pageable) {
+        return repository.findAll(UserSpecification.filter(request), pageable)
                 .map(userMapper::entityMapToResponse);
     }
 

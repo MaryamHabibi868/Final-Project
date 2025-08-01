@@ -3,6 +3,9 @@ package ir.maktab.homeservice.service;
 import ir.maktab.homeservice.domains.Customer;
 import ir.maktab.homeservice.domains.Specialist;
 import ir.maktab.homeservice.domains.User;
+import ir.maktab.homeservice.domains.Wallet;
+import ir.maktab.homeservice.domains.enumClasses.Role;
+import ir.maktab.homeservice.dto.UserFilterRequest;
 import ir.maktab.homeservice.dto.UserResponse;
 import ir.maktab.homeservice.exception.NotFoundException;
 import ir.maktab.homeservice.mapper.UserMapper;
@@ -13,6 +16,7 @@ import org.mockito.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -100,30 +104,39 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findAllByNameFilter_returnsUserResponsePage() {
-        String firstName = "Ali";
-        String lastName = "Ahmadi";
-        Pageable pageable = PageRequest.of(0, 10);
+    void filterUsers_shouldReturnFilteredPageOfUsers() {
+        UserFilterRequest filterRequest = new UserFilterRequest();
+        filterRequest.setRole(Role.ROLE_SPECIALIST);
+        filterRequest.setFirstName("Ali");
 
-        User user = new User() {};
-        user.setId(1L);
-        Page<User> userPage = new PageImpl<>(Collections.singletonList(user));
+        Pageable pageable = PageRequest.of(0, 5);
 
-        UserResponse response = new UserResponse();
-        response.setId(1L);
+        User user = User.builder()
+                .firstName("Ali")
+                .lastName("Ahmadi")
+                .role(Role.ROLE_SPECIALIST)
+                .email("ali@test.com")
+                .wallet(new Wallet())
+                .isActive(true)
+                .isEmailVerify(true)
+                .password("pass")
+                .build();
 
+        UserResponse expectedResponse =
+                UserResponse.builder()
+                .firstName("Ali")
+                .lastName("Ahmadi")
+                .email("ali@test.com")
+                .build();
 
-        when(userRepository.findAll(any(Specification.class),
-                eq(pageable))).thenReturn(userPage);
-        when(userMapper.entityMapToResponse(user)).thenReturn(response);
+        Page<User> userPage = new PageImpl<>(List.of(user));
+        when(userRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(userPage);
+        when(userMapper.entityMapToResponse(user)).thenReturn(expectedResponse);
 
-        Page<UserResponse> result = userService.findAllByNameFilter(
-                firstName, lastName, pageable);
+        Page<UserResponse> result = userService.filterUsers(filterRequest, pageable);
 
-        assertNotNull(result);
         assertEquals(1, result.getTotalElements());
-        assertEquals(response, result.getContent().get(0));
-
+        assertEquals("Ali", result.getContent().get(0).getFirstName());
         verify(userRepository).findAll(any(Specification.class), eq(pageable));
         verify(userMapper).entityMapToResponse(user);
     }
