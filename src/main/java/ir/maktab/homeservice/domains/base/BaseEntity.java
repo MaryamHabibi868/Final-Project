@@ -3,10 +3,11 @@ package ir.maktab.homeservice.domains.base;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @Getter
@@ -27,12 +28,26 @@ public class BaseEntity<ID extends Serializable> implements Serializable {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private ID id;
 
-    @Column(name = CREATE_DATE)
-    @CreatedDate
+
+    @TimeZoneStorage(TimeZoneStorageType.COLUMN)
+    @Column(name = CREATE_DATE, columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private ZonedDateTime createDate;
 
-    @Column(name = LAST_UPDATE_DATE)
-    @LastModifiedDate
+
+    @TimeZoneStorage(TimeZoneStorageType.COLUMN)
+    @Column(name = LAST_UPDATE_DATE, columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private ZonedDateTime lastUpdateDate;
 
+
+    @PrePersist
+    protected void onCreate() {
+        createDate = lastUpdateDate =
+                ZonedDateTime.now(ZoneId.of("Asia/Tehran"));
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        lastUpdateDate =
+                ZonedDateTime.now(ZoneId.of("Asia/Tehran"));
+    }
 }
