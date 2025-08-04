@@ -51,8 +51,17 @@ public class FeedbackServiceImpl
             Specialist foundSpecialist = foundOffer.getSpecialist();
             Double averageRangeBySpecialistId = repository.
                     findAverageRangeBySpecialistId(foundSpecialist.getId());
+            Double currentSpecialistScore = foundSpecialist.getScore();
 
-            foundSpecialist.setScore(averageRangeBySpecialistId);
+
+            if (currentSpecialistScore == 0.0) {
+                foundSpecialist.setScore(averageRangeBySpecialistId);
+            } else {
+                double finalScore =
+                        (currentSpecialistScore + averageRangeBySpecialistId) / 2.0;
+                foundSpecialist.setScore(finalScore);
+            }
+
             specialistService.save(foundSpecialist);
 
             return feedbackMapper.entityMapToResponse(save);
